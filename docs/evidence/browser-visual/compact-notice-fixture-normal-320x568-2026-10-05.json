@@ -1,0 +1,247 @@
+{
+  "command": "node /tmp/review-compact-notice-fixture.mjs",
+  "browser": "Chromium 149.0.7827.55",
+  "setupFrameGapRecoveries": [],
+  "screenshot": "/workspace/machimamore/docs/evidence/browser-visual/compact-notice-fixture-normal-320x568-2026-10-05.png",
+  "actualPausedBefore": {
+    "observer": {
+      "phase": "paused",
+      "screen": "paused",
+      "tick": 61,
+      "missionId": 3,
+      "seed": 1296122696,
+      "pauseReasons": [
+        "manual"
+      ]
+    },
+    "domScreen": "paused"
+  },
+  "fixture": {
+    "fixtureType": "DOM-only combination presentation fixture; not a naturally occurring combat sample",
+    "noGameStateWrites": true,
+    "domScreenForCss": "playing",
+    "observer": {
+      "phase": "paused",
+      "screen": "paused",
+      "tick": 61,
+      "missionId": 3,
+      "seed": 1296122696,
+      "pauseReasons": [
+        "manual"
+      ]
+    },
+    "viewport": {
+      "width": 320,
+      "height": 568,
+      "devicePixelRatio": 1
+    },
+    "notices": [
+      {
+        "selector": "#reload-status",
+        "text": "再装填 6.0秒",
+        "hidden": false,
+        "display": "block",
+        "left": 12,
+        "top": 230.171875,
+        "right": 308,
+        "bottom": 258.171875,
+        "width": 296,
+        "height": 28
+      },
+      {
+        "selector": "#reload-progress",
+        "text": "",
+        "hidden": false,
+        "display": "block",
+        "left": 12,
+        "top": 264.171875,
+        "right": 308,
+        "bottom": 271.171875,
+        "width": 296,
+        "height": 7
+      },
+      {
+        "selector": "#city-warning",
+        "text": "△ 前方の街が攻撃中 · 区画13 250HP · 計20区画",
+        "hidden": false,
+        "display": "block",
+        "left": 12,
+        "top": 277.171875,
+        "right": 308,
+        "bottom": 305.171875,
+        "width": 296,
+        "height": 28
+      },
+      {
+        "selector": "#warning",
+        "text": "低空注意 · 機首を上げて",
+        "hidden": false,
+        "display": "block",
+        "left": 12,
+        "top": 311.171875,
+        "right": 308,
+        "bottom": 339.171875,
+        "width": 296,
+        "height": 28
+      }
+    ],
+    "announcement": {
+      "selector": "#announcement",
+      "text": "街を守りUFO50機を撃破 · 味方残機は自機込み",
+      "hidden": false,
+      "display": "block",
+      "left": 12,
+      "top": 286,
+      "right": 308,
+      "bottom": 302.796875,
+      "width": 296,
+      "height": 16.796875
+    },
+    "noticeStack": {
+      "selector": ".hud-notices",
+      "text": "再装填 6.0秒\n          \n          \n          △ 前方の街が攻撃中 · 区画13 250HP · 計20区画\n          低空注意 · 機首を上げて",
+      "hidden": false,
+      "display": "flex",
+      "left": 12,
+      "top": 230.171875,
+      "right": 308,
+      "bottom": 339.171875,
+      "width": 296,
+      "height": 109
+    },
+    "approximateNormalAircraftBand": {
+      "left": 63.44,
+      "right": 256.56,
+      "top": 335.12,
+      "bottom": 397.59999999999997
+    },
+    "approximateNormalReticleZone": {
+      "left": 142,
+      "right": 178,
+      "top": 188.184,
+      "bottom": 224.184
+    },
+    "maxNoticeBottom": 339.171875,
+    "bodyBandClearancePx": -4.0518749999999955,
+    "noticeObstructionsOfBodyBand": [
+      "#warning"
+    ],
+    "noticeObstructionsOfReticle": [],
+    "measuredBounds": [
+      {
+        "selector": ".hud-notices",
+        "text": "再装填 6.0秒\n          \n          \n          △ 前方の街が攻撃中 · 区画13 250HP · 計20区画\n          低空注意 · 機首を上げて",
+        "hidden": false,
+        "display": "flex",
+        "left": 12,
+        "top": 230.171875,
+        "right": 308,
+        "bottom": 339.171875,
+        "width": 296,
+        "height": 109
+      },
+      {
+        "selector": "#reload-status",
+        "text": "再装填 6.0秒",
+        "hidden": false,
+        "display": "block",
+        "left": 12,
+        "top": 230.171875,
+        "right": 308,
+        "bottom": 258.171875,
+        "width": 296,
+        "height": 28
+      },
+      {
+        "selector": "#reload-progress",
+        "text": "",
+        "hidden": false,
+        "display": "block",
+        "left": 12,
+        "top": 264.171875,
+        "right": 308,
+        "bottom": 271.171875,
+        "width": 296,
+        "height": 7
+      },
+      {
+        "selector": "#city-warning",
+        "text": "△ 前方の街が攻撃中 · 区画13 250HP · 計20区画",
+        "hidden": false,
+        "display": "block",
+        "left": 12,
+        "top": 277.171875,
+        "right": 308,
+        "bottom": 305.171875,
+        "width": 296,
+        "height": 28
+      },
+      {
+        "selector": "#warning",
+        "text": "低空注意 · 機首を上げて",
+        "hidden": false,
+        "display": "block",
+        "left": 12,
+        "top": 311.171875,
+        "right": 308,
+        "bottom": 339.171875,
+        "width": 296,
+        "height": 28
+      },
+      {
+        "selector": "#announcement",
+        "text": "街を守りUFO50機を撃破 · 味方残機は自機込み",
+        "hidden": false,
+        "display": "block",
+        "left": 12,
+        "top": 286,
+        "right": 308,
+        "bottom": 302.796875,
+        "width": 296,
+        "height": 16.796875
+      },
+      {
+        "selector": ".flight-data",
+        "text": "機体 100%\n          250m396km/h\n          機銃 288機関砲 96\n          暫定得点 0暫定命中率—（未射撃）\n          時間点は勝利時",
+        "hidden": false,
+        "display": "block",
+        "left": 96,
+        "top": 407.1875,
+        "right": 214,
+        "bottom": 556,
+        "width": 118,
+        "height": 148.8125
+      },
+      {
+        "selector": ".mission-hud",
+        "text": "UFO撃破0 / 50残機50 · 出撃8 · 予備＋待機42\n          味方（自機込み）残機50出撃8 · 予備＋待機42\n          街の耐久100%破壊 0 / 20区画",
+        "hidden": false,
+        "display": "grid",
+        "left": 12,
+        "top": 68.1875,
+        "right": 308,
+        "bottom": 185.40625,
+        "width": 296,
+        "height": 117.21875
+      }
+    ]
+  },
+  "actualPausedAfter": {
+    "phase": "paused",
+    "screen": "paused",
+    "tick": 61,
+    "missionId": 3,
+    "seed": 1296122696,
+    "pauseReasons": [
+      "manual"
+    ],
+    "domScreen": "playing"
+  },
+  "visualReview": "Opened at original 320x568. The notice stack ends at y=339.17px, 4.05px into the conservative projected aircraft band (top y=335.12px). In the PNG the low-altitude card sits directly against the aircraft top silhouette; this is a DOM-only notice combination, not a natural combat sample, and the 4px zone intersection is a conservative projection rather than pixel segmentation.",
+  "priorDiscardedExploratoryAttempt": {
+    "result": "no_capture",
+    "observedDomScreen": "paused_during_strict_warmup",
+    "reason": "not recorded; no cause inferred",
+    "note": "The first exploratory script stopped at the paused DOM state before reading the observer snapshot or capturing a PNG. The later successful run began from a fresh browser context."
+  }
+}

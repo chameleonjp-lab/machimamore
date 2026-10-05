@@ -1,0 +1,159 @@
+{
+  "config": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/machimamore/node_modules/@playwright/test/cli.js",
+      "test",
+      "--project=webkit",
+      "--grep",
+      "WebGL context restoration does not silently resume the mission",
+      "--workers=1"
+    ],
+    "configFile": "/workspace/machimamore/playwright.config.ts",
+    "rootDir": "/workspace/machimamore/browser-tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/machimamore/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspace/machimamore/browser-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspace/machimamore/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/workspace/machimamore/browser-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "input-recovery.spec.ts",
+      "file": "input-recovery.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "WebGL context restoration does not silently resume the mission",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10977,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-10-05T03:53:35.722Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "setup-frame-gap-recovery-1",
+                      "contentType": "application/json",
+                      "body": "ewogICJyZWFzb24iOiAi55S76Z2i5pu05paw44Gr6ZW344GE56m655m944GM44GC44Gj44Gf44Gf44KB5YGc5q2i44GX44G+44GX44Gf44CCIiwKICAicGF1c2VSZWFzb25zIjogWwogICAgImZyYW1lIgogIF0sCiAgInRpY2siOiAwLAogICJjb25maXJtZWRGcm96ZW5UaWNrIjogMCwKICAiZnJlZXplQ2hlY2tNcyI6IDEyMCwKICAicmVzdW1lZFRocm91Z2hWaXNpYmxlQnV0dG9uIjogdHJ1ZSwKICAiaW5wdXRQcmVzZW50YXRpb25CZWZvcmVSZXN1bWUiOiAia2V5Ym9hcmQiLAogICJyZXN1bWVJbnB1dE1ldGhvZCI6ICJtb3VzZS1jbGljayIsCiAgImlucHV0UHJlc2VudGF0aW9uQWZ0ZXJSZXN1bWUiOiAia2V5Ym9hcmQiLAogICJyZXN1bWVkU2NyZWVuIjogInBsYXlpbmciLAogICJyZXN1bWVkUGhhc2UiOiAicGxheWluZyIKfQ=="
+                    },
+                    {
+                      "name": "documented-frame-gap-recovery",
+                      "contentType": "application/json",
+                      "body": "ewogICJyZWNvdmVyaWVzIjogWwogICAgewogICAgICAicmVhc29uIjogIueUu+mdouabtOaWsOOBq+mVt+OBhOepuueZveOBjOOBguOBo+OBn+OBn+OCgeWBnOatouOBl+OBvuOBl+OBn+OAgiIsCiAgICAgICJwYXVzZVJlYXNvbnMiOiBbCiAgICAgICAgImZyYW1lIgogICAgICBdLAogICAgICAidGljayI6IDAsCiAgICAgICJjb25maXJtZWRGcm96ZW5UaWNrIjogMCwKICAgICAgImZyZWV6ZUNoZWNrTXMiOiAxMjAsCiAgICAgICJyZXN1bWVkVGhyb3VnaFZpc2libGVCdXR0b24iOiB0cnVlLAogICAgICAiaW5wdXRQcmVzZW50YXRpb25CZWZvcmVSZXN1bWUiOiAia2V5Ym9hcmQiLAogICAgICAicmVzdW1lSW5wdXRNZXRob2QiOiAibW91c2UtY2xpY2siLAogICAgICAiaW5wdXRQcmVzZW50YXRpb25BZnRlclJlc3VtZSI6ICJrZXlib2FyZCIsCiAgICAgICJyZXN1bWVkU2NyZWVuIjogInBsYXlpbmciLAogICAgICAicmVzdW1lZFBoYXNlIjogInBsYXlpbmciCiAgICB9CiAgXSwKICAicmVzdW1lZFRocm91Z2hWaXNpYmxlQnV0dG9uIjogdHJ1ZSwKICAic2V0dXBXYXJtdXBUaWNrcyI6IDEyLAogICJzZXR1cFdhcm11cE1zIjogODgxLAogICJzZXR1cEVsYXBzZWRNcyI6IDMwNDkKfQ=="
+                    },
+                    {
+                      "name": "webgl-context-restoration-capability",
+                      "contentType": "application/json",
+                      "body": "ewogICJicm93c2VyTmFtZSI6ICJ3ZWJraXQiLAogICJzdXBwb3J0ZWQiOiB0cnVlLAogICJjb250ZXh0VHlwZSI6ICJ3ZWJnbDIiLAogICJleHRlbnNpb25QcmVzZW50IjogdHJ1ZSwKICAiY2FuTG9zZSI6IHRydWUsCiAgImNhblJlc3RvcmUiOiB0cnVlCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2c889bb79498ad958aa1-8000152f39acd1c70edf",
+          "file": "input-recovery.spec.ts",
+          "line": 359,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-05T03:53:34.215Z",
+    "duration": 13350.333999999999,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

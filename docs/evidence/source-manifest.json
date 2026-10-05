@@ -1,0 +1,399 @@
+{
+  "schema": 1,
+  "generatedAt": "2026-10-05T04:07:05.620Z",
+  "commit": "38534ef0788a9876e73e2f819ad1db5cc63c3858",
+  "workingTreeDirty": true,
+  "contentDigest": "0e0a5a4211fe45f0f761af17fd1f2c6ab67ec7d6da9d4b46baf433596d714b9f",
+  "files": [
+    {
+      "path": ".github/workflows/checks.yml",
+      "bytes": 895,
+      "sha256": "47eece8a43ae297d50334d76fb8f86edf528a37b59966f562b8484794ab78665"
+    },
+    {
+      "path": "browser-tests/fixtures.ts",
+      "bytes": 16746,
+      "sha256": "eb9e8bb094bb0d15a14d6a74a72e35d6b2681f5ae0906a110f55c31857fd7a4b"
+    },
+    {
+      "path": "browser-tests/game-flow.spec.ts",
+      "bytes": 7334,
+      "sha256": "a42a70e483b9ae4edce3988323fed9db64e34e0489b339f013571287d6f6229f"
+    },
+    {
+      "path": "browser-tests/input-recovery.spec.ts",
+      "bytes": 24271,
+      "sha256": "82ea23503e97ea163705e769bf4f7acd1451dfd2ae2ad0ef6b23d2f77fdc9498"
+    },
+    {
+      "path": "browser-tests/mobile-layout.spec.ts",
+      "bytes": 23665,
+      "sha256": "6c6da79754640494a08e28744371b1fa41a6d88b3881e14d6541cf8bac0c7018"
+    },
+    {
+      "path": "browser-tests/production.spec.ts",
+      "bytes": 5795,
+      "sha256": "04efc9de8f22daddccc560899427a4dcd51ec208a5d798ed6559e0b7115de1e5"
+    },
+    {
+      "path": "browser-tests/render-capacity.spec.ts",
+      "bytes": 4059,
+      "sha256": "219c77b586759e45c8459096f38e64ce7580b7c99b638aa7df946e0696f4e407"
+    },
+    {
+      "path": "browser-tests/render-fixture.html",
+      "bytes": 256,
+      "sha256": "97e8d68e130d63f9292db95d5888569d80ce3c93299326e5174fb0e287c69599"
+    },
+    {
+      "path": "browser-tests/resource-bounds.spec.ts",
+      "bytes": 7173,
+      "sha256": "0fe61550b16b6dc0c038666c58d58d6fcdb3f7cf8283a8130d539058c0d1780a"
+    },
+    {
+      "path": "index.html",
+      "bytes": 8510,
+      "sha256": "5be9bcc2705da8a87d91d0667052e1f1f91220f0ad17c722db001d22f11b9e23"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 47198,
+      "sha256": "135a6faf48d520bdb1bb6e3fff57218f21f6e60c734932cc710663ae8403f333"
+    },
+    {
+      "path": "package.json",
+      "bytes": 1066,
+      "sha256": "6e921d48347545fcd3ebbe43e9e9ab962e695aca5fe8ff5c5e18d12891e233ac"
+    },
+    {
+      "path": "playwright.config.ts",
+      "bytes": 927,
+      "sha256": "729ea074f9606aa4de3c11206c903c3ba91250e1a314aa90070cc803540e9b59"
+    },
+    {
+      "path": "public/third-party-notices.txt",
+      "bytes": 1081,
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+    },
+    {
+      "path": "scripts/balance.ts",
+      "bytes": 4013,
+      "sha256": "028294bad2aa4ad815f3398671d2624c06bb2a8eba466b421713d22c63f2d9ff"
+    },
+    {
+      "path": "scripts/browser-campaign.ts",
+      "bytes": 10870,
+      "sha256": "8b2e6d80eb60ec9e46a7f9b10691e3089a7fcc9b481d8562d491dabe11f45793"
+    },
+    {
+      "path": "scripts/browser-evidence.ts",
+      "bytes": 29879,
+      "sha256": "0fae86128b6ed98d221f91c4362cc861c66e2fc4e93d3e43ceae63a929fa7f2a"
+    },
+    {
+      "path": "scripts/cadence-experiment.ts",
+      "bytes": 3265,
+      "sha256": "91e20c9c17f5d85a267fa0e7158822680aa43c94116231f026dc36f6871ea777"
+    },
+    {
+      "path": "scripts/check-dist.mjs",
+      "bytes": 2152,
+      "sha256": "708c6943b54768666b37b1c44475bebeda7ac54d4d9b76afd66250ade9bd1c11"
+    },
+    {
+      "path": "scripts/controls-browser.mjs",
+      "bytes": 18974,
+      "sha256": "75d10cc7cf9ff5d4b0f2e013399ee710c8f348dcf7fc5b028dca99cf4aa02191"
+    },
+    {
+      "path": "scripts/defeat-search.ts",
+      "bytes": 5548,
+      "sha256": "ebd9f05efbcbbbfd82b65e2ff6e70b9c5dbb76b4c16065d9dfd2d9edad8ac99f"
+    },
+    {
+      "path": "scripts/legal-pilot.ts",
+      "bytes": 18371,
+      "sha256": "48aca7032cb6807ab2797d9d47b22bbfe4453c55f76269adbcb8e60ff3828051"
+    },
+    {
+      "path": "scripts/review-balance-evidence.mjs",
+      "bytes": 3127,
+      "sha256": "09ee65f5f617e67e125ada4a43ddf421d6c33db0c53f3ed99118014cd59a3771"
+    },
+    {
+      "path": "scripts/review-ir09-recovery.mjs",
+      "bytes": 4392,
+      "sha256": "bf908c41ce1676ff15b839ba61583bdb7e764c83c573f45c800de6ea9c7414c9"
+    },
+    {
+      "path": "scripts/review-ir10-fixtures.ts",
+      "bytes": 1905,
+      "sha256": "07d2497c8e567cf4d4af6e00238143d781352e12af8e2edba63133ddf59a7b21"
+    },
+    {
+      "path": "scripts/review-rounded-box-equivalence.ts",
+      "bytes": 2205,
+      "sha256": "1c3ab1ac81a60fe46dabc25f823f9fadb324835c868df5c2c622430cbe7c2e7c"
+    },
+    {
+      "path": "scripts/review-rounded-box-reference.ts",
+      "bytes": 3162,
+      "sha256": "17e178e1c4ec0bbd771755ae12726520a75985214b18961a086a3ee81a70dc1d"
+    },
+    {
+      "path": "scripts/source-manifest.mjs",
+      "bytes": 1402,
+      "sha256": "17fb0664f34bdfcc36237981757bce8f097b8a6f84e1d30bfe9f6e147c470df9"
+    },
+    {
+      "path": "scripts/turn-held.ts",
+      "bytes": 3551,
+      "sha256": "e8e37df94c794f2aad83dab78f38646adace0421a42a127f440a3eb4d4add816"
+    },
+    {
+      "path": "src/aircraft-batch.ts",
+      "bytes": 8097,
+      "sha256": "cd69fdcd03507faffca251b311f253f4ccd10aa0bb11fbfc767626a4960c5428"
+    },
+    {
+      "path": "src/aircraft.ts",
+      "bytes": 34835,
+      "sha256": "1a9c18f93e5a48869882b2aa2946cdeb352dc4a8acd76b4fd9beade8ded621d5"
+    },
+    {
+      "path": "src/ammunition.ts",
+      "bytes": 1027,
+      "sha256": "2388602d763ee11037ffd16a4719ee2f2f862ee220fb62e1955d7cc0a122c24d"
+    },
+    {
+      "path": "src/audio.ts",
+      "bytes": 6683,
+      "sha256": "086fe8700e92fbf1ab04a5fb0595f7a138f242a7c33aa385ffdcfa63c5b53724"
+    },
+    {
+      "path": "src/city.ts",
+      "bytes": 1456,
+      "sha256": "8aa8390b37458d2dbd598473730343b348ae32a5b9df59487c924cdb86cde3ee"
+    },
+    {
+      "path": "src/collision.ts",
+      "bytes": 10569,
+      "sha256": "b3b6c90d4f0c5fb0835cc8f8964ec4189635ca64287067089f799834d5950d25"
+    },
+    {
+      "path": "src/control-settings.css",
+      "bytes": 7054,
+      "sha256": "f08dd3b0a8c8d165e3202ce313b170f7fe5babd6dc93a6178eacbff0ef6a35e5"
+    },
+    {
+      "path": "src/control-settings.ts",
+      "bytes": 35195,
+      "sha256": "b7b4bdbe11806137a71c6c96fcebe2c8760b83f3ec5341d57b7b5767cf7eb88b"
+    },
+    {
+      "path": "src/dialog-focus.ts",
+      "bytes": 1234,
+      "sha256": "86d631a4d618558e1ca671004c12ccc1fbdfe75516e6c5d04f962acd2c5e1996"
+    },
+    {
+      "path": "src/flight-assist.ts",
+      "bytes": 7809,
+      "sha256": "ffb4cec9e6e65b950b785a6dacae593f69f16f4773ddba7252ab48211e1066aa"
+    },
+    {
+      "path": "src/flight-types.ts",
+      "bytes": 1039,
+      "sha256": "bba0fd716a7689b84cfc3fbdb50df73016f1e7fb3c0546607444fe9e5a5ad6fa"
+    },
+    {
+      "path": "src/flight-view.ts",
+      "bytes": 2332,
+      "sha256": "f7881454dc87dee7473edbd98aba6919d35dbd56a563e20827342cc0525d1c60"
+    },
+    {
+      "path": "src/flight.ts",
+      "bytes": 8697,
+      "sha256": "c9662786f1fdb40f5cc62f3352a638e77b18d8f3be18a613c524dcdd4c7bac63"
+    },
+    {
+      "path": "src/hud.ts",
+      "bytes": 5575,
+      "sha256": "4c430050c67697c78edb1221b360a6ba84d666a70c40d4f3298d49b3c6464827"
+    },
+    {
+      "path": "src/input.ts",
+      "bytes": 14116,
+      "sha256": "0b64cb32fac2053cb933c85fe9a7f7a5d2a4e4f24d2aca33403537e054a20847"
+    },
+    {
+      "path": "src/keyboard-settings.ts",
+      "bytes": 9087,
+      "sha256": "e5507387423e7bb7b7fc9e944c595750c70891a28d98bf49b7f9489242379b58"
+    },
+    {
+      "path": "src/laser.ts",
+      "bytes": 2526,
+      "sha256": "35ceb9b4dea94e5d6802986bff2b0a403333304f25145d3131b79aad1c852111"
+    },
+    {
+      "path": "src/main.ts",
+      "bytes": 17901,
+      "sha256": "447df3128a3cb5dbb4fb24336589ef527cf506f2bd7dbbd05385d645a2c6585d"
+    },
+    {
+      "path": "src/roster.ts",
+      "bytes": 4717,
+      "sha256": "78282d7b209414dd343a4095c63314c8e23b3ac1d440de3457b1cc2596d9bead"
+    },
+    {
+      "path": "src/rules-guide.ts",
+      "bytes": 10196,
+      "sha256": "f2fca68492ddbfd60d13b03e6c2035e8f8a7e0ef80f6fe15aa2f6f53020ba37f"
+    },
+    {
+      "path": "src/rules.ts",
+      "bytes": 2740,
+      "sha256": "e67ca5b7c76f9e7faf851c522ba5557759c669419ab46dd4d2594d3bcf5ad910"
+    },
+    {
+      "path": "src/scene.ts",
+      "bytes": 24410,
+      "sha256": "49f32e56e91c7f5d5efa122e36668dc65d53ffb5d9c5386fde90184c508239c4"
+    },
+    {
+      "path": "src/score.ts",
+      "bytes": 2577,
+      "sha256": "6709c24859bd19b0b08b0901a6af3d9b0472c0447d0155ce033770b9cbdc5542"
+    },
+    {
+      "path": "src/simulation.ts",
+      "bytes": 32079,
+      "sha256": "bd8cc3a82ddaaecbc8a5d2cb1205908a41a7f634d7a02bbe3b91dcc8f1f36254"
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 21480,
+      "sha256": "80d0cdf38ccca1494534b6e005701e33162cb3e7f6519ae087e3882b38fef191"
+    },
+    {
+      "path": "src/types.ts",
+      "bytes": 5520,
+      "sha256": "f855167404befd3b7ab6c81935b63be8364fcdeb1065436e94049c79d8a6a446"
+    },
+    {
+      "path": "src/ufo-ai.ts",
+      "bytes": 4891,
+      "sha256": "c8103bb6b72f65ee3bd7ab682a124ef930522720d27884973b82fb5873fe9195"
+    },
+    {
+      "path": "tests/aircraft-batch.test.ts",
+      "bytes": 14620,
+      "sha256": "490c28f1449d48cc3bb68ef69826014a590211dd5d7ccbd6ce558b2199e3c4b7"
+    },
+    {
+      "path": "tests/audio-lifecycle.test.ts",
+      "bytes": 2914,
+      "sha256": "ff1d183389bbdd2c4997b633e1cc640083d1a6ef3f395ded073947ebc6494c83"
+    },
+    {
+      "path": "tests/collision-property.test.ts",
+      "bytes": 2569,
+      "sha256": "2d5e7cc3b6f1b942c1427bd823dc1d71fcf5e6f54c954c6752db418eb26d8aa4"
+    },
+    {
+      "path": "tests/controls-contracts.test.ts",
+      "bytes": 6467,
+      "sha256": "fd10330a38e07cfe36691c2eb61c8c425f1bf820a03e36e911ab3d7ac3523f78"
+    },
+    {
+      "path": "tests/controls-dialog-focus.test.ts",
+      "bytes": 4571,
+      "sha256": "dd483ce7c3db5fe1cd8e1ddc2274c8d4ebc56cf9d8e25864acfe6b364ec190e6"
+    },
+    {
+      "path": "tests/controls-keyboard.test.ts",
+      "bytes": 11444,
+      "sha256": "48cc8f1115b14f332fed9d62ba3c92b23ca144d2f5d0192b7e2111e7b34fa419"
+    },
+    {
+      "path": "tests/controls-ownership.test.ts",
+      "bytes": 2309,
+      "sha256": "3ac924ef382b34cc0256e2b8f8da418140ab445568c8ede367c18a971bcf5d5d"
+    },
+    {
+      "path": "tests/controls-recovery.test.ts",
+      "bytes": 5920,
+      "sha256": "06cef2ce159acdede5a9d35aebd8292a862d72e83a3781efd2b688188abdac99"
+    },
+    {
+      "path": "tests/controls-settings.test.ts",
+      "bytes": 10086,
+      "sha256": "06b1ece83f074577ba3cf78a7ebb443a9666fb4a8cfc8d5b9ca7eb133d064800"
+    },
+    {
+      "path": "tests/flight-ammunition.test.ts",
+      "bytes": 1868,
+      "sha256": "eb611e5c459de950552d11fefc9d6c08938241b8b02452b18266ee87417ff6d2"
+    },
+    {
+      "path": "tests/flight-assist.test.ts",
+      "bytes": 4177,
+      "sha256": "84f5d085b242dc5b4d5ad3978968333ac37121f1af426f1f86e4f21735524de2"
+    },
+    {
+      "path": "tests/flight-parity.test.ts",
+      "bytes": 4554,
+      "sha256": "f811081345c1526456f6026c2528ede05de426d552f12607bc81b1bf7d55e1c2"
+    },
+    {
+      "path": "tests/simulation-combat.test.ts",
+      "bytes": 11095,
+      "sha256": "2a683692e385ada475fcf6b04cc1cbdbb691f88fea962ab01950c7a79c048abc"
+    },
+    {
+      "path": "tests/simulation-fixtures.ts",
+      "bytes": 2733,
+      "sha256": "aecdf2bb189c5bafcc64903d0487ab3c22723aa0d7a5ae5257d052d83b7c27bc"
+    },
+    {
+      "path": "tests/simulation-laser.test.ts",
+      "bytes": 4808,
+      "sha256": "837fd89628eeddfbb58d2f07e3151edf3789d2c48766269c0382e57dfac45b02"
+    },
+    {
+      "path": "tests/simulation-lifecycle.test.ts",
+      "bytes": 9304,
+      "sha256": "66e2b14ef6a0fcea283c903d8058a57313098a8d08851a561f5613dbe0b6cebd"
+    },
+    {
+      "path": "tests/simulation-roster.test.ts",
+      "bytes": 2321,
+      "sha256": "0ca3684ad88d29fcb6423973bf273ed31b171e42df7233d9f265b673700ef7cb"
+    },
+    {
+      "path": "tests/simulation-score-city.test.ts",
+      "bytes": 3525,
+      "sha256": "3516f40f32bee5aa98b07d00f6b597c8ffc93f4e57dcead9f60323ed5ba2965c"
+    },
+    {
+      "path": "tests/simulation-ufo.test.ts",
+      "bytes": 7840,
+      "sha256": "5569a728a260e53e7a7cf1df980f404e36e053792e2afce2daea683a57af52d1"
+    },
+    {
+      "path": "tsconfig.json",
+      "bytes": 215,
+      "sha256": "f18e94b76b8fd15d512f4efdb49bdd7bb019aa706418eaf10f0f2d9f4c7f4209"
+    },
+    {
+      "path": "tsconfig.tools.json",
+      "bytes": 195,
+      "sha256": "a760c4f0e9bfbd0be3e3c49bd4c112f89e878f95ab85760df221b3cd17da73f3"
+    },
+    {
+      "path": "vite.config.ts",
+      "bytes": 179,
+      "sha256": "13c3c6f6f0f70aea9ed954d50dfba335d1425569c4b722cd18c7ac295c9e9c45"
+    }
+  ]
+}

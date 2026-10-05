@@ -1,0 +1,650 @@
+{
+  "schema": 1,
+  "method": "Diagnostic only. A temporary script overrides the antialias request before WebGL context creation; no simulation state is edited. The02:21 pair established both missions at1366x768DPR1/Normal/defaultseed/no input/soundOFF. After5s warmup and logged visible frame-pause recovery before measurement, AA-on paused within5s; AA-off had0paused rAFs and endedPlaying. Different resultingticks/world states and AA-on pause prohibit a matched percentage speedup. Initial context probe drawingBuffer300x150 is at creation, not the final resized measurement buffer. navigationToMissionMs in this original record includes the windows/capture and is not startup latency. Later03:20/03:23 records did not reachReady or execute any steady window. Local raw paths are ignored artifacts, not hosted PR assets.",
+  "outcome": "Adopted initial constructor antialias:false only underR91 after openingAA-offPNG and preserving originalgeometry/material/camera. Five-second software viability is not60s/900s or physicalR93pass; later coldpreparation failures remain recorded. Full final verification pending.",
+  "runs": [
+    {
+      "rawFile": "artifacts/browser-evidence/renderer-aa-ab-2026-10-05T03-20-51.712Z.json",
+      "rawSha256": "49144b99c1fbea7767e0124cbeac8abcb92f0e9448cbc814bc40847a74ed4bda",
+      "startedAt": "2026-10-05T03:20:51.712Z",
+      "completedAt": "2026-10-05T03:21:59.816Z",
+      "nominalViewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "profiles": [
+        {
+          "antialiasForced": true,
+          "status": "failed",
+          "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+          "pageErrors": [],
+          "lastObservation": {
+            "screen": "home",
+            "phase": "ready",
+            "tick": 0,
+            "startupError": "画面を準備できません。WebGL対応とブラウザの描画設定を確認して再試行してください。描画準備が10秒以内に完了しませんでした。",
+            "startDisabled": true,
+            "context": {
+              "type": "webgl2",
+              "actualAttributes": {
+                "alpha": true,
+                "antialias": true,
+                "depth": true,
+                "desynchronized": false,
+                "failIfMajorPerformanceCaveat": false,
+                "powerPreference": "high-performance",
+                "premultipliedAlpha": true,
+                "preserveDrawingBuffer": false,
+                "stencil": false,
+                "xrCompatible": false
+              },
+              "samples": 4,
+              "vendor": "Google Inc. (Google)",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+              "drawingBuffer": {
+                "width": 300,
+                "height": 150
+              }
+            },
+            "contextRequests": [
+              {
+                "type": "webgl2",
+                "attributes": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": true,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                },
+                "overridden": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": true,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                }
+              }
+            ]
+          }
+        },
+        {
+          "antialiasForced": false,
+          "status": "failed",
+          "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+          "pageErrors": [],
+          "lastObservation": {
+            "screen": "home",
+            "phase": "ready",
+            "tick": 0,
+            "startupError": "画面を準備できません。WebGL対応とブラウザの描画設定を確認して再試行してください。描画準備が10秒以内に完了しませんでした。",
+            "startDisabled": true,
+            "context": {
+              "type": "webgl2",
+              "actualAttributes": {
+                "alpha": true,
+                "antialias": false,
+                "depth": true,
+                "desynchronized": false,
+                "failIfMajorPerformanceCaveat": false,
+                "powerPreference": "high-performance",
+                "premultipliedAlpha": true,
+                "preserveDrawingBuffer": false,
+                "stencil": false,
+                "xrCompatible": false
+              },
+              "samples": 0,
+              "vendor": "Google Inc. (Google)",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+              "drawingBuffer": {
+                "width": 300,
+                "height": 150
+              }
+            },
+            "contextRequests": [
+              {
+                "type": "webgl2",
+                "attributes": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": true,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                },
+                "overridden": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": false,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "rawFile": "artifacts/browser-evidence/renderer-aa-ab-2026-10-05T03-23-01.588Z.json",
+      "rawSha256": "d564d93d9f838c7fc0488e4940b658868e63d0e724062b4773f799d558b0045b",
+      "startedAt": "2026-10-05T03:23:01.588Z",
+      "completedAt": "2026-10-05T03:24:06.659Z",
+      "nominalViewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "profiles": [
+        {
+          "antialiasForced": true,
+          "status": "failed",
+          "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+          "pageErrors": [],
+          "lastObservation": {
+            "screen": "home",
+            "phase": "ready",
+            "tick": 0,
+            "startupError": "画面を準備できません。WebGL対応とブラウザの描画設定を確認して再試行してください。描画準備が10秒以内に完了しませんでした。",
+            "startDisabled": true,
+            "context": {
+              "type": "webgl2",
+              "actualAttributes": {
+                "alpha": true,
+                "antialias": true,
+                "depth": true,
+                "desynchronized": false,
+                "failIfMajorPerformanceCaveat": false,
+                "powerPreference": "high-performance",
+                "premultipliedAlpha": true,
+                "preserveDrawingBuffer": false,
+                "stencil": false,
+                "xrCompatible": false
+              },
+              "samples": 4,
+              "vendor": "Google Inc. (Google)",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+              "drawingBuffer": {
+                "width": 300,
+                "height": 150
+              }
+            },
+            "contextRequests": [
+              {
+                "type": "webgl2",
+                "attributes": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": true,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                },
+                "overridden": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": true,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                }
+              }
+            ]
+          }
+        },
+        {
+          "antialiasForced": false,
+          "status": "failed",
+          "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+          "pageErrors": [],
+          "lastObservation": {
+            "screen": "home",
+            "phase": "ready",
+            "tick": 0,
+            "startupError": "画面を準備できません。WebGL対応とブラウザの描画設定を確認して再試行してください。描画準備が10秒以内に完了しませんでした。",
+            "startDisabled": true,
+            "context": {
+              "type": "webgl2",
+              "actualAttributes": {
+                "alpha": true,
+                "antialias": false,
+                "depth": true,
+                "desynchronized": false,
+                "failIfMajorPerformanceCaveat": false,
+                "powerPreference": "high-performance",
+                "premultipliedAlpha": true,
+                "preserveDrawingBuffer": false,
+                "stencil": false,
+                "xrCompatible": false
+              },
+              "samples": 0,
+              "vendor": "Google Inc. (Google)",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+              "drawingBuffer": {
+                "width": 300,
+                "height": 150
+              }
+            },
+            "contextRequests": [
+              {
+                "type": "webgl2",
+                "attributes": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": true,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                },
+                "overridden": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": false,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "successfulDiagnosticPair": {
+    "rawFile": "artifacts/browser-evidence/renderer-aa-ab-2026-10-05T02-21-00.810Z.json",
+    "rawSha256": "7c537aa834038854f3a3d8fde10a92a7e739397aa494f729df5a9b8ef06db526",
+    "startedAt": "2026-10-05T02:21:00.810Z",
+    "completedAt": "2026-10-05T02:21:45.645Z",
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "profiles": [
+      {
+        "antialiasForced": true,
+        "warmup": {
+          "requestedDurationMs": 5000,
+          "observedDurationMs": 5008.699999999255,
+          "requestAnimationFrameCount": 39,
+          "meanIntervalMs": 131.57368421052635,
+          "p50IntervalMs": 116.69999999999891,
+          "p95IntervalMs": 266.6999999999989,
+          "p99IntervalMs": 399.89999999999964,
+          "maxIntervalMs": 399.89999999999964,
+          "pausedAnimationFrames": 36,
+          "screenTransitions": [
+            {
+              "elapsedMs": -0.3000000011179509,
+              "screen": "playing",
+              "reasonText": "作戦の時計も止まっています。",
+              "pauseReasons": null
+            },
+            {
+              "elapsedMs": 566.2999999988824,
+              "screen": "paused",
+              "reasonText": "画面更新に長い空白があったため停止しました。",
+              "pauseReasons": [
+                "frame"
+              ]
+            }
+          ]
+        },
+        "measured": {
+          "requestedDurationMs": 5000,
+          "observedDurationMs": 5031.800000000745,
+          "requestAnimationFrameCount": 38,
+          "meanIntervalMs": 133.32702702702704,
+          "p50IntervalMs": 133.3000000000011,
+          "p95IntervalMs": 250,
+          "p99IntervalMs": 266.60000000000036,
+          "maxIntervalMs": 266.60000000000036,
+          "pausedAnimationFrames": 35,
+          "screenTransitions": [
+            {
+              "elapsedMs": 90.09999999925458,
+              "screen": "playing",
+              "reasonText": "画面更新に長い空白があったため停止しました。",
+              "pauseReasons": null
+            },
+            {
+              "elapsedMs": 573.2999999992553,
+              "screen": "paused",
+              "reasonText": "画面更新に長い空白があったため停止しました。",
+              "pauseReasons": [
+                "frame"
+              ]
+            }
+          ],
+          "hostWallDurationMs": 5036
+        },
+        "beforeMeasure": {
+          "screen": "playing",
+          "phase": "playing",
+          "tick": 19,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal",
+          "pauseReasons": [],
+          "render": {
+            "ready": true,
+            "aircraft": 16,
+            "activeLasers": 0,
+            "projectiles": 0,
+            "decorations": 0,
+            "debrisMeshes": 0,
+            "smokeMeshes": 0,
+            "drawCalls": 257,
+            "geometries": 71,
+            "textures": 4,
+            "programs": 14
+          }
+        },
+        "afterMeasure": {
+          "screen": "paused",
+          "phase": "paused",
+          "tick": 31,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal",
+          "pauseReasons": [
+            "frame"
+          ],
+          "render": {
+            "ready": true,
+            "aircraft": 16,
+            "activeLasers": 0,
+            "projectiles": 0,
+            "decorations": 0,
+            "debrisMeshes": 0,
+            "smokeMeshes": 0,
+            "drawCalls": 256,
+            "geometries": 71,
+            "textures": 4,
+            "programs": 14
+          }
+        },
+        "webgl": {
+          "probe": {
+            "forcedAntialias": true,
+            "targetCalls": 1,
+            "requested": [
+              {
+                "type": "webgl2",
+                "attributes": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": true,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                },
+                "overridden": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": true,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                }
+              }
+            ],
+            "context": {
+              "type": "webgl2",
+              "actualAttributes": {
+                "alpha": true,
+                "antialias": true,
+                "depth": true,
+                "desynchronized": false,
+                "failIfMajorPerformanceCaveat": false,
+                "powerPreference": "high-performance",
+                "premultipliedAlpha": true,
+                "preserveDrawingBuffer": false,
+                "stencil": false,
+                "xrCompatible": false
+              },
+              "samples": 4,
+              "vendor": "Google Inc. (Google)",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+              "drawingBuffer": {
+                "width": 300,
+                "height": 150
+              }
+            }
+          },
+          "glLive": true,
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.7827.55 Safari/537.36",
+          "viewport": {
+            "width": 1366,
+            "height": 768,
+            "devicePixelRatio": 1
+          }
+        },
+        "pageErrors": [],
+        "outboundAttempts": [],
+        "screenshot": "/workspace/machimamore/artifacts/browser-evidence/renderer-aa-on-2026-10-05T02-21-00.810Z.png",
+        "setupRecoveries": [
+          {
+            "label": "after warmup, before measured window",
+            "pauseReasons": [
+              "frame"
+            ],
+            "reasonText": "画面更新に長い空白があったため停止しました。",
+            "frozenTick": 19,
+            "confirmedFrozenTick": 19,
+            "freezeCheckMs": 120,
+            "resumedThroughVisibleButton": true,
+            "resumedScreen": "playing",
+            "resumedPhase": "playing",
+            "resumedTick": 19
+          }
+        ]
+      },
+      {
+        "antialiasForced": false,
+        "warmup": {
+          "requestedDurationMs": 5000,
+          "observedDurationMs": 5064.799999998882,
+          "requestAnimationFrameCount": 76,
+          "meanIntervalMs": 66.44133333333333,
+          "p50IntervalMs": 66.60000000000036,
+          "p95IntervalMs": 150,
+          "p99IntervalMs": 283.39999999999964,
+          "maxIntervalMs": 283.39999999999964,
+          "pausedAnimationFrames": 57,
+          "screenTransitions": [
+            {
+              "elapsedMs": 66.19999999851007,
+              "screen": "playing",
+              "reasonText": "作戦の時計も止まっています。",
+              "pauseReasons": null
+            },
+            {
+              "elapsedMs": 932.7999999985095,
+              "screen": "paused",
+              "reasonText": "画面更新に長い空白があったため停止しました。",
+              "pauseReasons": [
+                "frame"
+              ]
+            }
+          ]
+        },
+        "measured": {
+          "requestedDurationMs": 5000,
+          "observedDurationMs": 5033.5999999996275,
+          "requestAnimationFrameCount": 51,
+          "meanIntervalMs": 99.99600000000002,
+          "p50IntervalMs": 83.39999999999964,
+          "p95IntervalMs": 166.60000000000036,
+          "p99IntervalMs": 166.70000000000073,
+          "maxIntervalMs": 166.70000000000073,
+          "pausedAnimationFrames": 0,
+          "screenTransitions": [
+            {
+              "elapsedMs": 3.599999999254578,
+              "screen": "playing",
+              "reasonText": "画面更新に長い空白があったため停止しました。",
+              "pauseReasons": null
+            }
+          ],
+          "hostWallDurationMs": 5037
+        },
+        "beforeMeasure": {
+          "screen": "playing",
+          "phase": "playing",
+          "tick": 44,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal",
+          "pauseReasons": [],
+          "render": {
+            "ready": true,
+            "aircraft": 16,
+            "activeLasers": 0,
+            "projectiles": 0,
+            "decorations": 0,
+            "debrisMeshes": 0,
+            "smokeMeshes": 0,
+            "drawCalls": 256,
+            "geometries": 71,
+            "textures": 4,
+            "programs": 14
+          }
+        },
+        "afterMeasure": {
+          "screen": "playing",
+          "phase": "playing",
+          "tick": 343,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal",
+          "pauseReasons": [],
+          "render": {
+            "ready": true,
+            "aircraft": 16,
+            "activeLasers": 12,
+            "projectiles": 19,
+            "decorations": 0,
+            "debrisMeshes": 0,
+            "smokeMeshes": 0,
+            "drawCalls": 256,
+            "geometries": 71,
+            "textures": 4,
+            "programs": 14
+          }
+        },
+        "webgl": {
+          "probe": {
+            "forcedAntialias": false,
+            "targetCalls": 1,
+            "requested": [
+              {
+                "type": "webgl2",
+                "attributes": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": true,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                },
+                "overridden": {
+                  "alpha": true,
+                  "depth": true,
+                  "stencil": false,
+                  "antialias": false,
+                  "premultipliedAlpha": true,
+                  "preserveDrawingBuffer": false,
+                  "powerPreference": "high-performance",
+                  "failIfMajorPerformanceCaveat": false
+                }
+              }
+            ],
+            "context": {
+              "type": "webgl2",
+              "actualAttributes": {
+                "alpha": true,
+                "antialias": false,
+                "depth": true,
+                "desynchronized": false,
+                "failIfMajorPerformanceCaveat": false,
+                "powerPreference": "high-performance",
+                "premultipliedAlpha": true,
+                "preserveDrawingBuffer": false,
+                "stencil": false,
+                "xrCompatible": false
+              },
+              "samples": 0,
+              "vendor": "Google Inc. (Google)",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+              "drawingBuffer": {
+                "width": 300,
+                "height": 150
+              }
+            }
+          },
+          "glLive": true,
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.7827.55 Safari/537.36",
+          "viewport": {
+            "width": 1366,
+            "height": 768,
+            "devicePixelRatio": 1
+          }
+        },
+        "pageErrors": [],
+        "outboundAttempts": [],
+        "screenshot": "/workspace/machimamore/artifacts/browser-evidence/renderer-aa-off-2026-10-05T02-21-00.810Z.png",
+        "setupRecoveries": [
+          {
+            "label": "after warmup, before measured window",
+            "pauseReasons": [
+              "frame"
+            ],
+            "reasonText": "画面更新に長い空白があったため停止しました。",
+            "frozenTick": 44,
+            "confirmedFrozenTick": 44,
+            "freezeCheckMs": 120,
+            "resumedThroughVisibleButton": true,
+            "resumedScreen": "playing",
+            "resumedPhase": "playing",
+            "resumedTick": 44
+          }
+        ]
+      }
+    ]
+  },
+  "openedDiagnosticImage": {
+    "path": "docs/evidence/browser-visual/diagnostic-aa-off-desktop.png",
+    "sha256": "a9d531eaa9eef4acbd96020bfe283a4949432c1ad6f4b5a88982716e382a2e17",
+    "review": "Root opened actual PNG: original aircraft/city/material colors/reticle visible; jaggededges visible. Diagnostic before finaldesktopCSS."
+  }
+}
