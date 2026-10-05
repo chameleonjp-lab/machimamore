@@ -33,4 +33,5 @@ jobs:
           path: |
             test-results/
             artifacts/
+            dist/artifact-manifest.json
           retention-days: 14
