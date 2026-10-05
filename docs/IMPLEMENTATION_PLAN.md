@@ -281,3 +281,11 @@ CIはPR検査と公開を分ける。PRでは固定Node/lockfile、単体、型/
 - [移行調査 固定head](https://github.com/chameleonjp-lab/machimamore/blob/ff78357d1390b03ff2c81f9b2392b7e391cf95c4/docs/MIGRATION.md)
 - [Kaisen 固定移行元](https://github.com/chameleonjp-lab/kaisen/tree/5f4565ee550ce9a1351516aa31ba9b5232c36e05)
 - [FightFlight 固定参照元](https://github.com/chameleonjp-lab/faitofuraito/tree/c2b313d37875b93458032d98636fcf5b5d30a138)
+
+## 2026-10-05 速度調整レバーの計画追補
+
+既存の固定要件/移植元に加え、[共通契約v1](THROTTLE_LEVER_CONTRACT.md)と[本作adapter追補](THROTTLE_LEVER_ADAPTER.md)を参照する。旧タッチ加速/減速、対応設定、コントロール数、v1書込み先だけは追補を優先する。原計画の本文とゲーム要件は保持する。
+
+適用工程: P00〜P07の共通操縦・設定移植、P12〜P15の画面、P17〜P19の受入。Normalは射撃・宙返りの2ボタン＋速度レバー1本（合計3コントロール）、Easyは宙返り1ボタンのまま。PC9操作、Easy自動巡航、兵装、飛行式は維持する。
+
+現mainの飛行/input/操作設定の不足により、実装接続とQAはblocked。現状・依存・確認済み範囲はadapter追補へ記録し、先行実装PRに無断で変更を混ぜない。コードがmainへ届いた後に、共通fixtureを実入力/速度制御へ接続して全件検査し、入力寿命・アクセシビリティ・保存移行・全unit/type/build・ブラウザーと実機の未検証を最終headで整理する。文書/fixtureの追加だけでこれらを完了扱いにしない。
