@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "path": "assets/index-BAyulP5k.css",
+      "bytes": 26978,
+      "sha256": "52bee58f42cf2b7d73afc93ba89df8a27f15cd117f74a857c8d852c602516d65"
+    },
+    {
+      "path": "assets/index-CX-kywWz.js",
+      "bytes": 710768,
+      "sha256": "9d04640ab8527e2b90fae88da3a455d7ca1da658eb0b20d21da04e1202dcceb0"
+    },
+    {
+      "path": "index.html",
+      "bytes": 8611,
+      "sha256": "dae5e25fd272dcf1115e7af756565e940271db243102c5af9a4f2ab6a0947d79"
+    },
+    {
+      "path": "third-party-notices.txt",
+      "bytes": 1081,
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+    }
+  ]
+}
