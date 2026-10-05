@@ -1,0 +1,1350 @@
+{
+  "status": "failed",
+  "mode": "performance",
+  "runId": "2026-10-05T04-39-06.370Z-performance",
+  "baseURL": "http://127.0.0.1:4176/",
+  "targetViewport": {
+    "width": 568,
+    "height": 320
+  },
+  "startTime": "2026-10-05T04:39:06.371Z",
+  "browser": {
+    "name": "webkit",
+    "version": "26.5"
+  },
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+    "playwrightBrowsersPathConfigured": true,
+    "graphics": {
+      "vendor": "Apple Inc.",
+      "renderer": "Apple GPU",
+      "version": "WebGL 2.0",
+      "antialias": false,
+      "samples": 0,
+      "cssSize": {
+        "width": 568,
+        "height": 320
+      },
+      "drawingBuffer": {
+        "width": 568,
+        "height": 320
+      },
+      "effectivePixelRatio": 1
+    },
+    "softwareRendererWorkerLimit": "2",
+    "graphicsThreadEnvironment": {
+      "LP_NUM_THREADS": "2"
+    },
+    "memory": null,
+    "viewportProfile": {
+      "width": 568,
+      "height": 320,
+      "deviceScaleFactor": 1,
+      "rendererPixelRatio": 1
+    },
+    "navigationToReadyMs": 3461
+  },
+  "outboundAttempts": [],
+  "screenshots": [
+    "/workspace/machimamore/artifacts/browser-evidence/2026-10-05T04-39-06.370Z-performance-home.png",
+    "/workspace/machimamore/artifacts/browser-evidence/2026-10-05T04-39-06.370Z-performance-mission-start.png",
+    "/workspace/machimamore/artifacts/browser-evidence/2026-10-05T04-39-06.370Z-performance-after-ten-relaunches.png"
+  ],
+  "activeScreenshotCaptures": [
+    {
+      "label": "mission-start",
+      "path": "/workspace/machimamore/artifacts/browser-evidence/2026-10-05T04-39-06.370Z-performance-mission-start.png",
+      "visualReviewRequired": true,
+      "captureInterrupted": false,
+      "captureRecoveryStatus": "not-required",
+      "before": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 34
+      },
+      "after": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 40,
+        "reason": "画面更新に長い空白があったため停止しました。",
+        "pauseReasons": []
+      },
+      "preCaptureRecovery": null,
+      "postCaptureRecovery": null
+    }
+  ],
+  "observations": [],
+  "framePauseRecoveries": [
+    {
+      "label": "mission-setup-warmup",
+      "reason": "画面更新に長い空白があったため停止しました。",
+      "pauseReasons": [
+        "frame"
+      ],
+      "tick": 0,
+      "confirmedFrozenTick": 0,
+      "freezeCheckMs": 120,
+      "resumedThroughVisibleButton": true,
+      "resumeConfirmed": true,
+      "resumedScreen": "playing",
+      "resumedPhase": "playing",
+      "resumedTick": 0
+    },
+    {
+      "label": "renderer warm-up",
+      "reason": "画面更新に長い空白があったため停止しました。",
+      "pauseReasons": [
+        "frame"
+      ],
+      "tick": 363,
+      "confirmedFrozenTick": 363,
+      "freezeCheckMs": 120,
+      "resumedThroughVisibleButton": true,
+      "resumeConfirmed": true,
+      "resumedScreen": "playing",
+      "resumedPhase": "playing",
+      "resumedTick": 363
+    },
+    {
+      "label": "mission-setup-warmup",
+      "reason": "画面更新に長い空白があったため停止しました。",
+      "pauseReasons": [
+        "frame"
+      ],
+      "tick": 0,
+      "confirmedFrozenTick": 0,
+      "freezeCheckMs": 120,
+      "resumedThroughVisibleButton": true,
+      "resumeConfirmed": true,
+      "resumedScreen": "playing",
+      "resumedPhase": "playing",
+      "resumedTick": 0
+    }
+  ],
+  "missionSetupWarmups": [
+    {
+      "action": "home",
+      "elapsedMs": 1869,
+      "warmupTicks": 12,
+      "lastTick": 34,
+      "steadyDurationMs": 562
+    },
+    {
+      "action": "home",
+      "elapsedMs": 683,
+      "warmupTicks": 12,
+      "lastTick": 40,
+      "steadyDurationMs": 677
+    },
+    {
+      "action": "home",
+      "elapsedMs": 646,
+      "warmupTicks": 12,
+      "lastTick": 39,
+      "steadyDurationMs": 638
+    },
+    {
+      "action": "home",
+      "elapsedMs": 1242,
+      "warmupTicks": 12,
+      "lastTick": 35,
+      "steadyDurationMs": 627
+    },
+    {
+      "action": "home",
+      "elapsedMs": 572,
+      "warmupTicks": 12,
+      "lastTick": 34,
+      "steadyDurationMs": 564
+    },
+    {
+      "action": "home",
+      "elapsedMs": 668,
+      "warmupTicks": 12,
+      "lastTick": 40,
+      "steadyDurationMs": 662
+    },
+    {
+      "action": "home",
+      "elapsedMs": 587,
+      "warmupTicks": 12,
+      "lastTick": 34,
+      "steadyDurationMs": 578
+    },
+    {
+      "action": "home",
+      "elapsedMs": 595,
+      "warmupTicks": 12,
+      "lastTick": 35,
+      "steadyDurationMs": 587
+    },
+    {
+      "action": "home",
+      "elapsedMs": 637,
+      "warmupTicks": 12,
+      "lastTick": 37,
+      "steadyDurationMs": 629
+    },
+    {
+      "action": "home",
+      "elapsedMs": 552,
+      "warmupTicks": 12,
+      "lastTick": 32,
+      "steadyDurationMs": 544
+    },
+    {
+      "action": "home",
+      "elapsedMs": 648,
+      "warmupTicks": 12,
+      "lastTick": 38,
+      "steadyDurationMs": 638
+    },
+    {
+      "action": "home",
+      "elapsedMs": 580,
+      "warmupTicks": 12,
+      "lastTick": 34,
+      "steadyDurationMs": 571
+    }
+  ],
+  "conclusion": null,
+  "setupMission": {
+    "missionId": 3,
+    "seed": 1296122696,
+    "rulesVersion": "machimamore-2",
+    "mode": "normal"
+  },
+  "relaunches": [
+    {
+      "index": 1,
+      "missionId": 5,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 2,
+      "missionId": 7,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 3,
+      "missionId": 9,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 4,
+      "missionId": 11,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 5,
+      "missionId": 13,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 6,
+      "missionId": 15,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 7,
+      "missionId": 17,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 8,
+      "missionId": 19,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 9,
+      "missionId": 21,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 10,
+      "missionId": 23,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    }
+  ],
+  "resourceBounds": {
+    "limits": {
+      "aircraft": 16,
+      "activeLasers": 40,
+      "projectiles": 2048,
+      "decorations": 24,
+      "audioContexts": 1,
+      "audioSources": 10,
+      "activeEffectSources": 9
+    },
+    "coldHome": {
+      "aircraft": 16,
+      "activeLasers": 0,
+      "projectiles": 0,
+      "decorations": 0,
+      "geometries": 71,
+      "textures": 4,
+      "programs": 14,
+      "audioContexts": 1,
+      "audioSources": 0,
+      "activeEffectSources": 0,
+      "soundEnabled": true
+    },
+    "warmHome": {
+      "geometries": 71,
+      "textures": 4,
+      "programs": 14
+    },
+    "warmupMission": {
+      "missionId": 3,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal"
+    },
+    "warmupSamples": [
+      {
+        "elapsedMs": 8,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 270,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 534,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 800,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 1059,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 1328,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 1586,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 1865,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 2137,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 2400,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 2675,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 2952,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 3286,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 3549,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 3830,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 4096,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 12,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 4368,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 12,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 2,
+          "activeEffectSources": 1,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 4638,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 18,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 4938,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 6,
+          "projectiles": 18,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 3,
+          "activeEffectSources": 2,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 5224,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 12,
+          "projectiles": 18,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 5,
+          "activeEffectSources": 4,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 5510,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 18,
+          "projectiles": 16,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 3,
+          "activeEffectSources": 2,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 5778,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 18,
+          "projectiles": 16,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 6439,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 18,
+          "projectiles": 16,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 6788,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 24,
+          "projectiles": 19,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 2,
+          "activeEffectSources": 1,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 7091,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 24,
+          "projectiles": 19,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 3,
+          "activeEffectSources": 2,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 7374,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 12,
+          "projectiles": 26,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 3,
+          "activeEffectSources": 2,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 7677,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 6,
+          "projectiles": 17,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 2,
+          "activeEffectSources": 1,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 7996,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 17,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 1,
+          "activeEffectSources": 0,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 8285,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 15,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 4,
+          "activeEffectSources": 3,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 8566,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 26,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 3,
+          "activeEffectSources": 2,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 8849,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 29,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 4,
+          "activeEffectSources": 3,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 9123,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 40,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 4,
+          "activeEffectSources": 3,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 9390,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 31,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 2,
+          "activeEffectSources": 1,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 9649,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 31,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 2,
+          "activeEffectSources": 1,
+          "soundEnabled": true
+        }
+      },
+      {
+        "elapsedMs": 9909,
+        "missionId": 3,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "aircraft": 16,
+          "activeLasers": 0,
+          "projectiles": 21,
+          "decorations": 0,
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14,
+          "audioContexts": 1,
+          "audioSources": 2,
+          "activeEffectSources": 1,
+          "soundEnabled": true
+        }
+      }
+    ],
+    "repeatedHome": [
+      {
+        "index": 1,
+        "missionId": 6,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      },
+      {
+        "index": 2,
+        "missionId": 8,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      },
+      {
+        "index": 3,
+        "missionId": 10,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      },
+      {
+        "index": 4,
+        "missionId": 12,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      },
+      {
+        "index": 5,
+        "missionId": 14,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      },
+      {
+        "index": 6,
+        "missionId": 16,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      },
+      {
+        "index": 7,
+        "missionId": 18,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      },
+      {
+        "index": 8,
+        "missionId": 20,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      },
+      {
+        "index": 9,
+        "missionId": 22,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      },
+      {
+        "index": 10,
+        "missionId": 24,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal",
+        "resources": {
+          "geometries": 71,
+          "textures": 4,
+          "programs": 14
+        }
+      }
+    ],
+    "maximumObserved": {
+      "aircraft": 16,
+      "activeLasers": 24,
+      "projectiles": 40,
+      "decorations": 0,
+      "geometries": 71,
+      "textures": 4,
+      "programs": 14,
+      "audioContexts": 1,
+      "audioSources": 5,
+      "activeEffectSources": 4,
+      "soundEnabled": true
+    },
+    "soundWasEnabled": true
+  },
+  "performanceMission": {
+    "missionId": 25,
+    "seed": 1296122696,
+    "rulesVersion": "machimamore-2",
+    "mode": "normal"
+  },
+  "finishTime": "2026-10-05T04:39:38.969Z",
+  "error": "page.evaluate: ReferenceError: Can't find variable: __name"
+}

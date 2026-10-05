@@ -1,0 +1,97 @@
+{
+  "status": "completed",
+  "mode": "easy",
+  "policy": "active",
+  "backend": "webkit",
+  "browser": "26.5",
+  "viewport": {
+    "width": 568,
+    "height": 320
+  },
+  "startedAt": "2026-10-05T04:33:27.486Z",
+  "finishedAt": "2026-10-05T04:35:27.079Z",
+  "wallMs": 119593,
+  "mission": {
+    "tick": 6717,
+    "activeSeconds": 111.95,
+    "enemyDestroyed": 50,
+    "friendlyLost": 27,
+    "friendlyRemaining": 23,
+    "cityPercent": 81.54337364368868,
+    "cityDistrictsDestroyed": 0,
+    "accuracy": 0.2297872340425532,
+    "score": 65448,
+    "resultText": "\n        CITY DEFENDED防衛成功イージーUFO全50機を撃破。母艦は撤退します。能動作戦時間01:51.95最終得点 65,448UFO破壊点＋50,000与ダメージ点＋20,000時間点（勝利時）＋18,496.3自機損失−0僚機損失−13,500命中率減点−7,702.1街損失−1,845.7自機のUFO撃破3機僚機のUFO撃破47機自機 / 僚機損失0 / 27機街の残耐久 / 破壊4077.2 / 5000HP · 0区画自機 命中 / 発射108 / 470発 · 23.0%味方 / 敵の残機23 / 0機もう一度出撃ホームへ戻る操作設定\n      "
+  },
+  "retry": {
+    "missionId": 3,
+    "tick": 0,
+    "phase": "playing",
+    "friendlyRemaining": 50,
+    "enemyRemaining": 50,
+    "score": 0
+  },
+  "pauseCount": 1,
+  "pauses": [
+    {
+      "atMs": 6620,
+      "tick": 0,
+      "reasons": [
+        "frame"
+      ],
+      "reason": "画面更新に長い空白があったため停止しました。",
+      "frozenTick": 0
+    }
+  ],
+  "errors": [],
+  "attempts": [],
+  "inputTraceCount": 1319,
+  "resultSha256": "c58632d56c85c5e760f3608bd6dc23fd423c294816075f768aed4e3508bc3050",
+  "capturesSha256": "1a7b996298bb01ec890e2203942d8b0fc337a633a48d3535ff305812166a80f3",
+  "captures": {
+    "flight": {
+      "file": "flight.png",
+      "sha256": "d790d04a6425fb7d8c15245cd922307819695339fa96dc507a6237c7130fc012",
+      "bytes": 160062,
+      "width": 568,
+      "height": 320
+    },
+    "combat": {
+      "file": "combat.png",
+      "sha256": "a04b838ac4166d74bfc3dd06ee4f66ceff1c93d13e2ec6d1d7e465d398cd3ee6",
+      "bytes": 158446,
+      "width": 568,
+      "height": 320
+    },
+    "end": {
+      "file": "end.png",
+      "sha256": "ac9757c8a38dfbcc9fcb9b504b4a84778a92c05bff42668e70a344d5dd338b72",
+      "bytes": 39935,
+      "width": 568,
+      "height": 320
+    },
+    "retry": {
+      "file": "retry.png",
+      "sha256": "47ca56e022afb7380c07536af9c3259c23baa11f30629697dca646c82a5ef8a1",
+      "bytes": 156392,
+      "width": 568,
+      "height": 320
+    }
+  },
+  "method": "Read-only development snapshots; all control actions use Playwright mouse drag, keyboard Space/KeyW/KeyS, and explicit UI resume. Pilot changes release and re-press held controls. The copied GameState exists only in the driver. No browser state edits after Start. Each accepted-input sample precedes the trace row actions; pointer diagonals are normalized by the real input path.",
+  "sourceContentDigest": "0e0a5a4211fe45f0f761af17fd1f2c6ab67ec7d6da9d4b46baf433596d714b9f",
+  "command": "PLAYWRIGHT_BROWSERS_PATH=/workspace/.cache/ms-playwright LD_LIBRARY_PATH=/workspace/.cache/browser-libs/usr/lib/x86_64-linux-gnu PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 LP_NUM_THREADS=2 node --import tsx scripts/browser-campaign.ts --webkit --small",
+  "publicProjection": {
+    "file": "input-trace.json",
+    "rows": 1319,
+    "method": "Exact complete inputTrace, resultText and selected result/retry observations from local raw. Each acceptedInput precedes actions; no trace rows omitted."
+  },
+  "localOnlyFiles": [
+    "result.json",
+    "flight.png",
+    "combat.png",
+    "end.png",
+    "retry.png"
+  ],
+  "retentionScope": "Large full result and PNGs retained locally; text projection and captures metadata are prepared for the Draft. Public PNG transfer requires pending user approval."
+}

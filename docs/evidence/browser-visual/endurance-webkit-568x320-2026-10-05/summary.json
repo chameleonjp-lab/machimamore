@@ -1,0 +1,314 @@
+{
+  "status": "completed",
+  "mode": "endurance",
+  "browser": {
+    "name": "webkit",
+    "version": "26.5"
+  },
+  "browserUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+  "profile": {
+    "width": 568,
+    "height": 320,
+    "deviceScaleFactor": 1,
+    "rendererPixelRatio": 1
+  },
+  "graphics": {
+    "vendor": "Apple Inc.",
+    "renderer": "Apple GPU",
+    "version": "WebGL 2.0",
+    "antialias": false,
+    "samples": 0,
+    "cssSize": {
+      "width": 568,
+      "height": 320
+    },
+    "drawingBuffer": {
+      "width": 568,
+      "height": 320
+    },
+    "effectivePixelRatio": 1
+  },
+  "runId": "2026-10-05T04-46-44.313Z-endurance",
+  "sourceContentDigest": "6f0078ca79e4c38e89954e48cc7486c03c6f046261f401ebf4e3fd34fde55794",
+  "measurement": {
+    "durationMs": 900190,
+    "sampleCount": 177,
+    "sampleIntervalMs": "approximately 5 seconds",
+    "firstSampleMs": 33,
+    "lastSampleMs": 899764,
+    "phases": {
+      "playing": 177
+    },
+    "allSamplesPlaying": true,
+    "missionTransitions": [
+      {
+        "elapsedMs": 111273,
+        "ended": {
+          "missionId": 25,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        },
+        "next": {
+          "missionId": 26,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        }
+      },
+      {
+        "elapsedMs": 223300,
+        "ended": {
+          "missionId": 26,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        },
+        "next": {
+          "missionId": 27,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        }
+      },
+      {
+        "elapsedMs": 334963,
+        "ended": {
+          "missionId": 27,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        },
+        "next": {
+          "missionId": 28,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        }
+      },
+      {
+        "elapsedMs": 447353,
+        "ended": {
+          "missionId": 28,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        },
+        "next": {
+          "missionId": 29,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        }
+      },
+      {
+        "elapsedMs": 559703,
+        "ended": {
+          "missionId": 29,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        },
+        "next": {
+          "missionId": 30,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        }
+      },
+      {
+        "elapsedMs": 673043,
+        "ended": {
+          "missionId": 30,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        },
+        "next": {
+          "missionId": 31,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        }
+      },
+      {
+        "elapsedMs": 785701,
+        "ended": {
+          "missionId": 31,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        },
+        "next": {
+          "missionId": 32,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        }
+      },
+      {
+        "elapsedMs": 899764,
+        "ended": {
+          "missionId": 32,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        },
+        "next": {
+          "missionId": 33,
+          "seed": 1296122696,
+          "rulesVersion": "machimamore-2",
+          "mode": "normal"
+        }
+      }
+    ]
+  },
+  "resourceLimits": {
+    "aircraft": 16,
+    "activeLasers": 40,
+    "projectiles": 2048,
+    "decorations": 24,
+    "audioContexts": 1,
+    "audioSources": 10,
+    "activeEffectSources": 9
+  },
+  "observedExtrema": {
+    "aircraft": {
+      "min": 8,
+      "max": 16
+    },
+    "activeLasers": {
+      "min": 0,
+      "max": 30
+    },
+    "projectiles": {
+      "min": 0,
+      "max": 28
+    },
+    "decorations": {
+      "min": 0,
+      "max": 1
+    },
+    "geometries": {
+      "min": 71,
+      "max": 71
+    },
+    "textures": {
+      "min": 4,
+      "max": 4
+    },
+    "programs": {
+      "min": 14,
+      "max": 14
+    },
+    "audioContexts": {
+      "min": 1,
+      "max": 1
+    },
+    "audioSources": {
+      "min": 1,
+      "max": 6
+    },
+    "activeEffectSources": {
+      "min": 0,
+      "max": 5
+    }
+  },
+  "rendererCountsStable": true,
+  "outboundAttempts": [],
+  "conclusion": "15-minute wall-clock run completed with periodic live-play observations. Review resource maxima and trend.",
+  "activeCaptures": [
+    {
+      "label": "mission-start",
+      "before": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 37
+      },
+      "after": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 43,
+        "reason": "画面更新に長い空白があったため停止しました。",
+        "pauseReasons": []
+      },
+      "recovery": "not-required"
+    },
+    {
+      "label": "endurance-start",
+      "before": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 34
+      },
+      "after": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 40,
+        "reason": "作戦時計・装填・復帰・レーザーも止まっています。",
+        "pauseReasons": []
+      },
+      "recovery": "not-required"
+    },
+    {
+      "label": "endurance-end",
+      "before": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 30
+      },
+      "after": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 39,
+        "reason": "作戦時計・装填・復帰・レーザーも止まっています。",
+        "pauseReasons": []
+      },
+      "recovery": "not-required"
+    }
+  ],
+  "files": {
+    "2026-10-05T04-46-44.313Z-endurance-after-ten-relaunches.png": {
+      "bytes": 119482,
+      "sha256": "84de71859fc65e686fd5840ef7f4cd0a746999a01d98baf04847f5c827db66aa"
+    },
+    "2026-10-05T04-46-44.313Z-endurance-endurance-end.png": {
+      "bytes": 148130,
+      "sha256": "6da7f17171fad4a83967118699f7be5c458e500fe075e228909ee1c0e3d964cb"
+    },
+    "2026-10-05T04-46-44.313Z-endurance-endurance-start.png": {
+      "bytes": 147919,
+      "sha256": "e2658561e6dec667144db2d29ea5d81d508adc814e4c2e87649e862b0e30f8bc"
+    },
+    "2026-10-05T04-46-44.313Z-endurance-home.png": {
+      "bytes": 61522,
+      "sha256": "71946a3e5521b22878b04e491b5da9cda490a4b34217054d6c730d44219630af"
+    },
+    "2026-10-05T04-46-44.313Z-endurance-mission-start.png": {
+      "bytes": 147797,
+      "sha256": "f9c4cf3342e943d1f4474b5a15539afc60798ec32543c12be437f4460e122e54"
+    }
+  },
+  "rawLocalReport": {
+    "path": "artifacts/browser-evidence/2026-10-05T04-46-44.313Z-endurance.json",
+    "sha256": "aeb4351f88a3c72f42ffb0b529c67594483705a2ea1a04971b5b623a39a32f8c",
+    "bytes": 9947365,
+    "retainedInIgnoredArtifacts": true
+  },
+  "rawReportPublicCopyRemoved": true,
+  "pageErrorsCollected": false,
+  "driverCompletedWithoutException": true,
+  "observationProjection": "observations.json",
+  "observationCount": 177,
+  "invocationStartedAt": "2026-10-05T04:46:44.313Z",
+  "invocationFinishedAt": "2026-10-05T05:02:16.938Z",
+  "measurementWindowAbsoluteStartTimestampRecorded": false,
+  "measurementWindowMs": 900190,
+  "observationProjectionFile": {
+    "path": "docs/evidence/browser-visual/endurance-webkit-568x320-2026-10-05/observations.json",
+    "bytes": 128395,
+    "sha256": "cb5affddbb2abdaf13c58bbf23d1767621157da61a39fd59aefce37e12e4fc7e"
+  },
+  "observationProjectionSha256": "0b62df406e5f196179d4f17291d0e52d4e20e4e8f7fbb2849ef74c4c0ba9d4da",
+  "observationProjectionBytes": 128533
+}

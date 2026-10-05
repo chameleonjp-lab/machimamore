@@ -1,0 +1,199 @@
+{
+  "status": "passed",
+  "backend": "webkit",
+  "browserVersion": "26.5",
+  "viewport": {
+    "width": 393,
+    "height": 852
+  },
+  "baseURL": "http://127.0.0.1:4180/",
+  "startedAt": "2026-10-05T04:37:18.631Z",
+  "completedAt": "2026-10-05T04:38:12.827Z",
+  "productUnchanged": true,
+  "caseCount": 6,
+  "cases": [
+    {
+      "name": "nine bindings saved through settings UI",
+      "pass": true,
+      "bindings": {
+        "left": "KeyA",
+        "right": "KeyD",
+        "up": "KeyI",
+        "down": "KeyK",
+        "fire": "KeyF",
+        "loop": "KeyJ",
+        "accelerate": "KeyE",
+        "brake": "KeyQ",
+        "pause": "KeyP"
+      }
+    },
+    {
+      "name": "remapped four directions and throttle keys drive accepted inputs",
+      "pass": true,
+      "tick": 111
+    },
+    {
+      "name": "held loop completes and returns to ready through normal input",
+      "pass": true,
+      "startTick": 19,
+      "endTick": 467,
+      "activeTicks": 448,
+      "loopProgress": 0,
+      "cooldown": 0,
+      "frameResumes": 0,
+      "uninterruptedSingleLoopVerified": true,
+      "holdMethod": "Physical key down, re-down only after documented pause recovery; no wall-time performance claim"
+    },
+    {
+      "name": "held fire resumes after shared reload through the normal input path",
+      "pass": true,
+      "actor": "7:0:1",
+      "emptyTick": 731,
+      "reloadTicks": 354,
+      "resumeTick": 1091,
+      "mg": 284,
+      "cannon": 94,
+      "frameResumes": 1
+    },
+    {
+      "name": "closing settings returns to pause and preserves its clock",
+      "pass": true,
+      "tick": 1091
+    },
+    {
+      "name": "crash and respawn clear old holds and accept the new pilot first key",
+      "pass": true,
+      "previousPilot": 0,
+      "previousActor": "9:0:1",
+      "waitingTick": 186,
+      "newPilot": 8,
+      "newActor": "9:8:2",
+      "respawnTick": 370,
+      "firstKeyTick": 381,
+      "firstTurn": 1
+    }
+  ],
+  "strictPauses": [
+    {
+      "stage": "start",
+      "reason": "画面更新に長い空白があったため停止しました。",
+      "pauseReasons": [
+        "frame"
+      ],
+      "tick": 0,
+      "frozenTick": 0,
+      "freezeCheckMs": 120,
+      "maxGap": 0.665,
+      "heldBefore": [],
+      "resumeMethod": "visible #resume button",
+      "resumedThroughVisibleButton": true,
+      "resumedTick": 0,
+      "resumedPhase": "playing",
+      "freshDown": []
+    },
+    {
+      "stage": "held-fire-reload-complete",
+      "reason": "画面更新に長い空白があったため停止しました。",
+      "pauseReasons": [
+        "frame"
+      ],
+      "tick": 984,
+      "frozenTick": 984,
+      "freezeCheckMs": 120,
+      "maxGap": 0.665,
+      "heldBefore": [
+        "KeyF"
+      ],
+      "resumeMethod": "visible #resume button",
+      "resumedThroughVisibleButton": true,
+      "resumedTick": 984,
+      "resumedPhase": "playing",
+      "freshDown": [
+        "KeyF"
+      ]
+    }
+  ],
+  "loopWarmup": {
+    "startTick": 119,
+    "endTick": 540,
+    "explicitFrameResumes": 0,
+    "method": "Ordinary loop key and exact frame-gap visible Resume only; no state edits"
+  },
+  "inputHandovers": [
+    {
+      "stage": "start",
+      "tick": 0,
+      "from": "",
+      "to": "3:0:1",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    },
+    {
+      "stage": "start",
+      "tick": 0,
+      "from": "",
+      "to": "5:0:1",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    },
+    {
+      "stage": "start",
+      "tick": 0,
+      "from": "",
+      "to": "7:0:1",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    },
+    {
+      "stage": "start",
+      "tick": 0,
+      "from": "",
+      "to": "9:0:1",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    },
+    {
+      "stage": "ordinary-input-crash",
+      "tick": 186,
+      "from": "9:0:1",
+      "to": "",
+      "released": [
+        "KeyF",
+        "KeyK"
+      ],
+      "intended": [
+        "KeyF",
+        "KeyK"
+      ],
+      "freshDown": []
+    },
+    {
+      "stage": "ordinary-respawn",
+      "tick": 370,
+      "from": "",
+      "to": "9:8:2",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    }
+  ],
+  "errors": [],
+  "files": {
+    "report.json": {
+      "sha256": "630e5604dc786a1262f0df5542c0fdfbc75e7f47355db31167727abb29aca615",
+      "bytes": 9982
+    },
+    "keyboard-nine.png": {
+      "sha256": "44ac5118180c32bdd84d6a4741ed2ebee809b7f94963e6068c224b58d0c9d2b9",
+      "bytes": 90493
+    },
+    "held-fire-reload.png": {
+      "sha256": "c9b067d605e9f4fbc0860476b28181ea5ede189b415ce4ade16b13eaea54d31f",
+      "bytes": 127405
+    }
+  }
+}
