@@ -1,0 +1,5461 @@
+{
+  "schema": 1,
+  "evidenceType": "compact-projection-of-browser-evidence-endurance-record",
+  "sourceContentDigest": "6f0078ca79e4c38e89954e48cc7486c03c6f046261f401ebf4e3fd34fde55794",
+  "rawLocalRecord": {
+    "path": "artifacts/browser-evidence/2026-10-05T04-46-44.313Z-endurance.json",
+    "sha256": "aeb4351f88a3c72f42ffb0b529c67594483705a2ea1a04971b5b623a39a32f8c",
+    "bytes": 9947365,
+    "retainedInIgnoredArtifacts": true
+  },
+  "run": {
+    "status": "completed",
+    "mode": "endurance",
+    "runId": "2026-10-05T04-46-44.313Z-endurance",
+    "browser": {
+      "name": "webkit",
+      "version": "26.5"
+    },
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+    "viewport": {
+      "width": 568,
+      "height": 320
+    },
+    "viewportProfile": {
+      "width": 568,
+      "height": 320,
+      "deviceScaleFactor": 1,
+      "rendererPixelRatio": 1
+    },
+    "graphics": {
+      "vendor": "Apple Inc.",
+      "renderer": "Apple GPU",
+      "version": "WebGL 2.0",
+      "antialias": false,
+      "samples": 0,
+      "cssSize": {
+        "width": 568,
+        "height": 320
+      },
+      "drawingBuffer": {
+        "width": 568,
+        "height": 320
+      },
+      "effectivePixelRatio": 1
+    },
+    "memory": null,
+    "enduranceWindowMission": {
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal"
+    },
+    "driverCompletedWithoutException": true,
+    "pageErrorEventsCollected": false,
+    "outboundAttempts": [],
+    "phaseCollection": "All recorded rows have phase=playing. The driver reads the app screen before every observation; a paused screen marks the run interrupted and exits without a Resume action. screenAtPoll is a source-derived annotation inferred from the retained Playing phase and the driver's screen/Retry flow; it was not retained as a separate field in the raw report.",
+    "timingCollection": "Per-row gapCount and maxFrameGap are retained. Repeated frameIntervals arrays are omitted here and remain in the raw local report."
+  },
+  "setupBeforeWindow": {
+    "framePauseRecoveries": [
+      {
+        "label": "mission-setup-warmup",
+        "reason": "画面更新に長い空白があったため停止しました。",
+        "pauseReasons": [
+          "frame"
+        ],
+        "tick": 0,
+        "confirmedFrozenTick": 0,
+        "freezeCheckMs": 120,
+        "resumedThroughVisibleButton": true,
+        "resumeConfirmed": true,
+        "resumedScreen": "playing",
+        "resumedPhase": "playing",
+        "resumedTick": 0
+      },
+      {
+        "label": "mission-setup-warmup",
+        "reason": "画面更新に長い空白があったため停止しました。",
+        "pauseReasons": [
+          "frame"
+        ],
+        "tick": 0,
+        "confirmedFrozenTick": 0,
+        "freezeCheckMs": 120,
+        "resumedThroughVisibleButton": true,
+        "resumeConfirmed": true,
+        "resumedScreen": "playing",
+        "resumedPhase": "playing",
+        "resumedTick": 0
+      }
+    ],
+    "missionSetupWarmups": [
+      {
+        "action": "home",
+        "elapsedMs": 2014,
+        "warmupTicks": 12,
+        "lastTick": 35,
+        "steadyDurationMs": 590
+      },
+      {
+        "action": "home",
+        "elapsedMs": 605,
+        "warmupTicks": 12,
+        "lastTick": 36,
+        "steadyDurationMs": 592
+      },
+      {
+        "action": "home",
+        "elapsedMs": 617,
+        "warmupTicks": 12,
+        "lastTick": 36,
+        "steadyDurationMs": 607
+      },
+      {
+        "action": "home",
+        "elapsedMs": 578,
+        "warmupTicks": 12,
+        "lastTick": 34,
+        "steadyDurationMs": 572
+      },
+      {
+        "action": "home",
+        "elapsedMs": 652,
+        "warmupTicks": 12,
+        "lastTick": 38,
+        "steadyDurationMs": 640
+      },
+      {
+        "action": "home",
+        "elapsedMs": 575,
+        "warmupTicks": 12,
+        "lastTick": 34,
+        "steadyDurationMs": 567
+      },
+      {
+        "action": "home",
+        "elapsedMs": 1316,
+        "warmupTicks": 12,
+        "lastTick": 34,
+        "steadyDurationMs": 613
+      },
+      {
+        "action": "home",
+        "elapsedMs": 583,
+        "warmupTicks": 12,
+        "lastTick": 35,
+        "steadyDurationMs": 573
+      },
+      {
+        "action": "home",
+        "elapsedMs": 584,
+        "warmupTicks": 12,
+        "lastTick": 34,
+        "steadyDurationMs": 576
+      },
+      {
+        "action": "home",
+        "elapsedMs": 595,
+        "warmupTicks": 12,
+        "lastTick": 35,
+        "steadyDurationMs": 586
+      },
+      {
+        "action": "home",
+        "elapsedMs": 583,
+        "warmupTicks": 12,
+        "lastTick": 34,
+        "steadyDurationMs": 574
+      },
+      {
+        "action": "home",
+        "elapsedMs": 559,
+        "warmupTicks": 12,
+        "lastTick": 33,
+        "steadyDurationMs": 548
+      },
+      {
+        "action": "playing",
+        "elapsedMs": 613,
+        "warmupTicks": 12,
+        "lastTick": 78,
+        "steadyDurationMs": 605
+      }
+    ]
+  },
+  "resourceBounds": {
+    "limits": {
+      "aircraft": 16,
+      "activeLasers": 40,
+      "projectiles": 2048,
+      "decorations": 24,
+      "audioContexts": 1,
+      "audioSources": 10,
+      "activeEffectSources": 9
+    },
+    "coldHome": {
+      "aircraft": 16,
+      "activeLasers": 0,
+      "projectiles": 0,
+      "decorations": 0,
+      "geometries": 71,
+      "textures": 4,
+      "programs": 14,
+      "audioContexts": 1,
+      "audioSources": 0,
+      "activeEffectSources": 0,
+      "soundEnabled": true
+    },
+    "warmHome": {
+      "geometries": 71,
+      "textures": 4,
+      "programs": 14
+    },
+    "maximumObservedAcrossSetupAndWindow": {
+      "aircraft": 16,
+      "activeLasers": 30,
+      "projectiles": 38,
+      "decorations": 1,
+      "geometries": 71,
+      "textures": 4,
+      "programs": 14,
+      "audioContexts": 1,
+      "audioSources": 6,
+      "activeEffectSources": 5,
+      "soundEnabled": true
+    },
+    "soundWasEnabled": true
+  },
+  "tenRelaunchBaselines": [
+    {
+      "index": 1,
+      "missionId": 5,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 2,
+      "missionId": 7,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 3,
+      "missionId": 9,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 4,
+      "missionId": 11,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 5,
+      "missionId": 13,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 6,
+      "missionId": 15,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 7,
+      "missionId": 17,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 8,
+      "missionId": 19,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 9,
+      "missionId": 21,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    },
+    {
+      "index": 10,
+      "missionId": 23,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "activeResources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "homeResources": {
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14
+      }
+    }
+  ],
+  "observedExtrema": {
+    "aircraft": {
+      "min": 8,
+      "max": 16
+    },
+    "activeLasers": {
+      "min": 0,
+      "max": 30
+    },
+    "projectiles": {
+      "min": 0,
+      "max": 28
+    },
+    "decorations": {
+      "min": 0,
+      "max": 1
+    },
+    "geometries": {
+      "min": 71,
+      "max": 71
+    },
+    "textures": {
+      "min": 4,
+      "max": 4
+    },
+    "programs": {
+      "min": 14,
+      "max": 14
+    },
+    "audioContexts": {
+      "min": 1,
+      "max": 1
+    },
+    "audioSources": {
+      "min": 1,
+      "max": 6
+    },
+    "activeEffectSources": {
+      "min": 0,
+      "max": 5
+    }
+  },
+  "rendererCountsStable": true,
+  "missionTransitions": [
+    {
+      "elapsedMs": 111273,
+      "ended": {
+        "missionId": 25,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      },
+      "next": {
+        "missionId": 26,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      }
+    },
+    {
+      "elapsedMs": 223300,
+      "ended": {
+        "missionId": 26,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      },
+      "next": {
+        "missionId": 27,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      }
+    },
+    {
+      "elapsedMs": 334963,
+      "ended": {
+        "missionId": 27,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      },
+      "next": {
+        "missionId": 28,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      }
+    },
+    {
+      "elapsedMs": 447353,
+      "ended": {
+        "missionId": 28,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      },
+      "next": {
+        "missionId": 29,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      }
+    },
+    {
+      "elapsedMs": 559703,
+      "ended": {
+        "missionId": 29,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      },
+      "next": {
+        "missionId": 30,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      }
+    },
+    {
+      "elapsedMs": 673043,
+      "ended": {
+        "missionId": 30,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      },
+      "next": {
+        "missionId": 31,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      }
+    },
+    {
+      "elapsedMs": 785701,
+      "ended": {
+        "missionId": 31,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      },
+      "next": {
+        "missionId": 32,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      }
+    },
+    {
+      "elapsedMs": 899764,
+      "ended": {
+        "missionId": 32,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      },
+      "next": {
+        "missionId": 33,
+        "seed": 1296122696,
+        "rulesVersion": "machimamore-2",
+        "mode": "normal"
+      }
+    }
+  ],
+  "observationCount": 177,
+  "observations": [
+    {
+      "elapsedMs": 33,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 80,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 5052,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 380,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 30,
+        "projectiles": 21,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 10076,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 681,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 0,
+        "projectiles": 15,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 15103,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 984,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 3,
+        "projectiles": 5,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 20126,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1285,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 2,
+        "projectiles": 11,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 25153,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1587,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 4,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 30185,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1888,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 3,
+        "projectiles": 9,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 35217,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2191,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 14,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 40270,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2494,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 5,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 45321,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2797,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 1,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 50378,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3098,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 5,
+        "projectiles": 19,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 55425,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3404,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 5,
+        "projectiles": 28,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 60476,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3706,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 4,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 65547,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4010,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 4,
+        "projectiles": 2,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 70597,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4314,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 7,
+        "projectiles": 20,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 75642,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4615,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 3,
+        "projectiles": 16,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 80681,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4919,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 4,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 85723,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5222,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 5,
+        "projectiles": 6,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 90771,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5525,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 6,
+        "projectiles": 6,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 95833,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5829,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 11,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 100915,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6133,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 4,
+        "projectiles": 10,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 105972,
+      "screenAtPoll": "playing",
+      "missionId": 25,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6437,
+      "resources": {
+        "aircraft": 8,
+        "activeLasers": 0,
+        "projectiles": 16,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 111273,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 116352,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 310,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 18,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 121422,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 612,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 0,
+        "projectiles": 15,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 126478,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 917,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 131539,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1220,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 1,
+        "projectiles": 4,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 136663,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1527,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 0,
+        "projectiles": 9,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 141768,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1833,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 5,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 146899,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2143,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 2,
+        "projectiles": 15,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 151987,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2447,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 13,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 157066,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2752,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 4,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 162119,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3056,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 8,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 167207,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3360,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 1,
+        "projectiles": 26,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 172349,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3668,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 177409,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3972,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 3,
+        "projectiles": 5,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 182473,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4276,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 8,
+        "projectiles": 20,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 187532,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4580,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 4,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 192653,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4888,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 5,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 197733,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5191,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 3,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 6,
+        "activeEffectSources": 5,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 202849,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5499,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 2,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 207908,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5802,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 2,
+        "projectiles": 11,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 212984,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6106,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 2,
+        "projectiles": 10,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 218059,
+      "screenAtPoll": "playing",
+      "missionId": 26,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6412,
+      "resources": {
+        "aircraft": 8,
+        "activeLasers": 0,
+        "projectiles": 10,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 223300,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 0,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 228369,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 307,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 18,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 233441,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 611,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 238500,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 915,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 243562,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1219,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 1,
+        "projectiles": 4,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 248637,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1523,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 0,
+        "projectiles": 9,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 253684,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1827,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 4,
+        "projectiles": 11,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 258757,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2130,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 4,
+        "projectiles": 16,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 263814,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2434,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 11,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 268875,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2738,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 273952,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3042,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 5,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 279003,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3344,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 16,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 284058,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3649,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 4,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 289125,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3953,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 2,
+        "projectiles": 7,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 294195,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4257,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 5,
+        "projectiles": 15,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 299285,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4562,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 2,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 304353,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4866,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 3,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 309403,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5170,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 1,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 314483,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5474,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 1,
+        "projectiles": 6,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 319575,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5780,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 4,
+        "projectiles": 6,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 324693,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6087,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 6,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 329762,
+      "screenAtPoll": "playing",
+      "missionId": 27,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6391,
+      "resources": {
+        "aircraft": 8,
+        "activeLasers": 0,
+        "projectiles": 6,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 334963,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 340039,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 306,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 18,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 345128,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 612,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 0,
+        "projectiles": 15,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 350229,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 918,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 355329,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1225,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 1,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 360426,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1530,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 0,
+        "projectiles": 11,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 365507,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1834,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 5,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 370586,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2139,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 2,
+        "projectiles": 17,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 375688,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2446,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 13,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 380816,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2754,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 4,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 385918,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3059,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 7,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 391023,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3366,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 2,
+        "projectiles": 26,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 396163,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3674,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 7,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 401298,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3982,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 4,
+        "projectiles": 4,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 406423,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4290,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 7,
+        "projectiles": 16,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 411534,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4596,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 5,
+        "projectiles": 16,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 416625,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4902,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 4,
+        "projectiles": 14,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 421701,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5206,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 4,
+        "projectiles": 11,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 426785,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5512,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 4,
+        "projectiles": 6,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 431889,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5818,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 1,
+        "projectiles": 13,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 436986,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6123,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 3,
+        "projectiles": 6,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 442068,
+      "screenAtPoll": "playing",
+      "missionId": 28,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6428,
+      "resources": {
+        "aircraft": 8,
+        "activeLasers": 0,
+        "projectiles": 14,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 447353,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 452442,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 311,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 18,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 457541,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 617,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 0,
+        "projectiles": 13,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 462657,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 923,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 467773,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1230,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 472876,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1536,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 0,
+        "projectiles": 11,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 477977,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1842,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 4,
+        "projectiles": 9,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 483082,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2149,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 1,
+        "projectiles": 15,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 488177,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2455,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 493265,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2760,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 2,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 498355,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3065,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 7,
+        "projectiles": 14,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 503439,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3370,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 2,
+        "projectiles": 26,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 508506,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3674,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 7,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 513601,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3980,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 4,
+        "projectiles": 5,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 518697,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4283,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 7,
+        "projectiles": 16,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 523788,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4591,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 5,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 528864,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4896,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 4,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 6,
+        "activeEffectSources": 5,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 533951,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5201,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 4,
+        "projectiles": 9,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 6,
+        "activeEffectSources": 5,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 539044,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5507,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 3,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 544156,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5812,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 2,
+        "projectiles": 11,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 549236,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6119,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 3,
+        "projectiles": 4,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 554335,
+      "screenAtPoll": "playing",
+      "missionId": 29,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6424,
+      "resources": {
+        "aircraft": 8,
+        "activeLasers": 0,
+        "projectiles": 14,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 559703,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 0,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 564822,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 310,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 18,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 569919,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 616,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 0,
+        "projectiles": 13,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 575015,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 922,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 580109,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1227,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 1,
+        "projectiles": 8,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 585225,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1534,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 0,
+        "projectiles": 9,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 590338,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1841,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 5,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 595496,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2151,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 1,
+        "projectiles": 15,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 600624,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2457,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 605741,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2765,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 610835,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3070,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 7,
+        "projectiles": 14,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 615954,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3378,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 3,
+        "projectiles": 28,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 621151,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3690,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 5,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 626296,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3998,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 5,
+        "projectiles": 2,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 631456,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4308,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 8,
+        "projectiles": 24,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 636618,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4619,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 3,
+        "projectiles": 16,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 641765,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4927,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 3,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 646924,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5236,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 4,
+        "projectiles": 6,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 652122,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5545,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 9,
+        "projectiles": 6,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 657330,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5861,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 662445,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6166,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 3,
+        "projectiles": 14,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 667564,
+      "screenAtPoll": "playing",
+      "missionId": 30,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6475,
+      "resources": {
+        "aircraft": 8,
+        "activeLasers": 0,
+        "projectiles": 22,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 673043,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 0,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 678138,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 310,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 18,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 683257,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 617,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 0,
+        "projectiles": 13,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 688397,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 926,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 693490,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1231,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 6,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 698594,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1537,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 11,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 703688,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1842,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 4,
+        "projectiles": 9,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 708779,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2148,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 1,
+        "projectiles": 15,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 713899,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2455,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 719033,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2764,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 2,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 724142,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3070,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 7,
+        "projectiles": 14,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 729261,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3378,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 3,
+        "projectiles": 28,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 734352,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3683,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 5,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 739473,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3990,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 5,
+        "projectiles": 4,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 6,
+        "activeEffectSources": 5,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 744579,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4297,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 7,
+        "projectiles": 26,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 749698,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4604,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 4,
+        "projectiles": 16,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 6,
+        "activeEffectSources": 5,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 754820,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4910,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 3,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 759919,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5216,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 4,
+        "projectiles": 7,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 765017,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5522,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 6,
+        "projectiles": 6,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 770144,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5830,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 0,
+        "projectiles": 11,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 775265,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6138,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 4,
+        "projectiles": 12,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 780402,
+      "screenAtPoll": "playing",
+      "missionId": 31,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6446,
+      "resources": {
+        "aircraft": 8,
+        "activeLasers": 0,
+        "projectiles": 16,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 785701,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 790832,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 310,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 18,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 796072,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 624,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 801188,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 933,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 5,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 806331,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1241,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 811460,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1548,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 816636,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 1859,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 3,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 821779,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2168,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 0,
+        "projectiles": 13,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 826907,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2475,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 0,
+        "projectiles": 11,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 832051,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 2784,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 4,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 837212,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3093,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 5,
+        "projectiles": 22,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 842386,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3404,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 5,
+        "projectiles": 28,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 847580,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 3716,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 1,
+        "projectiles": 6,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 852749,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4026,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 2,
+        "projectiles": 2,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 857976,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4338,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 5,
+        "projectiles": 15,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 863184,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4652,
+      "resources": {
+        "aircraft": 15,
+        "activeLasers": 2,
+        "projectiles": 9,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 868350,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 4962,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 7,
+        "projectiles": 12,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 5,
+        "activeEffectSources": 4,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 873575,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5274,
+      "resources": {
+        "aircraft": 14,
+        "activeLasers": 5,
+        "projectiles": 10,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 4,
+        "activeEffectSources": 3,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 878779,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5587,
+      "resources": {
+        "aircraft": 13,
+        "activeLasers": 8,
+        "projectiles": 14,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 6,
+        "activeEffectSources": 5,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 883962,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5898,
+      "resources": {
+        "aircraft": 11,
+        "activeLasers": 0,
+        "projectiles": 10,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 889163,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6211,
+      "resources": {
+        "aircraft": 12,
+        "activeLasers": 0,
+        "projectiles": 14,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 2,
+        "activeEffectSources": 1,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 894346,
+      "screenAtPoll": "playing",
+      "missionId": 32,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 6522,
+      "resources": {
+        "aircraft": 9,
+        "activeLasers": 0,
+        "projectiles": 11,
+        "decorations": 1,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 3,
+        "activeEffectSources": 2,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    },
+    {
+      "elapsedMs": 899764,
+      "screenAtPoll": "playing",
+      "missionId": 33,
+      "seed": 1296122696,
+      "rulesVersion": "machimamore-2",
+      "mode": "normal",
+      "phase": "playing",
+      "tick": 5,
+      "resources": {
+        "aircraft": 16,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "decorations": 0,
+        "geometries": 71,
+        "textures": 4,
+        "programs": 14,
+        "audioContexts": 1,
+        "audioSources": 1,
+        "activeEffectSources": 0,
+        "soundEnabled": true
+      },
+      "timing": {
+        "gapCount": 2,
+        "maxFrameGap": 0.804
+      }
+    }
+  ],
+  "files": {
+    "2026-10-05T04-46-44.313Z-endurance-after-ten-relaunches.png": {
+      "bytes": 119482,
+      "sha256": "84de71859fc65e686fd5840ef7f4cd0a746999a01d98baf04847f5c827db66aa"
+    },
+    "2026-10-05T04-46-44.313Z-endurance-endurance-end.png": {
+      "bytes": 148130,
+      "sha256": "6da7f17171fad4a83967118699f7be5c458e500fe075e228909ee1c0e3d964cb"
+    },
+    "2026-10-05T04-46-44.313Z-endurance-endurance-start.png": {
+      "bytes": 147919,
+      "sha256": "e2658561e6dec667144db2d29ea5d81d508adc814e4c2e87649e862b0e30f8bc"
+    },
+    "2026-10-05T04-46-44.313Z-endurance-home.png": {
+      "bytes": 61522,
+      "sha256": "71946a3e5521b22878b04e491b5da9cda490a4b34217054d6c730d44219630af"
+    },
+    "2026-10-05T04-46-44.313Z-endurance-mission-start.png": {
+      "bytes": 147797,
+      "sha256": "f9c4cf3342e943d1f4474b5a15539afc60798ec32543c12be437f4460e122e54"
+    }
+  },
+  "invocation": {
+    "startedAt": "2026-10-05T04:46:44.313Z",
+    "finishedAt": "2026-10-05T05:02:16.938Z",
+    "includesSetup": true
+  },
+  "measurementWindow": {
+    "durationMs": 900190,
+    "absoluteStartTimestampRecorded": false,
+    "firstSampleElapsedMs": 33,
+    "lastSampleElapsedMs": 899764
+  }
+}

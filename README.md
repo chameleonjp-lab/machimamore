@@ -30,4 +30,6 @@ PR提出と公開は別工程です。本人による採用後の公開手順は
 
 ## 速度調整レバー（統合待ち）
 
-Normalの加速/減速タッチ2ボタンを上下1本の速度レバーへ統一する[共通契約](docs/THROTTLE_LEVER_CONTRACT.md)と[本作への適用・未実装項目](docs/THROTTLE_LEVER_ADAPTER.md)を追加しています。Easyの自動巡航とPCの加速/減速キーは維持します。現mainには対応する飛行入力/操作設定がないため、UI・保存移行の統合と受入検査は未完了です。
+Normalの加速/減速タッチ2ボタンを上下1本の速度レバーへ統一する[共通契約](docs/THROTTLE_LEVER_CONTRACT.md)と[本作への適用・未実装項目](docs/THROTTLE_LEVER_ADAPTER.md)を追加しています。Easyの自動巡航とPCの加速/減速キーは維持します。追補作成時のmainには飛行runtimeがなく、2026-10-05のPR #4採用でruntimeがmainへ届きました。速度レバーのUI・v2保存移行・受入検査は別作業として統合待ちです。
+
+後続の修正PR [#5](https://github.com/chameleonjp-lab/machimamore/pull/5) は2026-10-05T04:55:59Zに本人側で採用され、mainは `fa323bef322eb62f350011f3bd5f8af3935e17d9` になった。上記のDraft候補という記述はその提出時点の記録である。最終検証資料は別のDraft PR #6へ提出し、担当agentはマージ・公開を行わない。新しい検査PNGと長時間・作戦の大きなraw記録はローカル保持とし、公開資料には全入力行・全177観測のJSON投影と元記録のhashを保存する。

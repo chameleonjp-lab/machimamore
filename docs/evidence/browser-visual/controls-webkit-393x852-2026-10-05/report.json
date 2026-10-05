@@ -1,0 +1,248 @@
+{
+  "status": "passed",
+  "bootstrapStage": "complete",
+  "backend": "webkit",
+  "browserVersion": "26.5",
+  "viewport": {
+    "width": 393,
+    "height": 852
+  },
+  "baseURL": "http://127.0.0.1:4180/",
+  "output": "/workspace/machimamore/artifacts/controls-integration-final-webkit",
+  "pid": 45577,
+  "startedAt": "2026-10-05T04:37:18.631Z",
+  "setupPauses": [
+    {
+      "stage": "start",
+      "reason": "画面更新に長い空白があったため停止しました。",
+      "pauseReasons": [
+        "frame"
+      ],
+      "tick": 0,
+      "frozenTick": 0,
+      "freezeCheckMs": 120,
+      "maxGap": 0.665,
+      "heldBefore": [],
+      "resumeMethod": "visible #resume button",
+      "resumedThroughVisibleButton": true,
+      "resumedTick": 0,
+      "resumedPhase": "playing",
+      "freshDown": []
+    },
+    {
+      "stage": "held-fire-reload-complete",
+      "reason": "画面更新に長い空白があったため停止しました。",
+      "pauseReasons": [
+        "frame"
+      ],
+      "tick": 984,
+      "frozenTick": 984,
+      "freezeCheckMs": 120,
+      "maxGap": 0.665,
+      "heldBefore": [
+        "KeyF"
+      ],
+      "resumeMethod": "visible #resume button",
+      "resumedThroughVisibleButton": true,
+      "resumedTick": 984,
+      "resumedPhase": "playing",
+      "freshDown": [
+        "KeyF"
+      ]
+    }
+  ],
+  "inputHandovers": [
+    {
+      "stage": "start",
+      "tick": 0,
+      "from": "",
+      "to": "3:0:1",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    },
+    {
+      "stage": "start",
+      "tick": 0,
+      "from": "",
+      "to": "5:0:1",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    },
+    {
+      "stage": "start",
+      "tick": 0,
+      "from": "",
+      "to": "7:0:1",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    },
+    {
+      "stage": "start",
+      "tick": 0,
+      "from": "",
+      "to": "9:0:1",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    },
+    {
+      "stage": "ordinary-input-crash",
+      "tick": 186,
+      "from": "9:0:1",
+      "to": "",
+      "released": [
+        "KeyF",
+        "KeyK"
+      ],
+      "intended": [
+        "KeyF",
+        "KeyK"
+      ],
+      "freshDown": []
+    },
+    {
+      "stage": "ordinary-respawn",
+      "tick": 370,
+      "from": "",
+      "to": "9:8:2",
+      "released": [],
+      "intended": [],
+      "freshDown": []
+    }
+  ],
+  "cases": [
+    {
+      "name": "nine bindings saved through settings UI",
+      "pass": true,
+      "bindings": {
+        "left": "KeyA",
+        "right": "KeyD",
+        "up": "KeyI",
+        "down": "KeyK",
+        "fire": "KeyF",
+        "loop": "KeyJ",
+        "accelerate": "KeyE",
+        "brake": "KeyQ",
+        "pause": "KeyP"
+      }
+    },
+    {
+      "name": "remapped four directions and throttle keys drive accepted inputs",
+      "pass": true,
+      "tick": 111
+    },
+    {
+      "name": "held loop completes and returns to ready through normal input",
+      "pass": true,
+      "startTick": 19,
+      "endTick": 467,
+      "activeTicks": 448,
+      "loopProgress": 0,
+      "cooldown": 0,
+      "frameResumes": 0,
+      "uninterruptedSingleLoopVerified": true,
+      "holdMethod": "Physical key down, re-down only after documented pause recovery; no wall-time performance claim"
+    },
+    {
+      "name": "held fire resumes after shared reload through the normal input path",
+      "pass": true,
+      "actor": "7:0:1",
+      "emptyTick": 731,
+      "reloadTicks": 354,
+      "resumeTick": 1091,
+      "mg": 284,
+      "cannon": 94,
+      "frameResumes": 1
+    },
+    {
+      "name": "closing settings returns to pause and preserves its clock",
+      "pass": true,
+      "tick": 1091
+    },
+    {
+      "name": "crash and respawn clear old holds and accept the new pilot first key",
+      "pass": true,
+      "previousPilot": 0,
+      "previousActor": "9:0:1",
+      "waitingTick": 186,
+      "newPilot": 8,
+      "newActor": "9:8:2",
+      "respawnTick": 370,
+      "firstKeyTick": 381,
+      "firstTurn": 1
+    }
+  ],
+  "errors": [],
+  "beforeHashes": {
+    "index.html": "5be9bcc2705da8a87d91d0667052e1f1f91220f0ad17c722db001d22f11b9e23",
+    "src/aircraft-batch.ts": "cd69fdcd03507faffca251b311f253f4ccd10aa0bb11fbfc767626a4960c5428",
+    "src/aircraft.ts": "1a9c18f93e5a48869882b2aa2946cdeb352dc4a8acd76b4fd9beade8ded621d5",
+    "src/ammunition.ts": "2388602d763ee11037ffd16a4719ee2f2f862ee220fb62e1955d7cc0a122c24d",
+    "src/audio.ts": "086fe8700e92fbf1ab04a5fb0595f7a138f242a7c33aa385ffdcfa63c5b53724",
+    "src/city.ts": "8aa8390b37458d2dbd598473730343b348ae32a5b9df59487c924cdb86cde3ee",
+    "src/collision.ts": "b3b6c90d4f0c5fb0835cc8f8964ec4189635ca64287067089f799834d5950d25",
+    "src/control-settings.css": "f08dd3b0a8c8d165e3202ce313b170f7fe5babd6dc93a6178eacbff0ef6a35e5",
+    "src/control-settings.ts": "b7b4bdbe11806137a71c6c96fcebe2c8760b83f3ec5341d57b7b5767cf7eb88b",
+    "src/dialog-focus.ts": "86d631a4d618558e1ca671004c12ccc1fbdfe75516e6c5d04f962acd2c5e1996",
+    "src/flight-assist.ts": "ffb4cec9e6e65b950b785a6dacae593f69f16f4773ddba7252ab48211e1066aa",
+    "src/flight-types.ts": "bba0fd716a7689b84cfc3fbdb50df73016f1e7fb3c0546607444fe9e5a5ad6fa",
+    "src/flight-view.ts": "f7881454dc87dee7473edbd98aba6919d35dbd56a563e20827342cc0525d1c60",
+    "src/flight.ts": "c9662786f1fdb40f5cc62f3352a638e77b18d8f3be18a613c524dcdd4c7bac63",
+    "src/hud.ts": "4c430050c67697c78edb1221b360a6ba84d666a70c40d4f3298d49b3c6464827",
+    "src/input.ts": "0b64cb32fac2053cb933c85fe9a7f7a5d2a4e4f24d2aca33403537e054a20847",
+    "src/keyboard-settings.ts": "e5507387423e7bb7b7fc9e944c595750c70891a28d98bf49b7f9489242379b58",
+    "src/laser.ts": "35ceb9b4dea94e5d6802986bff2b0a403333304f25145d3131b79aad1c852111",
+    "src/main.ts": "447df3128a3cb5dbb4fb24336589ef527cf506f2bd7dbbd05385d645a2c6585d",
+    "src/roster.ts": "78282d7b209414dd343a4095c63314c8e23b3ac1d440de3457b1cc2596d9bead",
+    "src/rules-guide.ts": "f2fca68492ddbfd60d13b03e6c2035e8f8a7e0ef80f6fe15aa2f6f53020ba37f",
+    "src/rules.ts": "e67ca5b7c76f9e7faf851c522ba5557759c669419ab46dd4d2594d3bcf5ad910",
+    "src/scene.ts": "49f32e56e91c7f5d5efa122e36668dc65d53ffb5d9c5386fde90184c508239c4",
+    "src/score.ts": "6709c24859bd19b0b08b0901a6af3d9b0472c0447d0155ce033770b9cbdc5542",
+    "src/simulation.ts": "bd8cc3a82ddaaecbc8a5d2cb1205908a41a7f634d7a02bbe3b91dcc8f1f36254",
+    "src/style.css": "80d0cdf38ccca1494534b6e005701e33162cb3e7f6519ae087e3882b38fef191",
+    "src/types.ts": "f855167404befd3b7ab6c81935b63be8364fcdeb1065436e94049c79d8a6a446",
+    "src/ufo-ai.ts": "c8103bb6b72f65ee3bd7ab682a124ef930522720d27884973b82fb5873fe9195"
+  },
+  "method": "Functional controls check through ordinary settings DOM, physical Playwright keyboard/mouse events, and visible Resume only. Development snapshots and localStorage are read-only. Exact frame-gap pauses may be resumed after a 120ms frozen-tick check; this run makes no performance claim. Pilot changes release every physical hold before fresh key-down events. The server must keep source fixed; this driver does not configure HMR. No post-Start state edits.",
+  "warmup": {
+    "startTick": 119,
+    "endTick": 540,
+    "explicitFrameResumes": 0,
+    "method": "Ordinary loop key and exact frame-gap visible Resume only; no state edits"
+  },
+  "completedAt": "2026-10-05T04:38:12.827Z",
+  "afterHashes": {
+    "index.html": "5be9bcc2705da8a87d91d0667052e1f1f91220f0ad17c722db001d22f11b9e23",
+    "src/aircraft-batch.ts": "cd69fdcd03507faffca251b311f253f4ccd10aa0bb11fbfc767626a4960c5428",
+    "src/aircraft.ts": "1a9c18f93e5a48869882b2aa2946cdeb352dc4a8acd76b4fd9beade8ded621d5",
+    "src/ammunition.ts": "2388602d763ee11037ffd16a4719ee2f2f862ee220fb62e1955d7cc0a122c24d",
+    "src/audio.ts": "086fe8700e92fbf1ab04a5fb0595f7a138f242a7c33aa385ffdcfa63c5b53724",
+    "src/city.ts": "8aa8390b37458d2dbd598473730343b348ae32a5b9df59487c924cdb86cde3ee",
+    "src/collision.ts": "b3b6c90d4f0c5fb0835cc8f8964ec4189635ca64287067089f799834d5950d25",
+    "src/control-settings.css": "f08dd3b0a8c8d165e3202ce313b170f7fe5babd6dc93a6178eacbff0ef6a35e5",
+    "src/control-settings.ts": "b7b4bdbe11806137a71c6c96fcebe2c8760b83f3ec5341d57b7b5767cf7eb88b",
+    "src/dialog-focus.ts": "86d631a4d618558e1ca671004c12ccc1fbdfe75516e6c5d04f962acd2c5e1996",
+    "src/flight-assist.ts": "ffb4cec9e6e65b950b785a6dacae593f69f16f4773ddba7252ab48211e1066aa",
+    "src/flight-types.ts": "bba0fd716a7689b84cfc3fbdb50df73016f1e7fb3c0546607444fe9e5a5ad6fa",
+    "src/flight-view.ts": "f7881454dc87dee7473edbd98aba6919d35dbd56a563e20827342cc0525d1c60",
+    "src/flight.ts": "c9662786f1fdb40f5cc62f3352a638e77b18d8f3be18a613c524dcdd4c7bac63",
+    "src/hud.ts": "4c430050c67697c78edb1221b360a6ba84d666a70c40d4f3298d49b3c6464827",
+    "src/input.ts": "0b64cb32fac2053cb933c85fe9a7f7a5d2a4e4f24d2aca33403537e054a20847",
+    "src/keyboard-settings.ts": "e5507387423e7bb7b7fc9e944c595750c70891a28d98bf49b7f9489242379b58",
+    "src/laser.ts": "35ceb9b4dea94e5d6802986bff2b0a403333304f25145d3131b79aad1c852111",
+    "src/main.ts": "447df3128a3cb5dbb4fb24336589ef527cf506f2bd7dbbd05385d645a2c6585d",
+    "src/roster.ts": "78282d7b209414dd343a4095c63314c8e23b3ac1d440de3457b1cc2596d9bead",
+    "src/rules-guide.ts": "f2fca68492ddbfd60d13b03e6c2035e8f8a7e0ef80f6fe15aa2f6f53020ba37f",
+    "src/rules.ts": "e67ca5b7c76f9e7faf851c522ba5557759c669419ab46dd4d2594d3bcf5ad910",
+    "src/scene.ts": "49f32e56e91c7f5d5efa122e36668dc65d53ffb5d9c5386fde90184c508239c4",
+    "src/score.ts": "6709c24859bd19b0b08b0901a6af3d9b0472c0447d0155ce033770b9cbdc5542",
+    "src/simulation.ts": "bd8cc3a82ddaaecbc8a5d2cb1205908a41a7f634d7a02bbe3b91dcc8f1f36254",
+    "src/style.css": "80d0cdf38ccca1494534b6e005701e33162cb3e7f6519ae087e3882b38fef191",
+    "src/types.ts": "f855167404befd3b7ab6c81935b63be8364fcdeb1065436e94049c79d8a6a446",
+    "src/ufo-ai.ts": "c8103bb6b72f65ee3bd7ab682a124ef930522720d27884973b82fb5873fe9195"
+  },
+  "productUnchanged": true
+}

@@ -1,0 +1,1036 @@
+{
+  "suite": "Final single-worker Chromium + WebKit Playwright regression",
+  "command": "PLAYWRIGHT_BROWSERS_PATH=/workspace/.cache/ms-playwright LD_LIBRARY_PATH=/workspace/.cache/browser-libs/usr/lib/x86_64-linux-gnu PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 LP_NUM_THREADS=2 node --import tsx ./node_modules/@playwright/test/cli.js test --workers=1",
+  "workingDirectory": "/workspace/machimamore",
+  "source": {
+    "contentDigest": "0e0a5a4211fe45f0f761af17fd1f2c6ab67ec7d6da9d4b46baf433596d714b9f",
+    "inputFiles": 78,
+    "manifestGeneratedAt": "2026-10-05T04:07:05.620Z",
+    "manifestCommit": "38534ef0788a9876e73e2f819ad1db5cc63c3858"
+  },
+  "run": {
+    "startedAt": "2026-10-05T04:12:19.485Z",
+    "durationMs": 530371.792,
+    "passed": 33,
+    "skipped": 3,
+    "failed": 0,
+    "flaky": 0,
+    "total": 36
+  },
+  "skipSummary": [
+    {
+      "project": "chromium",
+      "file": "browser-tests/input-recovery.spec.ts",
+      "line": 248,
+      "reason": "Headless chromium did not produce a native focus/visibility transition; synthetic window blur is covered separately."
+    },
+    {
+      "project": "webkit",
+      "file": "browser-tests/input-recovery.spec.ts",
+      "line": 248,
+      "reason": "Headless webkit did not produce a native focus/visibility transition; synthetic window blur is covered separately."
+    },
+    {
+      "project": "webkit",
+      "file": "browser-tests/input-recovery.spec.ts",
+      "line": 44,
+      "reason": "Two-finger touch dispatch uses Chromium CDP; WebKit still runs the other interruption cases."
+    }
+  ],
+  "cases": [
+    {
+      "project": "chromium",
+      "file": "game-flow.spec.ts",
+      "line": 3,
+      "title": "Home → Start → Pause → Rules/Settings → Resume → fresh mission",
+      "status": "passed",
+      "durationMs": 25974,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "home-393x852",
+          "contentType": "image/png"
+        },
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-2",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "mission-393x852-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "mission-393x852-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "mission-393x852-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "rules-paused-393x852",
+          "contentType": "image/png"
+        },
+        {
+          "name": "settings-portrait-393x852",
+          "contentType": "image/png"
+        },
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "game-flow.spec.ts",
+      "line": 73,
+      "title": "settings are saved only by an explicit action and survive reload",
+      "status": "passed",
+      "durationMs": 14997,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "chromium",
+      "file": "game-flow.spec.ts",
+      "line": 108,
+      "title": "storage refusal offers a deliberate session-only action and leaves saved data alone",
+      "status": "passed",
+      "durationMs": 9838,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "webkit",
+      "file": "game-flow.spec.ts",
+      "line": 3,
+      "title": "Home → Start → Pause → Rules/Settings → Resume → fresh mission",
+      "status": "passed",
+      "durationMs": 19524,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "home-393x852",
+          "contentType": "image/png"
+        },
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "mission-393x852-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "mission-393x852-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "mission-393x852-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "rules-paused-393x852",
+          "contentType": "image/png"
+        },
+        {
+          "name": "settings-portrait-393x852",
+          "contentType": "image/png"
+        },
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "game-flow.spec.ts",
+      "line": 73,
+      "title": "settings are saved only by an explicit action and survive reload",
+      "status": "passed",
+      "durationMs": 11067,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "webkit",
+      "file": "game-flow.spec.ts",
+      "line": 108,
+      "title": "storage refusal offers a deliberate session-only action and leaves saved data alone",
+      "status": "passed",
+      "durationMs": 7681,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "chromium",
+      "file": "input-recovery.spec.ts",
+      "line": 3,
+      "title": "IME composition, shortcut modifiers, and keyboard capture use the settings dialog",
+      "status": "passed",
+      "durationMs": 8503,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "chromium",
+      "file": "input-recovery.spec.ts",
+      "line": 193,
+      "title": "synthetic window blur releases held keys and requires the visible Resume action",
+      "status": "passed",
+      "durationMs": 9211,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "synthetic-blur-lifecycle",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "input-recovery.spec.ts",
+      "line": 223,
+      "title": "native tab focus loss is measured separately from frame-gap pauses",
+      "status": "skipped",
+      "durationMs": 8407,
+      "skipReasons": [
+        "Headless chromium did not produce a native focus/visibility transition; synthetic window blur is covered separately."
+      ],
+      "retainedAttachments": [
+        {
+          "name": "native-tab-focus-observation",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "input-recovery.spec.ts",
+      "line": 267,
+      "title": "WebGL loss during initial preparation keeps Start disabled until graphics recover",
+      "status": "passed",
+      "durationMs": 12215,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "chromium",
+      "file": "input-recovery.spec.ts",
+      "line": 312,
+      "title": "a first WebGL draw failure leaves Home unavailable until the visible retry succeeds",
+      "status": "passed",
+      "durationMs": 13486,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "chromium",
+      "file": "input-recovery.spec.ts",
+      "line": 359,
+      "title": "WebGL context restoration does not silently resume the mission",
+      "status": "passed",
+      "durationMs": 13997,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "webgl-context-restoration-capability",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "input-recovery.spec.ts",
+      "line": 3,
+      "title": "IME composition, shortcut modifiers, and keyboard capture use the settings dialog",
+      "status": "passed",
+      "durationMs": 6913,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "webkit",
+      "file": "input-recovery.spec.ts",
+      "line": 193,
+      "title": "synthetic window blur releases held keys and requires the visible Resume action",
+      "status": "passed",
+      "durationMs": 9130,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-2",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "synthetic-blur-lifecycle",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "input-recovery.spec.ts",
+      "line": 223,
+      "title": "native tab focus loss is measured separately from frame-gap pauses",
+      "status": "skipped",
+      "durationMs": 8424,
+      "skipReasons": [
+        "Headless webkit did not produce a native focus/visibility transition; synthetic window blur is covered separately."
+      ],
+      "retainedAttachments": [
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "native-tab-focus-observation",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "input-recovery.spec.ts",
+      "line": 267,
+      "title": "WebGL loss during initial preparation keeps Start disabled until graphics recover",
+      "status": "passed",
+      "durationMs": 8724,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "input-recovery.spec.ts",
+      "line": 312,
+      "title": "a first WebGL draw failure leaves Home unavailable until the visible retry succeeds",
+      "status": "passed",
+      "durationMs": 10224,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-2",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "input-recovery.spec.ts",
+      "line": 359,
+      "title": "WebGL context restoration does not silently resume the mission",
+      "status": "passed",
+      "durationMs": 10086,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-2",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "webgl-context-restoration-capability",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "input-recovery.spec.ts",
+      "line": 43,
+      "title": "Chromium CDP two-touch input keeps the remaining pointer held and clears it on cancel",
+      "status": "passed",
+      "durationMs": 9810,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "two-touch-start-observation",
+          "contentType": "application/json"
+        },
+        {
+          "name": "two-touch-fire-release-audit",
+          "contentType": "application/json"
+        },
+        {
+          "name": "two-touch-cancel-audit",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "input-recovery.spec.ts",
+      "line": 43,
+      "title": "Chromium CDP two-touch input keeps the remaining pointer held and clears it on cancel",
+      "status": "skipped",
+      "durationMs": 839,
+      "skipReasons": [
+        "Two-finger touch dispatch uses Chromium CDP; WebKit still runs the other interruption cases."
+      ],
+      "retainedAttachments": []
+    },
+    {
+      "project": "chromium",
+      "file": "mobile-layout.spec.ts",
+      "line": 57,
+      "title": "home layout fits the five supported viewport profiles",
+      "status": "passed",
+      "durationMs": 37230,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "home-portrait-small",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-hud-layout-portrait-small",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-portrait-small-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-portrait-small-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-portrait-small-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "home-portrait-large",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-hud-layout-portrait-large",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-portrait-large-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-portrait-large-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-portrait-large-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "home-landscape-small",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-hud-layout-landscape-small",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-landscape-small-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-landscape-small-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-landscape-small-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "home-landscape-large",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-hud-layout-landscape-large",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-landscape-large-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-landscape-large-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-landscape-large-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "home-desktop",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-hud-layout-desktop",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-desktop-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-desktop-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-desktop-capture-state",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "mobile-layout.spec.ts",
+      "line": 271,
+      "title": "settings remain reachable at 200% text scale with safe-area insets and scroll",
+      "status": "passed",
+      "durationMs": 7301,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "settings-200-percent-safe-area-320x568",
+          "contentType": "image/png"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "mobile-layout.spec.ts",
+      "line": 301,
+      "title": "keyboard focus is visible and a modal traps Tab until Escape returns focus",
+      "status": "passed",
+      "durationMs": 7324,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "chromium",
+      "file": "mobile-layout.spec.ts",
+      "line": 330,
+      "title": "reduced-motion preference leaves flight timing and essential controls usable",
+      "status": "passed",
+      "durationMs": 10252,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "reduced-motion-home-393x852",
+          "contentType": "image/png"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "mobile-layout.spec.ts",
+      "line": 57,
+      "title": "home layout fits the five supported viewport profiles",
+      "status": "passed",
+      "durationMs": 28069,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "home-portrait-small",
+          "contentType": "image/png"
+        },
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-hud-layout-portrait-small",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-portrait-small-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-portrait-small-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-portrait-small-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "home-portrait-large",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-hud-layout-portrait-large",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-portrait-large-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-portrait-large-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-portrait-large-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "home-landscape-small",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-hud-layout-landscape-small",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-landscape-small-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-landscape-small-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-landscape-small-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "home-landscape-large",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-hud-layout-landscape-large",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-landscape-large-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-landscape-large-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-landscape-large-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "home-desktop",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-hud-layout-desktop",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-desktop-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-normal-desktop-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-normal-desktop-capture-state",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "mobile-layout.spec.ts",
+      "line": 271,
+      "title": "settings remain reachable at 200% text scale with safe-area insets and scroll",
+      "status": "passed",
+      "durationMs": 5890,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "settings-200-percent-safe-area-320x568",
+          "contentType": "image/png"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "mobile-layout.spec.ts",
+      "line": 301,
+      "title": "keyboard focus is visible and a modal traps Tab until Escape returns focus",
+      "status": "passed",
+      "durationMs": 4097,
+      "skipReasons": [],
+      "retainedAttachments": []
+    },
+    {
+      "project": "webkit",
+      "file": "mobile-layout.spec.ts",
+      "line": 330,
+      "title": "reduced-motion preference leaves flight timing and essential controls usable",
+      "status": "passed",
+      "durationMs": 11509,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "reduced-motion-home-393x852",
+          "contentType": "image/png"
+        },
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-2",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-3",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "mobile-layout.spec.ts",
+      "line": 195,
+      "title": "Easy aircraft and lower instruments remain visible in compact portrait and landscape",
+      "status": "passed",
+      "durationMs": 19938,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "easy-flight-layout-portrait-small",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-easy-portrait-small-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-easy-portrait-small-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-easy-portrait-small-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "easy-flight-layout-landscape-small",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-easy-landscape-small-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-easy-landscape-small-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-easy-landscape-small-capture-state",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "mobile-layout.spec.ts",
+      "line": 195,
+      "title": "Easy aircraft and lower instruments remain visible in compact portrait and landscape",
+      "status": "passed",
+      "durationMs": 17596,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "easy-flight-layout-portrait-small",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-easy-portrait-small-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-easy-portrait-small-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-easy-portrait-small-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "easy-flight-layout-landscape-small",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-easy-landscape-small-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "flight-easy-landscape-small-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "flight-easy-landscape-small-capture-state",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "production.spec.ts",
+      "line": 3,
+      "title": "release bundle starts through its normal UI with no observer and no outbound traffic",
+      "status": "passed",
+      "durationMs": 11613,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "release-frame-pause-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "release-home",
+          "contentType": "image/png"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "production.spec.ts",
+      "line": 3,
+      "title": "release bundle starts through its normal UI with no observer and no outbound traffic",
+      "status": "passed",
+      "durationMs": 9658,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "release-frame-pause-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "release-home",
+          "contentType": "image/png"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "render-capacity.spec.ts",
+      "line": 3,
+      "title": "maximum capacity renderer fixture keeps 16 entities, 40 beams, 2048 rounds and stable resources",
+      "status": "passed",
+      "durationMs": 11574,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "maximum-render-capacity",
+          "contentType": "image/png"
+        },
+        {
+          "name": "capacity-observation",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "render-capacity.spec.ts",
+      "line": 3,
+      "title": "maximum capacity renderer fixture keeps 16 entities, 40 beams, 2048 rounds and stable resources",
+      "status": "passed",
+      "durationMs": 7474,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "maximum-render-capacity",
+          "contentType": "image/png"
+        },
+        {
+          "name": "capacity-observation",
+          "contentType": "application/json"
+        }
+      ]
+    },
+    {
+      "project": "chromium",
+      "file": "resource-bounds.spec.ts",
+      "line": 40,
+      "title": "normal 8-vs-8 play with sound on remains within runtime resource limits across ten relaunches",
+      "status": "passed",
+      "durationMs": 61524,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "resource-check-active-normal-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "resource-check-active-normal-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "resource-check-active-normal-post-capture-frame-gap-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "resource-check-active-normal-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-2",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-2",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "renderer-home-resource-counts",
+          "contentType": "application/json"
+        },
+        {
+          "name": "resource-check-home-after-ten-relaunches",
+          "contentType": "image/png"
+        }
+      ]
+    },
+    {
+      "project": "webkit",
+      "file": "resource-bounds.spec.ts",
+      "line": 40,
+      "title": "normal 8-vs-8 play with sound on remains within runtime resource limits across ten relaunches",
+      "status": "passed",
+      "durationMs": 54923,
+      "skipReasons": [],
+      "retainedAttachments": [
+        {
+          "name": "setup-frame-gap-recovery-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-2",
+          "contentType": "application/json"
+        },
+        {
+          "name": "setup-frame-gap-recovery-3",
+          "contentType": "application/json"
+        },
+        {
+          "name": "documented-frame-gap-recovery",
+          "contentType": "application/json"
+        },
+        {
+          "name": "resource-check-active-normal-capture-candidate-1",
+          "contentType": "image/png"
+        },
+        {
+          "name": "resource-check-active-normal-capture-state-attempt-1",
+          "contentType": "application/json"
+        },
+        {
+          "name": "resource-check-active-normal-capture-state",
+          "contentType": "application/json"
+        },
+        {
+          "name": "renderer-home-resource-counts",
+          "contentType": "application/json"
+        },
+        {
+          "name": "resource-check-home-after-ten-relaunches",
+          "contentType": "image/png"
+        }
+      ]
+    }
+  ],
+  "report": "final-browser-results-2026-10-05.json",
+  "rawRun": "artifacts/browser-evidence/final-36-2026-10-05T04-12-19Z/test-results/browser-results.json",
+  "visualReview": "Selected final-run screenshots were opened at original viewport dimensions with the local image viewer; see the evidence paths listed in docs/BROWSER_VERIFICATION.md."
+}

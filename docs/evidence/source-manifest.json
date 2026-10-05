@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "generatedAt": "2026-10-05T04:07:05.620Z",
-  "commit": "38534ef0788a9876e73e2f819ad1db5cc63c3858",
+  "generatedAt": "2026-10-05T04:43:10.139Z",
+  "commit": "aed6858e1083ebc3139a8f3c5ed669f2d8c3d2fd",
   "workingTreeDirty": true,
-  "contentDigest": "0e0a5a4211fe45f0f761af17fd1f2c6ab67ec7d6da9d4b46baf433596d714b9f",
+  "contentDigest": "6f0078ca79e4c38e89954e48cc7486c03c6f046261f401ebf4e3fd34fde55794",
   "files": [
     {
       "path": ".github/workflows/checks.yml",
-      "bytes": 895,
-      "sha256": "47eece8a43ae297d50334d76fb8f86edf528a37b59966f562b8484794ab78665"
+      "bytes": 935,
+      "sha256": "1967a1c8b20627fbee6fb93ca966d4dc74f7c9c39ad2f3b9c1ee6cc7ffc16989"
     },
     {
       "path": "browser-tests/fixtures.ts",
@@ -87,8 +87,8 @@
     },
     {
       "path": "scripts/browser-evidence.ts",
-      "bytes": 29879,
-      "sha256": "0fae86128b6ed98d221f91c4362cc861c66e2fc4e93d3e43ceae63a929fa7f2a"
+      "bytes": 30062,
+      "sha256": "1a13a312c61091c45ff68da4dea6b15bb6b57bf056594865e05010618fb7394c"
     },
     {
       "path": "scripts/cadence-experiment.ts",

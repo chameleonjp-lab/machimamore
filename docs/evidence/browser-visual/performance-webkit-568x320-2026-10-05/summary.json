@@ -1,0 +1,177 @@
+{
+  "status": "completed",
+  "mode": "performance",
+  "browser": {
+    "name": "webkit",
+    "version": "26.5"
+  },
+  "browserUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+  "profile": {
+    "width": 568,
+    "height": 320,
+    "deviceScaleFactor": 1,
+    "rendererPixelRatio": 1
+  },
+  "graphics": {
+    "vendor": "Apple Inc.",
+    "renderer": "Apple GPU",
+    "version": "WebGL 2.0",
+    "antialias": false,
+    "samples": 0,
+    "cssSize": {
+      "width": 568,
+      "height": 320
+    },
+    "drawingBuffer": {
+      "width": 568,
+      "height": 320
+    },
+    "effectivePixelRatio": 1
+  },
+  "runId": "2026-10-05T04-43-32.426Z-performance",
+  "startTime": "2026-10-05T04:43:32.426Z",
+  "finishTime": "2026-10-05T04:45:03.807Z",
+  "sourceContentDigest": "6f0078ca79e4c38e89954e48cc7486c03c6f046261f401ebf4e3fd34fde55794",
+  "performanceMission": {
+    "missionId": 25,
+    "seed": 1296122696,
+    "rulesVersion": "machimamore-2",
+    "mode": "normal"
+  },
+  "measurement": {
+    "durationMs": 60008,
+    "sampleCount": 2816,
+    "meanIntervalMs": 21.30965909090909,
+    "p50IntervalMs": 17,
+    "p95IntervalMs": 36,
+    "p99IntervalMs": 54,
+    "maxIntervalMs": 226,
+    "continuousMission": true,
+    "endScreen": "playing",
+    "targets": {
+      "p95Ms": 33.4,
+      "p95Met": false,
+      "p99Ms": 50,
+      "p99Met": false
+    }
+  },
+  "tenRelaunches": {
+    "count": 10,
+    "coldHome": {
+      "aircraft": 16,
+      "activeLasers": 0,
+      "projectiles": 0,
+      "decorations": 0,
+      "geometries": 71,
+      "textures": 4,
+      "programs": 14,
+      "audioContexts": 1,
+      "audioSources": 0,
+      "activeEffectSources": 0,
+      "soundEnabled": true
+    },
+    "warmHome": {
+      "geometries": 71,
+      "textures": 4,
+      "programs": 14
+    },
+    "allHomeBaselinesMatch": true,
+    "activeMaxima": {
+      "aircraft": {
+        "observed": 16,
+        "limit": 16,
+        "withinLimit": true
+      },
+      "activeLasers": {
+        "observed": 30,
+        "limit": 40,
+        "withinLimit": true
+      },
+      "projectiles": {
+        "observed": 39,
+        "limit": 2048,
+        "withinLimit": true
+      },
+      "decorations": {
+        "observed": 0,
+        "limit": 24,
+        "withinLimit": true
+      },
+      "audioContexts": {
+        "observed": 1,
+        "limit": 1,
+        "withinLimit": true
+      },
+      "audioSources": {
+        "observed": 6,
+        "limit": 10,
+        "withinLimit": true
+      },
+      "activeEffectSources": {
+        "observed": 5,
+        "limit": 9,
+        "withinLimit": true
+      }
+    }
+  },
+  "outboundAttempts": [],
+  "conclusion": "60-second rAF sample recorded for webkit. Read P95/P99 together with the recorded browser and graphics backend.",
+  "activeCaptures": [
+    {
+      "label": "mission-start",
+      "before": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 35
+      },
+      "after": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 41,
+        "reason": "画面更新に長い空白があったため停止しました。",
+        "pauseReasons": []
+      },
+      "recovery": "not-required"
+    },
+    {
+      "label": "performance-end",
+      "before": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 3646
+      },
+      "after": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 3658,
+        "reason": "作戦時計・装填・復帰・レーザーも止まっています。",
+        "pauseReasons": []
+      },
+      "recovery": "not-required"
+    }
+  ],
+  "files": {
+    "2026-10-05T04-43-32.426Z-performance-after-ten-relaunches.png": {
+      "sha256": "84de71859fc65e686fd5840ef7f4cd0a746999a01d98baf04847f5c827db66aa",
+      "bytes": 119482
+    },
+    "2026-10-05T04-43-32.426Z-performance-home.png": {
+      "sha256": "71946a3e5521b22878b04e491b5da9cda490a4b34217054d6c730d44219630af",
+      "bytes": 61522
+    },
+    "2026-10-05T04-43-32.426Z-performance-mission-start.png": {
+      "sha256": "a9f826e2f8629993739adcead739d0d981cc3df24657a9b0f5afccb9767ee18a",
+      "bytes": 147569
+    },
+    "2026-10-05T04-43-32.426Z-performance-performance-end.png": {
+      "sha256": "3a7da9d1a9fd88830012cf1bd611d4cb62ae4929edb0f01dfc3961250f506868",
+      "bytes": 130309
+    },
+    "report.json": {
+      "sha256": "0af43ad7d25ad4907cf055b589b341b6b428025995b61830051475f42bc9fb5b",
+      "bytes": 114065
+    }
+  },
+  "driverCompletedWithoutException": true,
+  "pageErrorEventsCollected": false
+}

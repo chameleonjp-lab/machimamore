@@ -1,0 +1,178 @@
+{
+  "run": "WebKit Normal active-input natural-result campaign at 568×320",
+  "startedAt": "2026-10-05T04:28:52.998Z",
+  "finishedAt": "2026-10-05T04:30:53.985Z",
+  "wallMs": 120987,
+  "browser": "26.5",
+  "mode": "normal",
+  "policy": "active",
+  "viewport": {
+    "width": 568,
+    "height": 320
+  },
+  "sourceContentDigest": "0e0a5a4211fe45f0f761af17fd1f2c6ab67ec7d6da9d4b46baf433596d714b9f",
+  "command": "PLAYWRIGHT_BROWSERS_PATH=/workspace/.cache/ms-playwright LD_LIBRARY_PATH=/workspace/.cache/browser-libs/usr/lib/x86_64-linux-gnu PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 LP_NUM_THREADS=2 node --import tsx scripts/browser-campaign.ts --webkit --small --normal",
+  "naturalOutcome": {
+    "screen": "result",
+    "phase": "ended",
+    "tick": 6750,
+    "missionElapsed": "01:52.50",
+    "resultText": "\n        CITY DEFENDED防衛成功ノーマルUFO全50機を撃破。母艦は撤退します。能動作戦時間01:52.50最終得点 69,735UFO破壊点＋50,000与ダメージ点＋20,000時間点（勝利時）＋18,461.5自機損失−0僚機損失−15,000命中率減点−0街損失−3,726自機のUFO撃破0機僚機のUFO撃破50機自機 / 僚機損失0 / 30機街の残耐久 / 破壊4137.0 / 5000HP · 1区画自機 命中 / 発射28 / 28発 · 100.0%味方 / 敵の残機20 / 0機もう一度出撃ホームへ戻る操作設定\n      ",
+    "enemyDestroyed": 50,
+    "enemyRemaining": 0,
+    "friendlyDestroyed": 30,
+    "friendlyRemaining": 20,
+    "cityDestroyed": 1,
+    "cityPercentRemaining": 82.73988514109968,
+    "score": 69735
+  },
+  "frameGapRecoveries": [
+    {
+      "atMs": 6689,
+      "tick": 0,
+      "frozenTick": 0,
+      "pauseReasons": [
+        "frame"
+      ],
+      "pauseReason": "画面更新に長い空白があったため停止しました。",
+      "freezeCheckMs": 120,
+      "visibleResume": true
+    },
+    {
+      "atMs": 13787,
+      "tick": 366,
+      "frozenTick": 366,
+      "pauseReasons": [
+        "frame"
+      ],
+      "pauseReason": "画面更新に長い空白があったため停止しました。",
+      "freezeCheckMs": 120,
+      "visibleResume": true
+    }
+  ],
+  "inputTraceRows": 1331,
+  "pageErrors": [],
+  "externalRequestAttempts": [],
+  "captures": [
+    {
+      "label": "flight",
+      "before": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 905
+      },
+      "after": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 913
+      },
+      "failure": null
+    },
+    {
+      "label": "combat",
+      "before": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 2704
+      },
+      "after": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 2710
+      },
+      "failure": null
+    },
+    {
+      "label": "end",
+      "before": {
+        "screen": "result",
+        "phase": "ended",
+        "tick": 6750
+      },
+      "after": {
+        "screen": "result",
+        "phase": "ended",
+        "tick": 6750
+      },
+      "failure": null
+    },
+    {
+      "label": "retry",
+      "before": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 0
+      },
+      "after": {
+        "screen": "playing",
+        "phase": "playing",
+        "tick": 7
+      },
+      "failure": null
+    }
+  ],
+  "retry": {
+    "screen": "playing",
+    "phase": "playing",
+    "tick": 0,
+    "missionId": 4,
+    "mode": "normal",
+    "enemyRemaining": 50,
+    "friendlyRemaining": 50,
+    "score": 0
+  },
+  "screenshotReview": "Opened flight, combat, end and retry PNGs individually at original 568×320 dimensions with functions.view_image. Flight/combat show live Normal play, end shows the Victory result dialog top of its scroll area, and retry shows the fresh mission at tick 0. The complete result text and result counts are in result.json.",
+  "files": [
+    {
+      "file": "result.json",
+      "bytes": 1151233,
+      "sha256": "0289890951d0378712482fd08738b5d58b85a1ea1d281c35942683127eb3124b"
+    },
+    {
+      "file": "captures.json",
+      "bytes": 300719,
+      "sha256": "dfa3fc77f2cf713f46d8987b8fe722b2646e9e635edd14a093c76d82c0e73972"
+    },
+    {
+      "file": "flight.png",
+      "bytes": 187035,
+      "sha256": "3e7a4cc5011b4dae21bd609ef11cb975e9ea8894ccc5dda6bf988678bdd1fafe",
+      "width": 568,
+      "height": 320
+    },
+    {
+      "file": "combat.png",
+      "bytes": 173807,
+      "sha256": "beb1050800305d3599cfec580153239049f31ac15c68ad670b9adbd3c8ed485c",
+      "width": 568,
+      "height": 320
+    },
+    {
+      "file": "end.png",
+      "bytes": 47399,
+      "sha256": "9aaa40755967dfc2e3b2bed31a0cf9cac2309f1c9adb7f6f99a965a6fdfac14e",
+      "width": 568,
+      "height": 320
+    },
+    {
+      "file": "retry.png",
+      "bytes": 149251,
+      "sha256": "04759b33775e9c98d896d34ce7655537c64f9279a9a22f25369cd9aef3f0ca67",
+      "width": 568,
+      "height": 320
+    }
+  ],
+  "publicProjection": {
+    "file": "input-trace.json",
+    "rows": 1331,
+    "method": "Exact complete inputTrace, resultText and selected result/retry observations from local raw. Each acceptedInput precedes actions; no trace rows omitted."
+  },
+  "localOnlyFiles": [
+    "result.json",
+    "flight.png",
+    "combat.png",
+    "end.png",
+    "retry.png"
+  ],
+  "retentionScope": "Large full result and PNGs retained locally; text projection and captures metadata are prepared for the Draft. Public PNG transfer requires pending user approval."
+}
