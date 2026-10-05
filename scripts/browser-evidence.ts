@@ -326,30 +326,30 @@ async function returnHome(page: Page): Promise<void> {
 }
 
 async function steadyFrameSample(page: Page, durationMs: number): Promise<Snapshot> {
-  return page.evaluate(async duration => new Promise(resolve => {
+  return page.evaluate(async duration => new Promise<Snapshot>(resolve => {
     const intervals: number[] = [];
     let first: number | null = null;
     let previous: number | null = null;
-    const frame = (now: number) => {
+    const callbacks: FrameRequestCallback[] = [];
+    callbacks.push(function (now: number) {
       if (first === null) first = now;
       if (previous !== null) intervals.push(now - previous);
       previous = now;
-      if (now - first < duration) requestAnimationFrame(frame);
+      if (now - first < duration) requestAnimationFrame(callbacks[0]);
       else {
         const sorted = [...intervals].sort((a, b) => a - b);
-        const percentile = (p: number) => sorted.length ? sorted[Math.min(sorted.length - 1, Math.ceil(p * sorted.length) - 1)] : null;
         resolve({
           durationMs: now - first,
           sampleCount: intervals.length,
           meanIntervalMs: intervals.length ? intervals.reduce((sum, value) => sum + value, 0) / intervals.length : null,
-          p50IntervalMs: percentile(.5),
-          p95IntervalMs: percentile(.95),
-          p99IntervalMs: percentile(.99),
+          p50IntervalMs: sorted.length ? sorted[Math.min(sorted.length - 1, Math.ceil(.5 * sorted.length) - 1)] : null,
+          p95IntervalMs: sorted.length ? sorted[Math.min(sorted.length - 1, Math.ceil(.95 * sorted.length) - 1)] : null,
+          p99IntervalMs: sorted.length ? sorted[Math.min(sorted.length - 1, Math.ceil(.99 * sorted.length) - 1)] : null,
           maxIntervalMs: sorted.at(-1) ?? null,
         });
       }
-    };
-    requestAnimationFrame(frame);
+    });
+    requestAnimationFrame(callbacks[0]);
   }), durationMs);
 }
 
