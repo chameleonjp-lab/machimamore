@@ -11,9 +11,20 @@ test('Normal exposes three controls, a named 44px lever, native pointer release 
   await expect(lever).toHaveAttribute('aria-valuenow','100');
   await expect.poll(async()=>Number(((await readRequiredObservation(page)).acceptedInput as Record<string,unknown>).throttle)).toBe(1);
   await page.mouse.move(x,box!.y+box!.height-22);await expect(lever).toHaveAttribute('aria-valuenow','-100');
-  await page.mouse.up();await expect(lever).toHaveAttribute('aria-valuenow','0');
-  await expect.poll(async()=>Number(((await readRequiredObservation(page)).acceptedInput as Record<string,unknown>).throttle)).toBe(0);
-  // Mouse compatibility click selects PC presentation; a fresh touch re-exposes touch controls.
+  await page.mouse.up();
+  // The committed mouse click selects PC presentation, which hides the touch
+  // slider from role queries. Inspect its retained DOM state and real input
+  // release before using a native touch to expose the accessible slider again.
+  const retainedLever=page.locator('#throttle');
+  await expect(page.locator('#app')).toHaveAttribute('data-input','keyboard');
+  await expect(retainedLever).toHaveCount(1);await expect(retainedLever).toBeHidden();
+  await expect(retainedLever).toHaveAttribute('aria-valuenow','0');
+  await expect.poll(async()=>{
+    const observation=await readRequiredObservation(page),input=observation.input as Record<string,unknown>;
+    return {pointer:input.throttlePointer,axis:input.throttle,accepted:(observation.acceptedInput as Record<string,unknown>).throttle};
+  }).toEqual({pointer:null,axis:0,accepted:0});
+  await expect(page.locator('#app')).toHaveAttribute('data-screen','playing');
+  // A fresh touch re-exposes touch controls without changing the release state.
   await page.touchscreen.tap(196,420);await expect(lever).toBeVisible();
   await lever.focus();await page.keyboard.down('ArrowUp');await expect(lever).toHaveAttribute('aria-valuenow','100');
   await page.keyboard.up('ArrowUp');await expect(lever).toHaveAttribute('aria-valuenow','0');
