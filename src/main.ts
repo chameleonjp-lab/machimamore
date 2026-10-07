@@ -1,4 +1,5 @@
 import './style.css';
+import './common-shell.css';
 import './control-settings.css';
 import { createGame, startGame, stepGame, pauseGame, resumeGame, abortGame, getPlayer, getHudSnapshot } from './simulation';
 import { FIXED_DT, RULES_VERSION } from './rules';
@@ -17,15 +18,15 @@ let selectedMode:GameMode='easy',state=createGame({mode:selectedMode}),screen:'h
 let graphicsReady=false,contextLost=false,preparing=false,disposed=false,preparationGeneration=0,frameId=0,lastFrame=0,accumulator=0;
 let cancelPreparation:(()=>void)|null=null,presentationPending=false;
 let pendingLoop=false,pendingFire=false,pendingAccelerate=false,pendingBrake=false,lastPlayerIdentity='',lastEventId=-1,lastEventMission=-1,announcementUntil=0,lastNoticeTick=-999,resultPresentationStart=0;
-const buttons={fire:el<HTMLButtonElement>('fire'),loop:el<HTMLButtonElement>('loop'),accelerate:el<HTMLButtonElement>('accelerate'),brake:el<HTMLButtonElement>('brake')};
+const buttons={fire:el<HTMLButtonElement>('fire'),loop:el<HTMLButtonElement>('loop'),throttle:el<HTMLElement>('throttle')};
 for(const button of Object.values(buttons))button.dataset.flightControl='true';
 const keyboard=new KeyboardSettings(),presentation=new ControlInputPresentation(),settings=new ControlSettings(buttons,keyboard,presentation);
 let rules:RulesGuide|null=null;
 const controls=new FlightControls(canvas,buttons,()=>screen==='playing'&&state.phase==='playing'&&!!getPlayer(state)&&!settings.isOpen&&!rules?.isOpen,keyboard);
 function clearInput(){controls.clear();pendingLoop=false;pendingFire=false;pendingAccelerate=false;pendingBrake=false;}
 function phase():GameState['phase']{return state.phase;}
-function syncPilotOwnership(raw:FlightInput){const p=getPlayer(state),identity=p?`${state.missionId}:${p.token}:${p.generation}`:'';if(identity!==lastPlayerIdentity){lastPlayerIdentity=identity;clearInput();raw.turn=0;raw.climb=0;raw.fire=false;raw.loop=false;raw.accelerate=false;raw.brake=false;}}
-function syncInstructions(){const peek=controls.peek();if(peek.steerPointer!==null||peek.keys.length||Object.values(peek.heldPointers).some(ids=>ids.length)){presentationPending=true;return;}presentationPending=false;const touch=presentation.value==='touch';app.dataset.input=presentation.value;el('input-guide').textContent=touch?'画面をドラッグして操縦':'矢印キー・相対ドラッグで操縦';el('flight-tip').textContent=touch?'触れた位置からドラッグして操縦':'矢印キーで操縦';el('mode-guide').textContent=state.mode==='easy'?'自動射撃・巡航速度 · 相手の少し先を狙う':'手動射撃・加減速 · 長押しで操作';el('keyboard-guide').hidden=touch;el('keyboard-guide').textContent=keyboard.describe(state.mode);}
+function syncPilotOwnership(raw:FlightInput){const p=getPlayer(state),identity=p?`${state.missionId}:${p.token}:${p.generation}`:'';if(identity!==lastPlayerIdentity){lastPlayerIdentity=identity;clearInput();raw.turn=0;raw.climb=0;raw.fire=false;raw.loop=false;raw.accelerate=false;raw.brake=false;raw.throttle=0;}}
+function syncInstructions(){const peek=controls.peek();if(peek.steerPointer!==null||peek.throttlePointer!==null||peek.throttle!==0||peek.keys.length||Object.values(peek.heldPointers).some(ids=>ids.length)){presentationPending=true;return;}presentationPending=false;const touch=presentation.value==='touch';app.dataset.input=presentation.value;el('input-guide').textContent=touch?'画面をドラッグして操縦':'矢印キー・相対ドラッグで操縦';el('flight-tip').textContent=touch?'触れた位置からドラッグして操縦':'矢印キーで操縦';el('mode-guide').textContent=state.mode==='easy'?'自動射撃・巡航速度 · 相手の少し先を狙う':'射撃は長押し · 速度はレバーで調整';el('keyboard-guide').hidden=touch;el('keyboard-guide').textContent=keyboard.describe(state.mode);}
 function syncMode(){app.dataset.mode=state.mode;controls.setMode(state.mode);settings.setActiveMode(state.mode);el('normal-controls').hidden=state.mode!=='normal';el('friendly-fire-guide').hidden=state.mode!=='normal';el('hud-mode').textContent=modeName(state.mode);syncInstructions();}
 const unsubscribeKeys=keyboard.subscribe(syncInstructions),unsubscribePresentation=presentation.subscribe(syncInstructions);
 rules=new RulesGuide(()=>({mode:state.mode,input:presentation.value,keyboardDescription:keyboard.describe(state.mode)}),clearInput);
@@ -77,7 +78,8 @@ async function prepareGraphics(){
     if(screen==='paused')el('pause-reason').textContent='描画が復旧しました。作戦は停止中です。「飛行を再開」で続けられます。';scene.render(state,screen!=='home');
   }catch(error){
     if(disposed||generation!==preparationGeneration){candidate?.dispose();return;}
-    graphicsFailure(`画面を準備できません。WebGL対応とブラウザの描画設定を確認して再試行してください。${error instanceof Error?error.message:''}`);
+    console.error('MachiMamore graphics preparation failed:', error);
+    graphicsFailure('画面を準備できません。WebGL対応とブラウザの描画設定を確認して再試行してください。');
     candidate?.dispose();
   }finally{
     if(timer!==undefined)window.clearTimeout(timer);
@@ -92,9 +94,9 @@ const frameIntervals:number[]=[];let gapCount=0,maxFrameGap=0;
 function frame(now:number){if(disposed)return;frameId=requestAnimationFrame(frame);if(presentationPending)syncInstructions();if(!lastFrame){lastFrame=now;renderScene(screen!=='home',1);return;}const seconds=(now-lastFrame)/1000;lastFrame=now;
   if(screen==='playing'&&state.phase==='playing'){
     if(seconds>.25){gapCount++;maxFrameGap=Math.max(maxFrameGap,seconds);pause('frame');}
-    else{frameIntervals.push(seconds*1000);if(frameIntervals.length>4096)frameIntervals.shift();const raw=controls.sample();pendingLoop||=raw.loop;pendingFire||=raw.fire;pendingAccelerate||=!!raw.accelerate;pendingBrake||=!!raw.brake;accumulator+=Math.max(0,seconds);let count=0;
+    else{frameIntervals.push(seconds*1000);if(frameIntervals.length>4096)frameIntervals.shift();const raw=controls.sample(false);pendingLoop||=raw.loop;pendingFire||=raw.fire;pendingAccelerate||=!!raw.accelerate;pendingBrake||=!!raw.brake;accumulator+=Math.max(0,seconds);let count=0;
       while(accumulator+1e-12>=FIXED_DT&&state.phase==='playing'&&count<15){syncPilotOwnership(raw);
-        const input:FlightInput={...raw,fire:raw.fire||pendingFire,accelerate:raw.accelerate||pendingAccelerate,brake:raw.brake||pendingBrake,loop:pendingLoop,viewAspect:window.innerWidth/Math.max(1,window.innerHeight)};pendingLoop=false;pendingFire=false;pendingAccelerate=false;pendingBrake=false;stepGame(state,input);syncPilotOwnership(raw);accumulator-=FIXED_DT;count++;processEvents();if(phase()==='paused'){pause(state.fault?'fault':'frame');break;}if(phase()==='ended'){finish();break;}}
+        const input:FlightInput={...raw,throttle:controls.sampleThrottle(raw.accelerate||pendingAccelerate,raw.brake||pendingBrake),fire:raw.fire||pendingFire,accelerate:raw.accelerate||pendingAccelerate,brake:raw.brake||pendingBrake,loop:pendingLoop,viewAspect:window.innerWidth/Math.max(1,window.innerHeight)};pendingLoop=false;pendingFire=false;pendingAccelerate=false;pendingBrake=false;stepGame(state,input);syncPilotOwnership(raw);accumulator-=FIXED_DT;count++;processEvents();if(phase()==='paused'){pause(state.fault?'fault':'frame');break;}if(phase()==='ended'){finish();break;}}
       if(accumulator+1e-12>=FIXED_DT&&state.phase==='playing')pause('frame');hud.update(state,getHudSnapshot(state));if(announcementUntil&&state.tick>=announcementUntil){el('announcement').textContent='';announcementUntil=0;}
     }
   }

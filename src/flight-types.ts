@@ -16,6 +16,8 @@ export type GameMode = 'normal' | 'easy';
 
 /** Accepted inputs for one fixed tick. Loop is an edge; fire and throttle are holds. */
 export interface FlightInput {
+  /** Explicit rate axis (including zero) overrides legacy accelerate/brake. */
+  throttle?: number;
   turn: number;
   climb: number;
   fire: boolean;

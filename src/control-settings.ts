@@ -1,35 +1,34 @@
-// Adapted from pinned Kaisen; see docs/PROVENANCE_CONTROLS.md.
-import type { FlightControlButtons } from './input';
+import { measureHudObstacles, controlLayoutSize, settingsViewportSize, type ControlObstacle } from './control-obstacles';
+// Common lever integration; see docs/COMMON_UI_THROTTLE_VERIFICATION.md.
+import { persistSettingsBatch, readSettingsValue, hasSettingsRecovery } from './settings-storage';
+import type { MachiMamoreControlButtons } from './input';
 import { containDialogTabFocus } from './dialog-focus';
 import {
   KeyboardSettings, ControlInputPresentation, DEFAULT_KEY_BINDINGS, KEY_ACTIONS, KEY_LABELS, KEYBOARD_STORAGE_KEY,
   captureKey, keyConflict, keyLabel, preferredControlInput, type KeyAction, type KeyBindings,
 } from './keyboard-settings';
 
-export type ControlName = keyof FlightControlButtons;
+export type ControlName = 'fire' | 'loop' | 'throttle';
 type GameMode = 'normal' | 'easy';
 export type ControlPlacement = { x: number; y: number; size: number; opacity: number };
 export type ControlLayout = Record<ControlName, ControlPlacement>;
 type ModeLayouts = Record<GameMode, ControlLayout>;
 type Insets = { top: number; right: number; bottom: number; left: number };
 
-export const CONTROL_STORAGE_KEYS: Readonly<Record<GameMode, string>> = Object.freeze({
-  normal: 'machimamore-controls-v1',
-  easy: 'machimamore-controls-easy-v1',
-});
+export const STORAGE_KEYS: Record<GameMode, string> = { normal: 'machimamore-controls-v2', easy: 'machimamore-controls-easy-v2' };
+const LEGACY_STORAGE_KEYS: Record<GameMode, string> = { normal: 'machimamore-controls-v1', easy: 'machimamore-controls-easy-v1' };
 const MODES: GameMode[] = ['normal', 'easy'];
-export const CONTROL_NAMES: readonly ControlName[] = Object.freeze(['fire', 'loop', 'accelerate', 'brake']);
-export const MODE_CONTROLS: Readonly<Record<GameMode, readonly ControlName[]>> = {
+export const CONTROL_NAMES: ControlName[] = ['fire', 'loop', 'throttle'];
+export const MODE_CONTROLS: Record<GameMode, ControlName[]> = {
   normal: CONTROL_NAMES,
   easy: ['loop'],
 };
 export const DEFAULT_LAYOUT: ControlLayout = {
   fire: { x: 0.83, y: 0.84, size: 96, opacity: 0.9 },
   loop: { x: 0.83, y: 0.66, size: 72, opacity: 0.78 },
-  accelerate: { x: 0.17, y: 0.84, size: 76, opacity: 0.82 },
-  brake: { x: 0.17, y: 0.66, size: 76, opacity: 0.82 },
+  throttle: { x: 0.17, y: 0.75, size: 64, opacity: 0.82 },
 };
-const CONTROL_LABELS: Record<ControlName, string> = { fire: '射撃', loop: '宙返り', accelerate: '加速', brake: '減速' };
+const CONTROL_LABELS: Record<ControlName, string> = { fire: '射撃', loop: '宙返り', throttle: '速度レバー' };
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 const copyLayout = (layout: ControlLayout): ControlLayout => Object.fromEntries(
@@ -61,76 +60,79 @@ export function controlBounds(size: number, width: number, height: number, inset
 }
 
 /** Both editors commit together; failed storage never changes active input. */
-export function persistControlSettings(entries: Array<{ key: string; value: string }>, storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>): boolean {
-  const ownedKeys = new Set([KEYBOARD_STORAGE_KEY, ...Object.values(CONTROL_STORAGE_KEYS)]);
-  if (entries.some(({ key }) => !ownedKeys.has(key)) || new Set(entries.map(({ key }) => key)).size !== entries.length) return false;
-  const previous = new Map<string, string | null>();
-  const attempted: string[] = [];
-  try {
-    for (const { key } of entries) {
-      const raw = storage.getItem(key);
-      previous.set(key, raw);
-      // An older open tab must not downgrade a newer settings format.
-      if (raw) {
-        try {
-          const parsed: unknown = JSON.parse(raw);
-          if (parsed && typeof parsed === 'object' && 'version' in parsed
-            && typeof parsed.version === 'number' && parsed.version > 1) return false;
-        } catch { /* A malformed value may be replaced by an explicit Save. */ }
-      }
-    }
-    for (const { key, value } of entries) { attempted.push(key); storage.setItem(key, value); }
-    return true;
-  } catch {
-    for (const key of attempted.reverse()) {
-      try {
-        const value = previous.get(key);
-        if (value === null) storage.removeItem(key);
-        else if (value !== undefined) storage.setItem(key, value);
-      } catch { /* Storage itself can prevent rollback; retain the prior in-memory settings. */ }
-    }
-    return false;
-  }
-}
+export const persistControlSettings = persistSettingsBatch;
 
 function readNumber(value: unknown, fallback: number, min: number, max: number): number {
   return typeof value === 'number' && Number.isFinite(value) ? clamp(value, min, max) : fallback;
 }
 
-export function parseControlLayout(raw: string | null): ControlLayout {
+/** Pure read migration. Legacy raw data is never changed. */
+export function decodeControlLayout(raw: string | null, legacy = false): ControlLayout {
+  const layout = copyLayout(DEFAULT_LAYOUT);
+  if (!raw || raw.length > 8192) return layout;
   try {
-    if (!raw || raw.length > 8192) return copyLayout(DEFAULT_LAYOUT);
-    const parsed: unknown = JSON.parse(raw);
-    if (!parsed || typeof parsed !== 'object' || (parsed as { version?: unknown }).version !== 1) {
-      return copyLayout(DEFAULT_LAYOUT);
+    const parsed = JSON.parse(raw);
+    if (parsed?.version !== (legacy ? 1 : 2) || !parsed.controls || typeof parsed.controls !== 'object' || Array.isArray(parsed.controls)) return layout;
+    const read = (value: unknown, fallback: ControlPlacement): ControlPlacement => {
+      const item = value && typeof value === 'object' ? value as Record<string, unknown> : {};
+      return { x: readNumber(item.x, fallback.x, 0, 1), y: readNumber(item.y, fallback.y, 0, 1),
+        size: readNumber(item.size, fallback.size, 44, 140), opacity: readNumber(item.opacity, fallback.opacity, .2, 1) };
+    };
+    for (const name of CONTROL_NAMES) if (parsed.controls[name]) layout[name] = read(parsed.controls[name], layout[name]);
+    if (legacy) {
+      const valid = ['accelerate', 'brake'].map(name => parsed.controls[name]).filter(item => item && typeof item === 'object' && ['x','y','size','opacity'].every(key => typeof item[key] === 'number' && Number.isFinite(item[key])));
+      if (valid.length) {
+        const placements = valid.map(item => read(item, layout.throttle));
+        for (const key of ['x','y','size','opacity'] as const) layout.throttle[key] = placements.reduce((sum, item) => sum + item[key], 0) / placements.length;
+      }
     }
-    const source = (parsed as { controls?: unknown }).controls;
-    if (!source || typeof source !== 'object' || Array.isArray(source)) return copyLayout(DEFAULT_LAYOUT);
-    const values = source as Record<string, unknown>;
-    const layout = copyLayout(DEFAULT_LAYOUT);
-    for (const name of CONTROL_NAMES) {
-      const value = values[name];
-      if (!value || typeof value !== 'object') continue;
-      const item = value as Record<string, unknown>;
-      layout[name] = {
-        x: readNumber(item.x, layout[name].x, 0, 1),
-        y: readNumber(item.y, layout[name].y, 0, 1),
-        size: readNumber(item.size, layout[name].size, 44, 140),
-        opacity: readNumber(item.opacity, layout[name].opacity, 0.2, 1),
-      };
-    }
-    return layout;
-  } catch {
-    return copyLayout(DEFAULT_LAYOUT);
-  }
+  } catch { /* Corrupt saved input falls back without writing. */ }
+  return layout;
+}
+export const parseControlLayout = decodeControlLayout;
+export const CONTROL_STORAGE_KEYS = STORAGE_KEYS;
+
+export function loadLayout(mode: GameMode): ControlLayout {
+  try {
+    const current = readSettingsValue(STORAGE_KEYS[mode], localStorage);
+    return current !== null ? decodeControlLayout(current) : decodeControlLayout(localStorage.getItem(LEGACY_STORAGE_KEYS[mode]), true);
+  } catch { return copyLayout(DEFAULT_LAYOUT); }
 }
 
-function loadLayout(mode: GameMode): ControlLayout {
-  try { return parseControlLayout(localStorage.getItem(CONTROL_STORAGE_KEYS[mode])); }
-  catch { return copyLayout(DEFAULT_LAYOUT); }
+/** Real and preview controls use the same rectangular geometry. */
+export function controlDimensions(name: ControlName, size: number, width: number, height: number, insets: Insets = { top: 0, right: 0, bottom: 0, left: 0 }) {
+  const display = controlDisplaySize(size, width, height);
+  if (name !== 'throttle') return { width: display, height: display };
+  return { width: Math.max(44, Math.min(display, width - insets.left - insets.right - 16)),
+    height: Math.max(44, Math.min(display * 2, height - insets.top - insets.bottom - 16)) };
+}
+export function rectangularBounds(control: { width: number; height: number }, width: number, height: number, insets: Insets, margin = 8) {
+  const horizontal = controlBounds(control.width, width, height, insets, margin);
+  const vertical = controlBounds(control.height, width, height, insets, margin);
+  return { minX: horizontal.minX, maxX: horizontal.maxX, minY: vertical.minY, maxY: vertical.maxY };
+}
+/** Only the lever moves to avoid other controls; saved peers remain untouched. */
+export function safeThrottlePlacement(layout: ControlLayout, width: number, height: number, insets: Insets, obstacles: ControlObstacle[] = []): ControlPlacement & { blocked: boolean } {
+  const item = layout.throttle;
+  const dimensions = controlDimensions('throttle', item.size, width, height, insets);
+  const bounds = rectangularBounds(dimensions, width, height, insets);
+  const cannotFit = dimensions.height <= 44 || width - insets.left - insets.right < dimensions.width || height - insets.top - insets.bottom < dimensions.height;
+  const desired = { x: clamp(item.x, bounds.minX, bounds.maxX), y: clamp(item.y, bounds.minY, bounds.maxY) };
+  const peers = CONTROL_NAMES.filter(name => name !== 'throttle').map(name => {
+    const p = layout[name], d = controlDimensions(name, p.size, width, height, insets), b = rectangularBounds(d, width, height, insets);
+    return { x: clamp(p.x, b.minX, b.maxX) * width, y: clamp(p.y, b.minY, b.maxY) * height, ...d };
+  });
+  peers.push(...obstacles);
+  const clear = (x: number, y: number) => peers.every(peer => Math.abs(x * width - peer.x) >= (dimensions.width + peer.width) / 2 + 2 || Math.abs(y * height - peer.y) >= (dimensions.height + peer.height) / 2 + 2);
+  if (!cannotFit && clear(desired.x, desired.y)) return { ...item, ...desired, blocked: false };
+  const xs = [desired.x, bounds.minX, bounds.maxX], ys = [desired.y, bounds.minY, bounds.maxY];
+  for (const peer of peers) { xs.push((peer.x - (dimensions.width + peer.width) / 2 - 2) / width, (peer.x + (dimensions.width + peer.width) / 2 + 2) / width); ys.push((peer.y - (dimensions.height + peer.height) / 2 - 2) / height, (peer.y + (dimensions.height + peer.height) / 2 + 2) / height); }
+  const candidates = xs.flatMap(x => ys.map(y => ({ x: clamp(x, bounds.minX, bounds.maxX), y: clamp(y, bounds.minY, bounds.maxY) })))
+    .filter(p => clear(p.x, p.y)).sort((a,b) => Math.hypot((a.x-desired.x)*width,(a.y-desired.y)*height) - Math.hypot((b.x-desired.x)*width,(b.y-desired.y)*height));
+  return { ...item, ...(candidates[0] ?? desired), blocked: cannotFit || candidates.length === 0 };
 }
 
-/** Edits and persists the flight button layouts without resuming flight. */
+/** Edits and persists the flight control layouts without resuming flight. */
 export class ControlSettings {
   private readonly app: HTMLElement;
   private readonly dialog: HTMLDialogElement;
@@ -152,6 +154,8 @@ export class ControlSettings {
   private dragPointer: number | null = null;
   private dragControl: ControlName | null = null;
   private storageUnavailable = false;
+  private utilityObstacles: ControlObstacle[] = [];
+  private recoveryPending = false;
   private saveFailedAwaitingUse = false;
   private keyDraft: KeyBindings;
   private capturing: KeyAction | null = null;
@@ -161,9 +165,10 @@ export class ControlSettings {
     return this.dialog.open;
   }
 
-  constructor(private readonly buttons: FlightControlButtons, private readonly keyboard = new KeyboardSettings(), private readonly inputPresentation?: ControlInputPresentation) {
+  constructor(private readonly buttons: MachiMamoreControlButtons, private readonly keyboard = new KeyboardSettings(), private readonly inputPresentation?: ControlInputPresentation) {
     this.keyDraft = keyboard.bindings;
     this.app = document.getElementById('app') ?? document.body;
+    try { this.recoveryPending = hasSettingsRecovery(localStorage); } catch { /* Storage is optional. */ }
     this.saved = { normal: loadLayout('normal'), easy: loadLayout('easy') };
     this.draft = this.copyLayouts(this.saved);
     this.dialog = this.createDialog();
@@ -187,9 +192,11 @@ export class ControlSettings {
     this.safeProbe.setAttribute('aria-hidden', 'true');
     this.app.append(this.safeProbe);
     this.bindEvents();
+    this.utilityObstacles = measureHudObstacles(this.app);
     this.apply(this.saved[this.activeMode], this.activeMode);
     this.observer = new ResizeObserver(() => this.refreshLayout());
     this.observer.observe(this.app);
+    if (document.documentElement && document.documentElement !== this.app) this.observer.observe(document.documentElement);
     window.visualViewport?.addEventListener('resize', this.refreshLayout, { signal: this.abort.signal });
   }
 
@@ -200,6 +207,7 @@ export class ControlSettings {
 
   open(returnFocus?: HTMLElement, mode: GameMode = this.activeMode, allowBothModes = false): void {
     if (this.dialog.open) return;
+    try { this.recoveryPending = hasSettingsRecovery(localStorage); } catch { this.storageUnavailable = true; }
     this.returnFocus = returnFocus ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
     this.draft = this.copyLayouts(this.saved);
     this.keyDraft = this.keyboard.bindings;
@@ -253,26 +261,27 @@ export class ControlSettings {
         </div>
         <p class="settings-scroll-hint">下へスクロールしてすべての設定を確認できます</p>
         <div class="settings-main" tabindex="0" role="region" aria-label="操作設定の内容">
-        <section id="control-touch-editor" aria-label="タッチボタンの配置">
-          <p class="settings-hint">ボタンを選び、スライダーで調整します。下のプレビューでもドラッグできます。</p>
+        <section id="control-touch-editor" aria-label="タッチ操作の配置">
+          <p class="settings-hint">操作を選び、スライダーで調整します。下のプレビューでもドラッグできます。</p>
           <label class="control-select-label" for="control-mode">調整するモード</label>
           <select id="control-mode" class="control-target">
             <option value="normal">ノーマル</option><option value="easy">イージー</option>
           </select>
           <p id="control-mode-note" class="settings-mode-note" role="status"></p>
-          <label class="control-select-label" for="control-target">調整するボタン</label>
+          <label class="control-select-label" for="control-target">調整する操作</label>
           <select id="control-target" class="control-target">
             <option value="fire">射撃</option><option value="loop">宙返り</option>
-            <option value="accelerate">加速</option><option value="brake">減速</option>
+            <option value="throttle">速度レバー</option>
+            
           </select>
           <div class="control-settings-grid">
             <label class="setting-range" for="control-x"><span>横位置 <b id="control-x-value"></b></span><input id="control-x" type="range" min="5" max="95" step="1" aria-label="横位置"></label>
             <label class="setting-range" for="control-y"><span>縦位置 <b id="control-y-value"></b></span><input id="control-y" type="range" min="5" max="95" step="1" aria-label="縦位置"></label>
-            <label class="setting-range" for="control-size"><span>ボタンの大きさ <b id="control-size-value"></b></span><input id="control-size" type="range" min="44" max="140" step="2" aria-label="ボタンの大きさ"></label>
+            <label class="setting-range" for="control-size"><span>操作の大きさ <b id="control-size-value"></b></span><input id="control-size" type="range" min="44" max="140" step="2" aria-label="操作の大きさ"></label>
             <label class="setting-range" for="control-opacity"><span>不透明度 <b id="control-opacity-value"></b></span><input id="control-opacity" type="range" min="20" max="100" step="1" aria-label="不透明度"></label>
           </div>
           <button id="control-reset" class="control-reset" type="button">このモードの標準配置に戻す</button>
-          <p class="settings-hint">配置プレビュー（ボタンをドラッグして移動）</p>
+          <p class="settings-hint">配置プレビュー（操作をドラッグして移動）</p>
           <div id="control-preview" class="control-preview" aria-label="操作画面の配置プレビュー"></div>
         </section>
         <section id="control-keyboard-editor" aria-label="キーボードの割り当て" hidden>
@@ -353,6 +362,13 @@ export class ControlSettings {
 
   private save(): void {
     if (this.capturing) this.cancelKeyCapture();
+    const rect = this.app ? controlLayoutSize(this.app) : null;
+    if (this.app) this.utilityObstacles = measureHudObstacles(this.app);
+    if (rect && this.allowedModes.includes('normal') && safeThrottlePlacement(this.draft.normal, rect.width, rect.height, this.readInsets(), this.utilityObstacles).blocked) {
+      const note = this.dialog.querySelector<HTMLElement>('#control-storage-note')!;
+      note.hidden = false; note.textContent = '速度レバーの配置が重なっています。大きさや位置を調整してから保存してください。';
+      note.scrollIntoView({ block: 'nearest' }); return;
+    }
     if (this.saveFailedAwaitingUse) {
       for (const mode of this.allowedModes) this.saved[mode] = copyLayout(this.draft[mode]);
       this.keyboard.apply(this.keyDraft);
@@ -364,11 +380,11 @@ export class ControlSettings {
     const changedModes = this.allowedModes.filter(mode => JSON.stringify(this.draft[mode]) !== JSON.stringify(this.saved[mode]));
     for (const mode of changedModes) next[mode] = copyLayout(this.draft[mode]);
     const keysChanged = KEY_ACTIONS.some(action => this.keyDraft[action] !== this.keyboard.code(action));
-    if (changedModes.length === 0 && !keysChanged) {
+    if (changedModes.length === 0 && !keysChanged && !this.recoveryPending) {
       this.dialog.close('save');
       return;
     }
-    const entries = changedModes.map(mode => ({ key: CONTROL_STORAGE_KEYS[mode], value: JSON.stringify({ version: 1, controls: next[mode] }) }));
+    const entries: Array<{ key: string; value: string; maxVersion?: number; legacyKey?: string }> = changedModes.map(mode => ({ key: STORAGE_KEYS[mode], value: JSON.stringify({ version: 2, controls: next[mode] }), maxVersion: 2, legacyKey: LEGACY_STORAGE_KEYS[mode] }));
     if (keysChanged) entries.push({ key: KEYBOARD_STORAGE_KEY, value: JSON.stringify({ version: 1, bindings: this.keyDraft }) });
     let persisted = false;
     try {
@@ -376,13 +392,15 @@ export class ControlSettings {
     } catch { /* Accessing localStorage itself may throw. */ }
     if (persisted) {
       this.storageUnavailable = false;
+      this.recoveryPending = false;
       this.saved = next;
       this.keyboard.apply(this.keyDraft);
       this.apply(this.saved[this.activeMode], this.activeMode);
     } else {
+      try { this.recoveryPending = hasSettingsRecovery(localStorage); } catch { this.recoveryPending = true; }
       this.storageUnavailable = true;
       this.saveFailedAwaitingUse = true;
-      this.dialog.querySelector<HTMLElement>('#control-storage-note')!.textContent = '設定を保存できませんでした。「今回だけ使う」で、ページを閉じるまで適用します。';
+      this.dialog.querySelector<HTMLElement>('#control-storage-note')!.textContent = '設定を保存できませんでした。以前の設定で続けます。「今回だけ使う」で、ページを閉じるまで適用します。';
       this.dialog.querySelector<HTMLButtonElement>('#control-save')!.textContent = '今回だけ使う';
       this.dialog.querySelector<HTMLElement>('#control-storage-note')!.hidden = false;
       this.dialog.querySelector<HTMLElement>('#control-storage-note')!.scrollIntoView({ block: 'nearest' });
@@ -414,7 +432,7 @@ export class ControlSettings {
     this.editor = editor;
     this.dialog.querySelector<HTMLElement>('#control-touch-editor')!.hidden = editor !== 'touch';
     this.dialog.querySelector<HTMLElement>('#control-keyboard-editor')!.hidden = editor !== 'keyboard';
-    this.dialog.querySelector<HTMLElement>('#control-settings-title')!.textContent = editor === 'touch' ? 'タッチボタンの配置' : 'キーボードの設定';
+    this.dialog.querySelector<HTMLElement>('#control-settings-title')!.textContent = editor === 'touch' ? 'タッチ操作の配置' : 'キーボードの設定';
     for (const name of ['touch', 'keyboard']) this.dialog.querySelector(`#control-editor-${name}`)!.setAttribute('aria-pressed', String(name === editor));
     this.dialog.querySelector<HTMLElement>('.settings-main')!.scrollTop = 0;
     this.renderKeys();
@@ -516,8 +534,9 @@ export class ControlSettings {
     if (!this.dragControl) return;
     const rect = this.preview.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
-    const appWidth = this.app.getBoundingClientRect().width || 1;
-    const position = this.bounds(this.dragControl, rect.width, rect.height, rect.width / appWidth, 2);
+    const appWidth = controlLayoutSize(this.app).width || 1;
+    const previewSize = controlLayoutSize(this.preview);
+    const position = this.bounds(this.dragControl, previewSize.width, previewSize.height, previewSize.width / appWidth, 2);
     this.draft[this.layoutMode][this.dragControl].x = clamp((event.clientX - rect.left) / rect.width, position.minX, position.maxX);
     this.draft[this.layoutMode][this.dragControl].y = clamp((event.clientY - rect.top) / rect.height, position.minY, position.maxY);
     this.updateEditor();
@@ -526,7 +545,7 @@ export class ControlSettings {
   private updateEditor(): void {
     if (!this.dialog.isConnected) return;
     this.buildPreviewButtons();
-    const rect = this.app.getBoundingClientRect();
+    const rect = controlLayoutSize(this.app);
     const current = this.draft[this.layoutMode][this.selected];
     const bounds = this.bounds(this.selected, rect.width || 1, rect.height || 1, 1, 8, current.size);
     const x = clamp(current.x, bounds.minX, bounds.maxX);
@@ -544,16 +563,19 @@ export class ControlSettings {
     this.outputs.size.textContent = `${Math.round(current.size)}px`;
     this.outputs.opacity.textContent = `${Math.round(current.opacity * 100)}%`;
     this.dialog.querySelector<HTMLElement>('#control-mode-note')!.textContent = this.layoutMode === 'normal'
-      ? 'ノーマル：手動射撃と加減速。両方の弾倉が空になると6秒再装填。味方や街への誤射も損傷になります。'
-      : 'イージー：照準補助と自動射撃、巡航速度。宙返りボタンを調整できます。';
+      ? 'ノーマル：射撃・宙返り・速度レバーの3操作。自機弾は味方・街も損傷します。弾切れで6秒再装填。'
+      : 'イージー：自動射撃・巡航速度。宙返りの位置と大きさを調整できます。';
     this.select.disabled = MODE_CONTROLS[this.layoutMode].length === 1;
     for (const option of Array.from(this.select.options)) {
       option.disabled = !MODE_CONTROLS[this.layoutMode].includes(option.value as ControlName);
       option.hidden = option.disabled;
     }
     const storageNote = this.dialog.querySelector<HTMLElement>('#control-storage-note')!;
-    storageNote.hidden = !this.storageUnavailable;
-    if (this.storageUnavailable && !this.saveFailedAwaitingUse) {
+    const conflict = this.layoutMode === 'normal' && safeThrottlePlacement(this.draft.normal, rect.width, rect.height, this.readInsets(), this.utilityObstacles).blocked;
+    storageNote.hidden = !this.storageUnavailable && !this.recoveryPending && !conflict;
+    if (conflict) storageNote.textContent = '速度レバーを配置できません。大きさや位置を調整してください。';
+    else if (this.recoveryPending) storageNote.textContent = '前回の設定保存を復元する必要があります。控えの設定で表示しています。保存するで復元を再試行できます。';
+    if (this.storageUnavailable && !this.saveFailedAwaitingUse && !this.recoveryPending && !conflict) {
       storageNote.textContent = 'このブラウザでは保存できません。今回だけ使う設定は、ページを閉じるまで有効です。';
     }
     this.stylePreviewButtons();
@@ -568,6 +590,7 @@ export class ControlSettings {
       const label = document.createElement('span'); label.textContent = CONTROL_LABELS[name]; clone.append(label);
       clone.dataset.control = name;
       clone.classList.add('preview-control');
+      if (name === 'throttle') { clone.classList.add('preview-throttle'); const handle = document.createElement('i'); clone.append(handle); }
       clone.setAttribute('aria-hidden', 'true');
       clone.tabIndex = -1;
       this.preview.append(clone);
@@ -575,19 +598,27 @@ export class ControlSettings {
   }
 
   private stylePreviewButtons(): void {
-    const appRect = this.app.getBoundingClientRect();
-    const previewRect = this.preview.getBoundingClientRect();
+    const appRect = controlLayoutSize(this.app);
+    const previewRect = controlLayoutSize(this.preview);
     if (!appRect.width || !previewRect.width) return;
     const scale = previewRect.width / appRect.width;
     for (const name of CONTROL_NAMES) {
-      const control = this.draft[this.layoutMode][name];
+      const control = name === 'throttle' ? safeThrottlePlacement(this.draft[this.layoutMode], appRect.width, appRect.height, this.readInsets(), this.utilityObstacles) : this.draft[this.layoutMode][name];
       const element = this.preview.querySelector<HTMLElement>(`.preview-control[data-control="${name}"]`);
       if (!element) continue;
       element.hidden = !MODE_CONTROLS[this.layoutMode].includes(name);
       const position = this.bounds(name, previewRect.width, previewRect.height, scale, 8 * scale, control.size);
+      if (name === 'throttle') {
+        const blocked = 'blocked' in control && control.blocked === true;
+        element.setAttribute('aria-disabled', String(blocked));
+        element.classList.toggle('layout-blocked', blocked);
+
+      }
       element.style.setProperty('--control-x', `${clamp(control.x, position.minX, position.maxX) * 100}%`);
       element.style.setProperty('--control-y', `${clamp(control.y, position.minY, position.maxY) * 100}%`);
-      const diameter = this.displaySize(control.size) * scale;
+      const dimensions = controlDimensions(name, control.size, appRect.width, appRect.height, this.readInsets());
+      const diameter = dimensions.width * scale;
+      element.style.setProperty('--control-height', `${dimensions.height * scale}px`);
       const labelStyle = previewLabelStyle(diameter, CONTROL_LABELS[name].length);
       element.style.setProperty('--control-size', `${diameter}px`);
       element.style.setProperty('--preview-font-size', `${labelStyle.fontSize}px`);
@@ -600,27 +631,40 @@ export class ControlSettings {
   }
 
   private apply(layout: ControlLayout, mode: GameMode): void {
-    const rect = this.app.getBoundingClientRect();
+    const rect = controlLayoutSize(this.app);
     if (!rect.width || !rect.height) return;
     for (const name of CONTROL_NAMES) {
-      const control = layout[name];
+      const control = name === 'throttle' ? safeThrottlePlacement(layout, rect.width, rect.height, this.readInsets(), this.utilityObstacles) : layout[name];
       const position = this.bounds(name, rect.width, rect.height, 1, 8, control.size);
-      const element = this.buttons[name];
+      const element = this.buttons[name]!;
+      if (name === 'throttle') {
+        const blocked = 'blocked' in control && control.blocked === true;
+        element.setAttribute('aria-disabled', String(blocked));
+        element.classList.toggle('layout-blocked', blocked);
+        if (element.id === 'throttle') {
+          element.tabIndex = blocked ? -1 : 0;
+          const notice = document.getElementById('throttle-layout-note');
+          if (notice) notice.hidden = !blocked || this.activeMode !== 'normal';
+        }
+      }
       element.style.setProperty('--control-x', `${clamp(control.x, position.minX, position.maxX) * 100}%`);
       element.style.setProperty('--control-y', `${clamp(control.y, position.minY, position.maxY) * 100}%`);
-      element.style.setProperty('--control-size', `${this.displaySize(control.size)}px`);
+      const dimensions = controlDimensions(name, control.size, rect.width, rect.height, this.readInsets());
+      element.style.setProperty('--control-size', `${dimensions.width}px`);
+      element.style.setProperty('--control-height', `${dimensions.height}px`);
       element.style.setProperty('--control-opacity', String(control.opacity));
     }
   }
 
   private bounds(name: ControlName, width: number, height: number, scale: number, margin: number, buttonSize = this.draft[this.layoutMode][name].size): { minX: number; maxX: number; minY: number; maxY: number } {
-    const size = this.displaySize(buttonSize) * scale;
     const insets = this.readInsets();
-    return controlBounds(size, width, height, { top: insets.top * scale, right: insets.right * scale, bottom: insets.bottom * scale, left: insets.left * scale }, margin);
+    const rect = controlLayoutSize(this.app);
+    const dimensions = controlDimensions(name, buttonSize, rect.width, rect.height, insets);
+    return rectangularBounds({ width: dimensions.width * scale, height: dimensions.height * scale }, width, height, { top: insets.top * scale, right: insets.right * scale, bottom: insets.bottom * scale, left: insets.left * scale }, margin);
   }
 
   private displaySize(size: number): number {
-    const rect = this.app.getBoundingClientRect();
+    const rect = controlLayoutSize(this.app);
     return controlDisplaySize(size, rect.width, rect.height);
   }
 
@@ -639,11 +683,14 @@ export class ControlSettings {
   }
 
   private refreshLayout = (): void => {
+    this.utilityObstacles = measureHudObstacles(this.app);
     this.apply(this.saved[this.activeMode], this.activeMode);
-    this.dialog?.style.setProperty('--settings-viewport-height', `${window.visualViewport?.height ?? window.innerHeight}px`);
+    const viewport = settingsViewportSize(this.app, window.visualViewport?.width ?? window.innerWidth, window.visualViewport?.height ?? window.innerHeight);
+    this.dialog?.style.setProperty('--settings-viewport-width', `${viewport.width}px`);
+    this.dialog?.style.setProperty('--settings-viewport-height', `${viewport.height}px`);
     if (!this.dialog?.open) return;
     this.releaseDrag();
-    const appRect = this.app.getBoundingClientRect();
+    const appRect = controlLayoutSize(this.app);
     const availableWidth = Math.max(80, this.dialog.clientWidth - 48);
     const scrollRegion = this.dialog.querySelector<HTMLElement>('.settings-main')!;
     const preview = previewDimensions(appRect.width, appRect.height, availableWidth, scrollRegion.clientHeight - 24);
@@ -652,3 +699,4 @@ export class ControlSettings {
     this.updateEditor();
   };
 }
+

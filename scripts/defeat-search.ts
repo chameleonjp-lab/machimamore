@@ -13,7 +13,7 @@ const mode = arg('mode', 'easy') as GameMode;
 const policies = arg('policies', arg('policy', 'crash-fast')).split(',');
 const firstSeed = Number(arg('seed', '1')), count = Number(arg('count', '24'));
 const sourceHash = createHash('sha256');
-for (const file of ['simulation', 'types', 'rules', 'roster', 'city', 'score', 'ufo-ai', 'laser', 'collision', 'flight', 'flight-types', 'flight-view', 'flight-assist', 'ammunition'].map(name => `${name}.ts`).sort()) { sourceHash.update(file); sourceHash.update(await readFile(`src/${file}`)); }
+for (const file of ['simulation', 'types', 'rules', 'roster', 'city', 'score', 'ufo-ai', 'laser', 'collision', 'flight', 'flight-types', 'throttle-lever', 'flight-view', 'flight-assist', 'ammunition'].map(name => `${name}.ts`).sort()) { sourceHash.update(file); sourceHash.update(await readFile(`src/${file}`)); }
 const simulationSourceDigest = sourceHash.digest('hex');
 const policyHash = createHash('sha256');
 for (const file of ['scripts/defeat-search.ts', 'scripts/legal-pilot.ts']) { policyHash.update(file); policyHash.update(await readFile(file)); }

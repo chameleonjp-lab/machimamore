@@ -53,7 +53,7 @@ test('Home → Start → Pause → Rules/Settings → Resume → fresh mission',
   await page.locator('#control-save').click();
   await expect(settings).toBeHidden();
   await expect(page.locator('#app')).toHaveAttribute('data-screen', 'paused');
-  const persistedLayout = await page.evaluate(() => localStorage.getItem('machimamore-controls-v1'));
+  const persistedLayout = await page.evaluate(() => localStorage.getItem('machimamore-controls-v2'));
   expect(persistedLayout).not.toBeNull();
   expect(JSON.parse(persistedLayout!).controls.fire.size).toBe(Number(savedSize));
 
@@ -93,7 +93,7 @@ test('settings are saved only by an explicit action and survive reload', async (
   await page.locator('#control-size').press('ArrowRight');
   await expect(page.locator('#control-size')).toHaveValue(draft);
   await page.locator('#control-save').click();
-  const saved = await page.evaluate(() => localStorage.getItem('machimamore-controls-v1'));
+  const saved = await page.evaluate(() => localStorage.getItem('machimamore-controls-v2'));
   expect(saved).not.toBeNull();
   expect(JSON.parse(saved!).controls.fire.size).toBe(Number(draft));
 

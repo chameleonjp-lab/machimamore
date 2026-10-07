@@ -18,7 +18,7 @@ const partitions = Number(process.argv.find(a => a.startsWith('--partitions='))?
 if (!Number.isInteger(partitions) || partitions < 1 || !Number.isInteger(partition) || partition < 0 || partition >= partitions) throw new Error('Invalid balance partition');
 const output = smoke ? 'smoke.json' : `results-${partition}.json`;
 const sourceHash = createHash('sha256');
-for (const file of ['simulation', 'types', 'rules', 'roster', 'city', 'score', 'ufo-ai', 'laser', 'collision', 'flight', 'flight-types', 'flight-view', 'flight-assist', 'ammunition'].map(name => `${name}.ts`).sort()) {
+for (const file of ['simulation', 'types', 'rules', 'roster', 'city', 'score', 'ufo-ai', 'laser', 'collision', 'flight', 'flight-types', 'throttle-lever', 'flight-view', 'flight-assist', 'ammunition'].map(name => `${name}.ts`).sort()) {
   sourceHash.update(file); sourceHash.update(await readFile(`src/${file}`));
 }
 const simulationSourceDigest = sourceHash.digest('hex');

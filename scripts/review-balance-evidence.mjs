@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 
 const digest = createHash('sha256');
-for (const file of ['simulation', 'types', 'rules', 'roster', 'city', 'score', 'ufo-ai', 'laser', 'collision', 'flight', 'flight-types', 'flight-view', 'flight-assist', 'ammunition'].map(name => `${name}.ts`).sort()) {
+for (const file of ['simulation', 'types', 'rules', 'roster', 'city', 'score', 'ufo-ai', 'laser', 'collision', 'flight', 'flight-types', 'throttle-lever', 'flight-view', 'flight-assist', 'ammunition'].map(name => `${name}.ts`).sort()) {
   digest.update(file); digest.update(await readFile(`src/${file}`));
 }
 const sourceDigest = digest.digest('hex');
