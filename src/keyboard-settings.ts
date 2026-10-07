@@ -97,30 +97,53 @@ export function preferredControlInput(): 'touch' | 'keyboard' {
 
 export class ControlInputPresentation {
   private current = preferredControlInput();
-  private pendingPointer: string | null = null;
+  private readonly pendingPresses = new Map<number, PointerEvent>();
+  private completedPress: PointerEvent | null = null;
   private readonly abort = new AbortController();
   private readonly listeners = new Set<() => void>();
   constructor() {
     window.addEventListener('pointerdown', event => {
       // Only observe here: changing guide height during pointerdown moves the
       // pressed radio/start button before release, cancelling its activation.
-      this.pendingPointer = event.pointerType;
+      this.pendingPresses.set(event.pointerId, event);
+      this.completedPress = null;
+    }, { signal: this.abort.signal, capture: true });
+    window.addEventListener('pointerup', event => {
+      const press = this.pendingPresses.get(event.pointerId);
+      if (!press) return;
+      this.pendingPresses.delete(event.pointerId);
+      this.completedPress = press;
+      // Default-prevented flight gestures are already handled by the game.
+      // Finish their presentation on matching release even if no click follows;
+      // ordinary buttons/radios still keep their layout until click commits.
+      if (press.defaultPrevented) this.selectPointer(press.pointerType);
     }, { signal: this.abort.signal });
-    window.addEventListener('pointercancel', () => { this.pendingPointer = null; }, { signal: this.abort.signal });
-    window.addEventListener('blur', () => { this.pendingPointer = null; }, { signal: this.abort.signal });
+    window.addEventListener('pointercancel', event => {
+      this.pendingPresses.delete(event.pointerId);
+      if (this.completedPress?.pointerId === event.pointerId) this.completedPress = null;
+    }, { signal: this.abort.signal });
+    window.addEventListener('lostpointercapture', event => {
+      this.pendingPresses.delete(event.pointerId);
+    }, { signal: this.abort.signal, capture: true });
+    window.addEventListener('blur', () => this.clearPending(), { signal: this.abort.signal });
     window.addEventListener('click', event => {
       // The click target is already committed. Capture updates presentation
       // before a settings/help click handler chooses its device-specific view.
       // WebKit can label a touch-generated click as mouse; trust its press first.
-      const pointer = this.pendingPointer || event.pointerType; this.pendingPointer = null;
-      if (pointer === 'mouse') this.set('keyboard');
-      else if (pointer === 'touch' || pointer === 'pen') this.set('touch');
+      const pointer = this.completedPress?.pointerType || event.pointerType;
+      this.completedPress = null;
+      this.selectPointer(pointer);
     }, { signal: this.abort.signal, capture: true });
     window.addEventListener('keydown', event => {
-      this.pendingPointer = null;
+      this.clearPending();
       if (!event.isComposing && !keyboardEventHasShortcutModifier(event)) this.set('keyboard');
     }, { signal: this.abort.signal });
   }
+  private selectPointer(pointer: string): void {
+    if (pointer === 'mouse') this.set('keyboard');
+    else if (pointer === 'touch' || pointer === 'pen') this.set('touch');
+  }
+  private clearPending(): void { this.pendingPresses.clear(); this.completedPress = null; }
   get value(): 'touch' | 'keyboard' { return this.current; }
   private set(value: 'touch' | 'keyboard'): void {
     if (this.current === value) return;
@@ -128,7 +151,7 @@ export class ControlInputPresentation {
     for (const listener of this.listeners) listener();
   }
   subscribe(listener: () => void): () => void { this.listeners.add(listener); return () => this.listeners.delete(listener); }
-  dispose(): void { this.abort.abort(); this.listeners.clear(); }
+  dispose(): void { this.clearPending(); this.abort.abort(); this.listeners.clear(); }
 }
 
 /** The dialog owns persistence; flight only receives committed bindings. */

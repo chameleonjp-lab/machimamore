@@ -5,6 +5,7 @@ import { throttleAxisFromRaw, throttleAxisFromClientY, combineThrottleAxes, reso
 import { advanceThrottle, createFlightController } from '../src/flight';
 import { createGame, startGame, getPlayer, stepGame } from '../src/simulation';
 import { FlightControls } from '../src/input';
+import { ControlInputPresentation } from '../src/keyboard-settings';
 import { DEFAULT_LAYOUT, decodeControlLayout, controlDimensions, rectangularBounds, safeThrottlePlacement, loadLayout } from '../src/control-settings';
 import { persistSettingsBatch, readSettingsValue, SETTINGS_RECOVERY_KEY } from '../src/settings-storage';
 const fixture = JSON.parse(readFileSync(new URL('../docs/fixtures/throttle-lever-v1.json', import.meta.url), 'utf8'));
@@ -240,4 +241,62 @@ test('short touch adjustment reaches one M tick, centres on release, and interru
       if(terminal==='clear')f.controls.clear();else f.win.dispatchEvent(new Event(terminal));assert.equal(f.controls.sampleThrottle(),0);
     }
   }finally{f.cleanup();}
+});
+
+
+test('default-prevented flight gesture restores touch presentation on release without a click',()=>{
+  const f=controlsFixture(),presentation=new ControlInputPresentation();const changes:string[]=[];presentation.subscribe(()=>changes.push(presentation.value));
+  try {
+    f.win.dispatchEvent(key('keydown','KeyA'));assert.equal(presentation.value,'keyboard');changes.length=0;
+    const press=pointer('pointerdown',81,170,{isPrimary:true});
+    // Deliver capture observation before the actual game target handles it.
+    f.win.dispatchEvent(press);f.surface.dispatchEvent(press);
+    assert.equal(press.defaultPrevented,true,'real steering cancels the default pointer action');
+    assert.equal(f.controls.peek().steerPointer,81);
+    assert.equal(presentation.value,'keyboard','press must not move a held target');
+    f.win.dispatchEvent(pointer('pointerup',82));assert.equal(presentation.value,'keyboard','another owner cannot commit the gesture');
+    // No compatibility click is required to complete this native gesture.
+    f.win.dispatchEvent(pointer('pointerup',81));assert.equal(presentation.value,'touch');
+    assert.equal(f.controls.peek().steerPointer,null);assert.equal(f.controls.sample().throttle,0);
+    f.win.dispatchEvent(Object.assign(new Event('click'),{pointerType:'mouse'}));
+    assert.equal(presentation.value,'touch','a later compatibility click must retain the actual press type');
+    assert.deepEqual(changes,['touch']);
+  }finally{presentation.dispose();f.cleanup();}
+});
+
+test('presentation recovery preserves click-committed buttons and cancels interrupted flight gestures',()=>{
+  const originals=['window','navigator'].map(name=>[name,Object.getOwnPropertyDescriptor(globalThis,name)]as const);
+  const win=Object.assign(new EventTarget(),{matchMedia:()=>({matches:true})});
+  Object.defineProperty(globalThis,'window',{configurable:true,value:win});
+  Object.defineProperty(globalThis,'navigator',{configurable:true,value:{maxTouchPoints:5}});
+  const presentation=new ControlInputPresentation();
+  try {
+    win.dispatchEvent(pointer('pointerdown',1));win.dispatchEvent(pointer('pointerup',1));
+    assert.equal(presentation.value,'keyboard','an ordinary button waits for its committed click');
+    win.dispatchEvent(Object.assign(new Event('click'),{pointerType:'mouse'}));assert.equal(presentation.value,'touch');
+    for(const terminal of ['pointercancel','blur','keydown']){
+      win.dispatchEvent(key('keydown','KeyA'));assert.equal(presentation.value,'keyboard');
+      const press=pointer('pointerdown',2);win.dispatchEvent(press);press.preventDefault();
+      win.dispatchEvent(terminal==='keydown'?key('keydown','Enter'):terminal==='pointercancel'?pointer('pointercancel',2):new Event(terminal));
+      win.dispatchEvent(pointer('pointerup',2));assert.equal(presentation.value,'keyboard',terminal+' must discard an unfinished gesture');
+      win.dispatchEvent(Object.assign(new Event('click'),{pointerType:''}));assert.equal(presentation.value,'keyboard');
+    }
+    presentation.dispose();const press=pointer('pointerdown',3);win.dispatchEvent(press);press.preventDefault();win.dispatchEvent(pointer('pointerup',3));assert.equal(presentation.value,'keyboard');
+  }finally{presentation.dispose();for(const[name,descriptor]of originals)if(descriptor)Object.defineProperty(globalThis,name,descriptor);else Reflect.deleteProperty(globalThis,name);}
+});
+
+
+test('unrelated touch releases and cancellations cannot erase the accepted steering presentation',()=>{
+  const f=controlsFixture(),presentation=new ControlInputPresentation();
+  try {
+    f.win.dispatchEvent(key('keydown','KeyA'));assert.equal(presentation.value,'keyboard');
+    const accepted=pointer('pointerdown',1,170,{isPrimary:true});f.win.dispatchEvent(accepted);f.surface.dispatchEvent(accepted);
+    const rejected=pointer('pointerdown',2,170);f.win.dispatchEvent(rejected);f.surface.dispatchEvent(rejected);
+    assert.equal(accepted.defaultPrevented,true);assert.equal(rejected.defaultPrevented,false);assert.equal(f.controls.peek().steerPointer,1);
+    f.win.dispatchEvent(pointer('pointerup',2));assert.equal(presentation.value,'keyboard');
+    f.win.dispatchEvent(pointer('pointercancel',3));assert.equal(presentation.value,'keyboard');assert.equal(f.controls.peek().steerPointer,1);
+    f.win.dispatchEvent(pointer('pointerup',1));assert.equal(presentation.value,'touch');assert.equal(f.controls.peek().steerPointer,null);
+    f.win.dispatchEvent(pointer('lostpointercapture',1));
+    f.win.dispatchEvent(Object.assign(new Event('click'),{pointerType:'mouse'}));assert.equal(presentation.value,'touch','normal lost capture after release must not lose compatibility-click type');
+  }finally{presentation.dispose();f.cleanup();}
 });

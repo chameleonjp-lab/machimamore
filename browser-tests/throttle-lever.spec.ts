@@ -24,8 +24,21 @@ test('Normal exposes three controls, a named 44px lever, native pointer release 
     return {pointer:input.throttlePointer,axis:input.throttle,accepted:(observation.acceptedInput as Record<string,unknown>).throttle};
   }).toEqual({pointer:null,axis:0,accepted:0});
   await expect(page.locator('#app')).toHaveAttribute('data-screen','playing');
-  // A fresh touch re-exposes touch controls without changing the release state.
-  await page.touchscreen.tap(196,420);await expect(lever).toBeVisible();
+  // A fresh native canvas touch re-exposes touch controls without changing
+  // game state. Record its real event sequence for browser-specific diagnosis.
+  await page.evaluate(()=>{
+    const target=window as Window & {__touchRecoveryEvents?:PointerEvent[]};target.__touchRecoveryEvents=[];
+    for(const type of ['pointerdown','pointerup','click'])window.addEventListener(type,event=>{
+      target.__touchRecoveryEvents!.push(event as PointerEvent);
+    },{capture:true,once:true});
+  });
+  await page.locator('#flight').tap({position:{x:196,y:420}});
+  const nativeEvents=await page.evaluate(()=>((window as Window & {__touchRecoveryEvents?:PointerEvent[]}).__touchRecoveryEvents??[]).map(event=>({type:event.type,pointerId:event.pointerId,pointerType:event.pointerType,trusted:event.isTrusted,target:(event.target as HTMLElement|null)?.id,defaultPrevented:event.defaultPrevented})));
+  console.log('Native touch recovery events:',JSON.stringify(nativeEvents));
+  expect(nativeEvents).toEqual(expect.arrayContaining([expect.objectContaining({type:'pointerdown',pointerType:'touch',trusted:true,target:'flight'}),expect.objectContaining({type:'pointerup',pointerType:'touch',trusted:true,target:'flight'})]));
+  await expect(page.locator('#app')).toHaveAttribute('data-input','touch');
+  await expect(lever).toBeVisible();
+  await expect.poll(async()=>((await readRequiredObservation(page)).input as Record<string,unknown>).steerPointer).toBeNull();
   await lever.focus();await page.keyboard.down('ArrowUp');await expect(lever).toHaveAttribute('aria-valuenow','100');
   await page.keyboard.up('ArrowUp');await expect(lever).toHaveAttribute('aria-valuenow','0');
   await pauseActiveMission(page,testInfo);const stopped=await readRequiredObservation(page);expect((stopped.input as Record<string,unknown>).throttlePointer).toBeNull();expect((stopped.input as Record<string,unknown>).throttle).toBe(0);
