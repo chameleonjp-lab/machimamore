@@ -58,7 +58,7 @@ function dialogFixture() {
     returnValue: '',
     close(value: string) { this.returnValue = value; },
     querySelector(selector: string) {
-      if (!nodes.has(selector)) nodes.set(selector, { textContent: '', hidden: true, scrollIntoView() {} });
+      if (!nodes.has(selector)) nodes.set(selector, { textContent: '', hidden: true, scrollIntoView() {}, focus() {} });
       return nodes.get(selector);
     },
   };
@@ -149,4 +149,45 @@ test('default four touch controls keep safe edges and stay separate in portrait 
       }
     }
   }
+});
+
+test('an incomplete rollback stays pending after Cancel and an unchanged Save retries restoration', () => {
+  const original = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  const storage = storageFixture(), key = 'machimamore-controls-v2';
+  const before = JSON.stringify({version: 2, controls: DEFAULT_LAYOUT}); storage.values.set(key, before);
+  const write = storage.setItem; let denyRollback = true;
+  storage.setItem = (name, value) => {
+    if (denyRollback && (name === KEYBOARD_STORAGE_KEY || name === key && value === before)) throw new Error('quota');
+    write(name, value);
+  };
+  Object.defineProperty(globalThis, 'localStorage', {configurable:true, value:storage});
+  try {
+    const {editor, dialog} = dialogFixture();
+    editor.draft.normal.loop.x = .2; editor.keyDraft.loop = 'KeyB'; editor.save();
+    assert.equal(editor.recoveryPending, true); assert.notEqual(storage.getItem(key), before);
+    assert.ok(storage.getItem('machimamore-controls-recovery-v1'));
+    editor.onClosed(); assert.equal(editor.saveFailedAwaitingUse, false);
+    // Cancel restores the draft but cannot make the partial storage write successful.
+    assert.deepEqual(editor.draft.normal, DEFAULT_LAYOUT);
+    denyRollback = false; editor.save();
+    assert.equal(storage.getItem(key), before); assert.equal(storage.getItem(KEYBOARD_STORAGE_KEY), null);
+    assert.equal(storage.getItem('machimamore-controls-recovery-v1'), null);
+    assert.equal(editor.recoveryPending, false); assert.equal(dialog.returnValue, 'save');
+  } finally {if(original)Object.defineProperty(globalThis,'localStorage',original);else Reflect.deleteProperty(globalThis,'localStorage');}
+});
+
+test('reopening the real editor reacquires a retained recovery journal without changing storage', () => {
+  const originals=['localStorage','document','HTMLElement'].map(key=>[key,Object.getOwnPropertyDescriptor(globalThis,key)] as const);
+  const storage=storageFixture();storage.values.set('machimamore-controls-recovery-v1',JSON.stringify({version:1,previous:[]}));
+  class NodeStub {}
+  Object.defineProperty(globalThis,'localStorage',{configurable:true,value:storage});
+  Object.defineProperty(globalThis,'document',{configurable:true,value:{activeElement:null}});
+  Object.defineProperty(globalThis,'HTMLElement',{configurable:true,value:NodeStub});
+  try{
+    const {editor,dialog}=dialogFixture();const before=new Map(storage.values);
+    Object.assign(dialog,{open:false,showModal(){this.open=true;}});
+    Object.assign(editor,{modeSelect:{value:'',disabled:false,options:[]},select:{value:''},inputPresentation:{value:'touch'},setEditor(){},refreshLayout(){},recoveryPending:false});
+    editor.open(undefined,'normal',true);
+    assert.equal(editor.recoveryPending,true);assert.deepEqual(storage.values,before);
+  }finally{for(const[key,value]of originals)if(value)Object.defineProperty(globalThis,key,value);else Reflect.deleteProperty(globalThis,key);}
 });

@@ -125,7 +125,7 @@ test('home layout fits the five supported viewport profiles', async ({ page }, t
         && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
       const panel = boxes.find(box => box.selector === '.flight-data')!;
       const cityWarning = boxes.find(box => box.selector === '.city-warning')!;
-      const controls = ['#loop', '#fire', '#accelerate', '#brake'].map(selector => {
+      const controls = ['#loop', '#fire', '#throttle'].map(selector => {
         const element = document.querySelector<HTMLElement>(selector)!;
         const rect = element.getBoundingClientRect();
         const style = getComputedStyle(element);
@@ -177,7 +177,7 @@ test('home layout fits the five supported viewport profiles', async ({ page }, t
     expect(hudLayout.overlaps, `Flight information blocks should not cover each other at ${viewport.name}: ${JSON.stringify(hudLayout.boxes)}`).toEqual([]);
     expect(hudLayout.lowerPanelClearOfControls, `Lower flight panel should not cover touch controls at ${viewport.name}`).toEqual([]);
     expect(hudLayout.inputPresentation, `Touch presentation should be active after native touch at ${viewport.name}`).toBe('touch');
-    expect(hudLayout.controls.filter(control => control.visible), `Normal touch controls should be visible at ${viewport.name}`).toHaveLength(4);
+    expect(hudLayout.controls.filter(control => control.visible), `Normal touch controls should be visible at ${viewport.name}`).toHaveLength(3);
     expect(hudLayout.undersizedControls, `Visible flight controls should remain at least 44×44 CSS pixels at ${viewport.name}`).toEqual([]);
     expect(hudLayout.reticleObstructions, `HUD cards/notices should leave the projected reticle clear at ${viewport.name}`).toEqual([]);
     expect(hudLayout.playerBodyObstructions, `HUD cards/notices should leave the player aircraft clear at ${viewport.name}`).toEqual([]);

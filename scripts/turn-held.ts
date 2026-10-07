@@ -10,7 +10,7 @@ import type { FlightInput } from '../src/types';
 
 const seeds = [11, 29, 47, 71, 103, 151, 211, 307, 401, 503, 601, 701];
 const sourceHash = createHash('sha256');
-for (const file of ['simulation', 'types', 'rules', 'roster', 'city', 'score', 'ufo-ai', 'laser', 'collision', 'flight', 'flight-types', 'flight-view', 'flight-assist', 'ammunition'].map(name => `${name}.ts`).sort()) {
+for (const file of ['simulation', 'types', 'rules', 'roster', 'city', 'score', 'ufo-ai', 'laser', 'collision', 'flight', 'flight-types', 'throttle-lever', 'flight-view', 'flight-assist', 'ammunition'].map(name => `${name}.ts`).sort()) {
   sourceHash.update(file); sourceHash.update(await readFile(`src/${file}`));
 }
 const simulationSourceDigest = sourceHash.digest('hex');

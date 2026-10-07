@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, unlinkSync, rmdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,25 +8,25 @@ import ts from 'typescript';
 import { KEY_ACTIONS, DEFAULT_KEY_BINDINGS, KeyboardSettings, KEYBOARD_STORAGE_KEY, validKeyBindings } from '../src/keyboard-settings';
 import { CONTROL_NAMES, MODE_CONTROLS, CONTROL_STORAGE_KEYS, DEFAULT_LAYOUT, parseControlLayout, persistControlSettings } from '../src/control-settings';
 
-test('the accepted control contract is exactly nine keys and four/one touch buttons', () => {
+test('the accepted control contract is exactly nine keys and three/one touch controls', () => {
   assert.deepEqual(KEY_ACTIONS, ['left', 'right', 'up', 'down', 'fire', 'loop', 'accelerate', 'brake', 'pause']);
   assert.deepEqual(Object.values(DEFAULT_KEY_BINDINGS), ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space', 'KeyL', 'KeyW', 'KeyS', 'Escape']);
-  assert.deepEqual(CONTROL_NAMES, ['fire', 'loop', 'accelerate', 'brake']);
-  assert.deepEqual(MODE_CONTROLS.normal, ['fire', 'loop', 'accelerate', 'brake']);
+  assert.deepEqual(CONTROL_NAMES, ['fire', 'loop', 'throttle']);
+  assert.deepEqual(MODE_CONTROLS.normal, ['fire', 'loop', 'throttle']);
   assert.deepEqual(MODE_CONTROLS.easy, ['loop']);
   assert.equal(validKeyBindings({ ...DEFAULT_KEY_BINDINGS, unknownAction: 'KeyZ' }), false);
 });
 
 test('layout parsing restores only finite supported values and produces isolated drafts', () => {
-  const parsed = parseControlLayout(JSON.stringify({ version: 1, controls: {
+  const parsed = parseControlLayout(JSON.stringify({ version: 2, controls: {
     fire: { x: -2, y: 2, size: 1000, opacity: 0 },
     loop: { x: '0.5', y: null, size: '72', opacity: null },
     unknownAction: { x: 0.1, y: 0.1, size: 50, opacity: 1 },
   } }));
   assert.deepEqual(parsed.fire, { x: 0, y: 1, size: 140, opacity: 0.2 });
   assert.deepEqual(parsed.loop, DEFAULT_LAYOUT.loop);
-  assert.deepEqual(Object.keys(parsed), ['fire', 'loop', 'accelerate', 'brake']);
-  for (const raw of [null, '{', '[]', JSON.stringify({ version: 2, controls: parsed }), 'x'.repeat(8193)]) {
+  assert.deepEqual(Object.keys(parsed), ['fire', 'loop', 'throttle']);
+  for (const raw of [null, '{', '[]', JSON.stringify({ version: 3, controls: parsed }), 'x'.repeat(8193)]) {
     assert.deepEqual(parseControlLayout(raw), DEFAULT_LAYOUT);
   }
   parsed.loop.x = 0.25;
@@ -52,8 +52,8 @@ test('settings persistence cannot write another work or duplicate a commit key',
     { key: CONTROL_STORAGE_KEYS.normal, value: 'first' }, { key: CONTROL_STORAGE_KEYS.normal, value: 'second' },
   ], storage), false);
   assert.equal(persistControlSettings([
-    { key: CONTROL_STORAGE_KEYS.normal, value: JSON.stringify({ version: 1, controls: DEFAULT_LAYOUT }) },
-    { key: CONTROL_STORAGE_KEYS.easy, value: JSON.stringify({ version: 1, controls: DEFAULT_LAYOUT }) },
+    { key: CONTROL_STORAGE_KEYS.normal, value: JSON.stringify({ version: 2, controls: DEFAULT_LAYOUT }) },
+    { key: CONTROL_STORAGE_KEYS.easy, value: JSON.stringify({ version: 2, controls: DEFAULT_LAYOUT }) },
     { key: KEYBOARD_STORAGE_KEY, value: JSON.stringify({ version: 1, bindings: DEFAULT_KEY_BINDINGS }) },
   ], storage), true);
   for (const [key, value] of before) assert.equal(values.get(key), value);
@@ -73,7 +73,7 @@ test('keyboard load reads the MachiMamore key only and ignores other work settin
   } });
   try {
     assert.deepEqual(new KeyboardSettings().bindings, DEFAULT_KEY_BINDINGS);
-    assert.deepEqual(reads, ['machimamore-keyboard-v1']);
+    assert.deepEqual(reads, ['machimamore-controls-recovery-v1', 'machimamore-keyboard-v1']);
   } finally {
     if (original) Object.defineProperty(globalThis, 'localStorage', original);
     else Reflect.deleteProperty(globalThis, 'localStorage');
@@ -112,5 +112,5 @@ test('the TypeScript contract rejects removed actions and accepts UFO velocity t
     });
     const errors = ts.getPreEmitDiagnostics(program);
     assert.deepEqual(errors.map(error => ts.flattenDiagnosticMessageText(error.messageText, '\n')), []);
-  } finally { rmSync(directory, { recursive: true, force: true }); }
+  } finally { unlinkSync(fixture); rmdirSync(directory); }
 });
