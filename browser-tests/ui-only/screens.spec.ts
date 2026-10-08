@@ -1,11 +1,15 @@
 import { test, expect, type Page, type TestInfo } from '@playwright/test';
-import type { UiFixtureDriver, UiFixtureName } from '../../src/ui-test-driver';
+import type { UiFixtureDriver, UiFixtureName, UiScreen } from '../../src/ui-test-driver';
 
 declare global { interface Window { __machimamoreUi: UiFixtureDriver; } }
 
 async function show(page: Page, name: UiFixtureName) {
   await page.evaluate(name => window.__machimamoreUi.show(name), name);
   expect(await page.evaluate(() => window.__machimamoreUi.read())).toMatchObject({ tick:0, frameScheduled:false });
+}
+async function expectFixedUi(page: Page, screen: UiScreen, phase: 'ready'|'playing'|'paused'|'ended') {
+  await expect(page.locator('#app')).toHaveAttribute('data-screen',screen);
+  expect(await page.evaluate(() => window.__machimamoreUi.read())).toMatchObject({screen,phase,tick:0,frameScheduled:false});
 }
 async function capture(page: Page, info: TestInfo, name: string) {
   const path=info.outputPath(`${name}.png`);
@@ -57,6 +61,8 @@ async function canvasPixels(page: Page) {
 // performance sampling or recovery loop. Screenshots remain review evidence.
 test('real Home, HUD, dialogs, results and error UI from fixed display states', async ({page,baseURL},info) => {
   const started=Date.now(), errors:string[]=[], failures:string[]=[], outbound:string[]=[];
+  const mainFrameNavigations:string[]=[];
+  page.on('framenavigated',frame=>{if(frame===page.mainFrame())mainFrameNavigations.push(frame.url());});
   page.on('pageerror',error=>errors.push(error.message));
   page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
   page.on('requestfailed',request=>failures.push(`${request.method()} ${request.url()}: ${request.failure()?.errorText}`));
@@ -118,16 +124,26 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await expect(page.locator('#app')).toHaveAttribute('data-input','touch');
   expect(await page.evaluate(()=>window.__machimamoreUi.read())).toMatchObject({screen:'home',tick:0,frameScheduled:false});
 
+  const normalMode=page.locator('input[name="game-mode"][value="normal"]');
+  await normalMode.tap();await expect(normalMode).toBeChecked();
+  await expect(page.locator('#app')).toHaveAttribute('data-mode','normal');
+  await page.locator('#start').tap();
+  await expect(page.locator('#home')).toBeHidden();await expect(page.locator('#hud')).toBeVisible();
+  await expect(page.locator('#app')).toHaveAttribute('data-mode','normal');
+  await expectFixedUi(page,'playing','playing');
+
   await show(page,'normal');
   await expect(page.locator('#app')).toHaveAttribute('data-input','touch');
   await expect(page.locator('#app')).toHaveAttribute('data-screen','playing');
+  await expectFixedUi(page,'playing','playing');
   await fits(page,['#pause','#game-sound','#loop','#fire','#throttle'],true);
   await expect(page.locator('#throttle')).toHaveAttribute('aria-valuenow','0');
   await expect(page.locator('#throttle')).toHaveAttribute('aria-orientation','vertical');
   await expect(page.locator('#hud-mode')).toHaveText('ノーマル');
   await noHorizontalOverflow(page);expect(await canvasPixels(page)).toBeGreaterThan(30);
   await capture(page,info,'normal-hud');
-  await show(page,'paused');await expect(page.locator('#pause-screen')).toBeVisible();
+  await page.locator('#pause').tap();await expect(page.locator('#pause-screen')).toBeVisible();
+  await expectFixedUi(page,'paused','paused');
   await capture(page,info,'pause');
   await page.locator('#pause-rules').tap();await page.locator('#rules-close').tap();
   await expect(page.locator('#app')).toHaveAttribute('data-screen','paused');
@@ -135,6 +151,11 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.locator('#pause-controls').tap();await expect(page.locator('#control-mode')).toBeDisabled();
   await page.locator('#control-close').tap();await expect(page.locator('#app')).toHaveAttribute('data-screen','paused');
   expect(await page.evaluate(()=>window.__machimamoreUi.read())).toMatchObject({screen:'paused',tick:0,frameScheduled:false});
+  await page.locator('#resume').tap();await expect(page.locator('#pause-screen')).toBeHidden();
+  await expectFixedUi(page,'playing','playing');
+  await page.locator('#pause').tap();await expectFixedUi(page,'paused','paused');
+  await page.locator('#pause-home').tap();await expect(page.locator('#home')).toBeVisible();
+  await expectFixedUi(page,'home','ready');
 
   await show(page,'easy');await expect(page.locator('#loop')).toBeVisible();
   await expect(page.locator('#fire')).toBeHidden();await expect(page.locator('#throttle')).toBeHidden();
@@ -147,6 +168,7 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
 
   for(const [name,title] of [['victory','防衛成功'],['defeat','防衛失敗'],['interrupted','作戦中断']] as const){
     await show(page,name);await expect(page.locator('#result')).toBeVisible();
+    await expectFixedUi(page,'result','ended');
     await expect(page.locator('#result-title')).toHaveText(title);
     await expect(page.locator('#result-time')).toHaveText('02:03.45');
     await expect(page.locator('#result-score')).toHaveText('12,345');
@@ -156,12 +178,19 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   }
   await page.locator('#result-controls').tap();await page.locator('#control-cancel').tap();
   await expect(page.locator('#app')).toHaveAttribute('data-screen','result');
-  expect(await page.evaluate(()=>window.__machimamoreUi.read())).toMatchObject({screen:'result',tick:0,frameScheduled:false});
+  await expectFixedUi(page,'result','ended');
+  await page.locator('#retry').tap();await expect(page.locator('#result')).toBeHidden();
+  await expect(page.locator('#hud')).toBeVisible();await expectFixedUi(page,'playing','playing');
 
   await show(page,'startup-error');await expect(page.locator('#startup-error')).toBeVisible();
   await expect(page.locator('#start')).toBeDisabled();await expect(page.locator('#reload')).toBeVisible();
   await captureScrollSegments(page,info,'startup-error','#home',['#reload']);
-  expect(await page.evaluate(()=>window.__machimamoreUi.read())).toMatchObject({screen:'home',tick:0,frameScheduled:false});
+  await expectFixedUi(page,'home','ready');
+  const navigationsBeforeRetry=mainFrameNavigations.length;
+  await page.locator('#reload').tap();await expect(page.locator('#startup-error')).toBeHidden();
+  await expect(page.locator('#reload')).toBeHidden();await expect(page.locator('#start')).toBeEnabled();
+  await expectFixedUi(page,'home','ready');
+  expect(mainFrameNavigations).toHaveLength(navigationsBeforeRetry);
   expect(errors,'No uncaught/rejected runtime or console errors').toEqual([]);
   expect(failures,'No failed local assets').toEqual([]);expect(outbound,'No external requests').toEqual([]);
   } finally {
