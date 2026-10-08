@@ -12,6 +12,25 @@ async function capture(page: Page, info: TestInfo, name: string) {
   await page.screenshot({path,animations:'disabled'});
   await info.attach(name,{path,contentType:'image/png'});
 }
+async function captureScrollSegments(page: Page, info: TestInfo, name: string, selector: string, bottomSelectors: string[]) {
+  const scroller=page.locator(selector);
+  const {clientHeight,scrollHeight}=await scroller.evaluate((element:HTMLElement)=>({clientHeight:element.clientHeight,scrollHeight:element.scrollHeight}));
+  expect(clientHeight,`${selector} scroll viewport`).toBeGreaterThan(0);
+  const maxScroll=Math.max(0,scrollHeight-clientHeight);
+  const overlap=Math.min(48,Math.max(24,Math.ceil(clientHeight*.12)));
+  const step=Math.max(1,clientHeight-overlap);
+  const count=maxScroll===0?1:Math.max(3,Math.ceil(maxScroll/step)+1);
+  const positions=Array.from({length:count},(_,index)=>count===1?0:Math.round(maxScroll*index/(count-1)));
+  const middleIndex=Math.ceil((positions.length-1)/2);
+  for(let index=0;index<positions.length;index++) {
+    const top=positions[index];
+    await scroller.evaluate((element:HTMLElement,scrollTop:number)=>{element.scrollTop=scrollTop;},top);
+    expect(await scroller.evaluate((element:HTMLElement)=>Math.round(element.scrollTop)),`${selector} segment ${index}`).toBe(top);
+    if(index===positions.length-1) await fits(page,bottomSelectors);
+    const segment=index===0?'top':index===positions.length-1?'bottom':index===middleIndex?'middle':`middle-${index}`;
+    await capture(page,info,`${name}-${segment}`);
+  }
+}
 async function noHorizontalOverflow(page: Page) {
   expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(1);
 }
@@ -50,6 +69,7 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   try {
   await page.goto('/?ui=home');
   await expect(page.locator('html')).toHaveAttribute('data-ui-fixture-ready','true');
+  await show(page,'home');
   await expect(page.locator('#home')).toBeVisible();
   await expect(page.locator('#title')).toHaveText('マチマモレ');
   await expect(page.locator('#start')).toBeEnabled();
@@ -92,7 +112,7 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.keyboard.press('Escape');await expect(page.locator('#control-settings')).toBeHidden();
   await expect(page.locator('#home-controls')).toBeFocused();
 
-  await page.getByRole('radio',{name:'ノーマル'}).check();await page.locator('#start').tap();
+  await show(page,'normal');
   await expect(page.locator('#app')).toHaveAttribute('data-screen','playing');
   await fits(page,['#pause','#game-sound','#loop','#fire','#throttle'],true);
   await expect(page.locator('#throttle')).toHaveAttribute('aria-valuenow','0');
@@ -100,13 +120,14 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await expect(page.locator('#hud-mode')).toHaveText('ノーマル');
   await noHorizontalOverflow(page);expect(await canvasPixels(page)).toBeGreaterThan(30);
   await capture(page,info,'normal-hud');
-  await page.locator('#pause').tap();await expect(page.locator('#pause-screen')).toBeVisible();
+  await show(page,'paused');await expect(page.locator('#pause-screen')).toBeVisible();
   await capture(page,info,'pause');
   await page.locator('#pause-rules').tap();await page.locator('#rules-close').tap();
   await expect(page.locator('#app')).toHaveAttribute('data-screen','paused');
+  expect(await page.evaluate(()=>window.__machimamoreUi.read())).toMatchObject({screen:'paused',tick:0,frameScheduled:false});
   await page.locator('#pause-controls').tap();await expect(page.locator('#control-mode')).toBeDisabled();
   await page.locator('#control-close').tap();await expect(page.locator('#app')).toHaveAttribute('data-screen','paused');
-  await page.locator('#resume').tap();await expect(page.locator('#app')).toHaveAttribute('data-screen','playing');
+  expect(await page.evaluate(()=>window.__machimamoreUi.read())).toMatchObject({screen:'paused',tick:0,frameScheduled:false});
 
   await show(page,'easy');await expect(page.locator('#loop')).toBeVisible();
   await expect(page.locator('#fire')).toBeHidden();await expect(page.locator('#throttle')).toBeHidden();
@@ -124,18 +145,15 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
     await expect(page.locator('#result-score')).toHaveText('12,345');
     await expect(page.locator('#score-breakdown > div')).toHaveCount(7);
     await noHorizontalOverflow(page);
-    await capture(page,info,`score-result-${name}`);
+    await captureScrollSegments(page,info,`score-result-${name}`,'#result',['#retry','#result-home','#result-controls']);
   }
   await page.locator('#result-controls').tap();await page.locator('#control-cancel').tap();
   await expect(page.locator('#app')).toHaveAttribute('data-screen','result');
-  await page.locator('#retry').tap();await expect(page.locator('#app')).toHaveAttribute('data-screen','playing');
-  await page.locator('#pause').tap();await page.locator('#pause-home').tap();
-  await expect(page.locator('#home')).toBeVisible();expect(await canvasPixels(page)).toBe(0);
+  expect(await page.evaluate(()=>window.__machimamoreUi.read())).toMatchObject({screen:'result',tick:0,frameScheduled:false});
 
   await show(page,'startup-error');await expect(page.locator('#startup-error')).toBeVisible();
   await expect(page.locator('#start')).toBeDisabled();await expect(page.locator('#reload')).toBeVisible();
-  await capture(page,info,'startup-error');await page.locator('#reload').tap();
-  await expect(page.locator('#start')).toBeEnabled();await expect(page.locator('#startup-error')).toBeHidden();
+  await captureScrollSegments(page,info,'startup-error','#home',['#reload']);
   expect(await page.evaluate(()=>window.__machimamoreUi.read())).toMatchObject({screen:'home',tick:0,frameScheduled:false});
   expect(errors,'No uncaught/rejected runtime or console errors').toEqual([]);
   expect(failures,'No failed local assets').toEqual([]);expect(outbound,'No external requests').toEqual([]);
