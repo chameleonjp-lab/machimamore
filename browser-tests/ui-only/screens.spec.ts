@@ -112,7 +112,14 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.keyboard.press('Escape');await expect(page.locator('#control-settings')).toBeHidden();
   await expect(page.locator('#home-controls')).toBeFocused();
 
+  await page.locator('#home-controls').tap();await expect(page.locator('#control-settings')).toBeVisible();
+  await expect(page.locator('#app')).toHaveAttribute('data-input','touch');
+  await page.locator('#control-cancel').tap();await expect(page.locator('#control-settings')).toBeHidden();
+  await expect(page.locator('#app')).toHaveAttribute('data-input','touch');
+  expect(await page.evaluate(()=>window.__machimamoreUi.read())).toMatchObject({screen:'home',tick:0,frameScheduled:false});
+
   await show(page,'normal');
+  await expect(page.locator('#app')).toHaveAttribute('data-input','touch');
   await expect(page.locator('#app')).toHaveAttribute('data-screen','playing');
   await fits(page,['#pause','#game-sound','#loop','#fire','#throttle'],true);
   await expect(page.locator('#throttle')).toHaveAttribute('aria-valuenow','0');
