@@ -127,5 +127,5 @@ test('Pages workflow stays manual, main-only, SHA-pinned and least privilege', (
   for (const action of actions) assert.match(action, /^actions\/[a-z-]+@[0-9a-f]{40}$/);
   for (const checkout of workflow.split(/- uses: actions\/checkout@[0-9a-f]{40}/).slice(1)) assert.match(checkout.split(/\n      - /)[0], /persist-credentials: false/);
   const runSteps = [...workflow.matchAll(/^\s*(?:- )?run: (.+)$/gm)].map(match => match[1]);
-  assert.deepEqual(runSteps, ["|", "test \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\"", "npm ci --ignore-scripts --no-audit --no-fund", "npm run evidence:source", "npm test", "npm run test:review", "npm run test:evidence", "npm run build", "npm run check:dist", "npx playwright install --with-deps chromium webkit", "npm run test:browser", "node scripts/prepare-pages.mjs"]);
+  assert.deepEqual(runSteps, ["|", "test \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\"", "npm ci --ignore-scripts --no-audit --no-fund", "npm run evidence:source", "npm test", "npm run build", "npm run check:dist", "npx playwright install --with-deps chromium webkit", "npm run test:browser", "node scripts/prepare-pages.mjs"]);
 });

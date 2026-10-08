@@ -19,7 +19,7 @@ for (const path of files) {
   assert(/^dist\/(index\.html|third-party-notices\.txt|assets\/[\w.-]+\.(js|css))$/.test(path), `Unexpected distribution file: ${path}`);
   const data = await readFile(path);
   const text = data.toString('utf8');
-  assert(!/supabase|ranking-manifest|score-submit|api[_-]?key|__MACHIMAMORE_TEST__|__machimamoreDebug|__machimamoreRead/i.test(text), `Forbidden integration/debug hook: ${path}`);
+  assert(!/supabase|ranking-manifest|score-submit|api[_-]?key|__MACHIMAMORE_TEST__|__machimamoreDebug|__machimamoreRead|__machimamoreUi|ui-test-driver|ui-fixture-ready/i.test(text), `Forbidden integration/debug hook: ${path}`);
   assert(!/sourceMappingURL=/.test(text), `Source map reference: ${path}`);
   if (/\.(html|css)$/.test(path)) {
     assert(!/(?:src|href)=["']https?:\/\/|url\(["']?https?:\/\//i.test(text), `External asset: ${path}`);
