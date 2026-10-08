@@ -56,6 +56,56 @@ async function canvasPixels(page: Page) {
     return opaque;
   });
 }
+async function expectActualHitTargets(page:Page,selectors:string[]) {
+  const results=await page.evaluate((items)=>items.map(selector=>{
+    const target=document.querySelector<HTMLElement>(selector);if(!target)return{selector,hit:false};
+    const rect=target.getBoundingClientRect(),hit=document.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2);
+    return{selector,hit:!!hit&&(hit===target||target.contains(hit)),width:rect.width,height:rect.height,top:hit?.tagName??null};
+  }),selectors);
+  for(const result of results){expect(result.width,result.selector).toBeGreaterThanOrEqual(44);expect(result.height,result.selector).toBeGreaterThanOrEqual(44);expect(result.hit,`${result.selector} receives a center-point hit (${result.top})`).toBe(true);}
+}
+async function expectMarkerLabelsClear(page:Page,expected:string[]) {
+  const report=await page.evaluate(()=>{
+    const labels=window.__machimamoreUi.markerBoxes().map(box=>({text:box.text,x:box.x,y:box.y,width:box.width,height:box.height}));
+    const selectors=['#hud .time-block','#hud .hud-actions','#hud .enemy-tally','#hud .friendly-tally','#hud .city-tally','#hud .flight-data','#hud .flight-tip',
+      '#hud .hud-notices > :not([hidden])','#hud .flight-button:not([hidden])','#hud #throttle:not([hidden])','#hud #throttle-layout-note:not([hidden])',
+      '#announcement:not(:empty)','#ally-announcements:not(:empty)'];
+    const obstacles=selectors.flatMap(selector=>[...document.querySelectorAll<HTMLElement>(selector)].flatMap(element=>{
+      if(element.hidden||element.closest('[hidden]'))return[];const style=getComputedStyle(element),rect=element.getBoundingClientRect();
+      if(style.display==='none'||style.visibility==='hidden'||rect.width<=0||rect.height<=0)return[];
+      return[{selector,x:rect.x,y:rect.y,width:rect.width,height:rect.height}];
+    }));
+    const overlaps=(a:{x:number;y:number;width:number;height:number},b:{x:number;y:number;width:number;height:number})=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
+    const conflicts=labels.flatMap(label=>obstacles.filter(obstacle=>overlaps(label,obstacle)).map(obstacle=>`${label.text} overlaps ${obstacle.selector}`));
+    for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++)if(overlaps(labels[i]!,labels[j]!))conflicts.push(`${labels[i]!.text} overlaps ${labels[j]!.text}`);
+    const notices=obstacles.filter(box=>box.selector==='#hud .hud-notices > :not([hidden])');
+    const protectedUi=obstacles.filter(box=>box.selector!=='#hud .hud-notices > :not([hidden])');
+    for(const notice of notices)for(const target of protectedUi)if(overlaps(notice,target))conflicts.push(`notice overlaps ${target.selector}`);
+    for(let i=0;i<notices.length;i++)for(let j=i+1;j<notices.length;j++)if(overlaps(notices[i]!,notices[j]!))conflicts.push('notices overlap each other');
+    const messages=protectedUi.filter(box=>box.selector==='#announcement:not(:empty)'||box.selector==='#ally-announcements:not(:empty)');
+    const otherProtectedUi=protectedUi.filter(box=>!messages.includes(box));
+    for(const message of messages)for(const target of otherProtectedUi)if(overlaps(message,target))conflicts.push(`${message.selector} overlaps ${target.selector}`);
+    for(let i=0;i<messages.length;i++)for(let j=i+1;j<messages.length;j++)if(overlaps(messages[i]!,messages[j]!))conflicts.push('announcement messages overlap each other');
+    return{width:innerWidth,height:innerHeight,labels,conflicts};
+  });
+  expect(report.labels.map(label=>label.text.startsWith('街')?'city':label.text)).toEqual(expected);
+  for(const label of report.labels){expect(label.x).toBeGreaterThanOrEqual(0);expect(label.y).toBeGreaterThanOrEqual(0);expect(label.x+label.width).toBeLessThanOrEqual(report.width);expect(label.y+label.height).toBeLessThanOrEqual(report.height);}
+  expect(report.conflicts).toEqual([]);
+}
+async function expectAnnouncementLayout(page:Page) {
+  const layout=await page.locator('#announcement').evaluate((element:HTMLElement)=>{
+    const rect=element.getBoundingClientRect(),lineHeight=Number.parseFloat(getComputedStyle(element).lineHeight);
+    return{x:rect.x,y:rect.y,width:rect.width,height:rect.height,lines:Math.round(rect.height/lineHeight),viewportWidth:innerWidth,viewportHeight:innerHeight};
+  });
+  expect(layout.x).toBeGreaterThanOrEqual(0);expect(layout.y).toBeGreaterThanOrEqual(0);
+  expect(layout.x+layout.width).toBeLessThanOrEqual(layout.viewportWidth);expect(layout.y+layout.height).toBeLessThanOrEqual(layout.viewportHeight);
+  if(layout.viewportWidth===320&&layout.viewportHeight===568){
+    expect(layout.x).toBeCloseTo(167.2,1);expect(layout.y).toBeCloseTo(230.2,1);expect(layout.lines).toBe(2);
+  }
+  if(layout.viewportWidth===568&&layout.viewportHeight===320){
+    expect(layout.x).toBeCloseTo(150,0);expect(layout.y).toBeCloseTo(12,0);expect(layout.width).toBeCloseTo(268,0);expect(layout.lines).toBe(1);
+  }
+}
 
 // One pass per viewport; no mission progress, combat, reload countdown, waits,
 // performance sampling or recovery loop. Screenshots remain review evidence.
@@ -137,6 +187,8 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await expect(page.locator('#app')).toHaveAttribute('data-screen','playing');
   await expectFixedUi(page,'playing','playing');
   await fits(page,['#pause','#game-sound','#loop','#fire','#throttle'],true);
+  await expectActualHitTargets(page,['#pause','#game-sound','#loop','#fire','#throttle']);
+  await expectMarkerLabelsClear(page,['UFO','味方']);
   await expect(page.locator('#throttle')).toHaveAttribute('aria-valuenow','0');
   await expect(page.locator('#throttle')).toHaveAttribute('aria-orientation','vertical');
   await expect(page.locator('#hud-mode')).toHaveText('ノーマル');
@@ -157,13 +209,13 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.locator('#pause-home').tap();await expect(page.locator('#home')).toBeVisible();
   await expectFixedUi(page,'home','ready');
 
-  await show(page,'easy');await expect(page.locator('#loop')).toBeVisible();
+  await show(page,'easy');await expect(page.locator('#loop')).toBeVisible();await expectMarkerLabelsClear(page,['UFO','味方']);
   await expect(page.locator('#fire')).toBeHidden();await expect(page.locator('#throttle')).toBeHidden();
   expect(await canvasPixels(page)).toBeGreaterThan(30);await capture(page,info,'easy-hud');
   await show(page,'reload');await expect(page.locator('#reload-status')).toHaveText('再装填 3.0秒');
   await expect(page.locator('#reload-progress')).toBeVisible();
   await show(page,'wait');await expect(page.locator('#player-wait')).toContainText('引き継ぎ待ち');await capture(page,info,'waiting-hud');
-  await show(page,'notices');await fits(page,['#warning','#city-warning','#reload-status','#reload-progress']);
+  await show(page,'notices');await fits(page,['#warning','#city-warning','#reload-status','#reload-progress']);await expect(page.locator('#announcement')).toBeVisible();await expect(page.locator('#announcement')).toHaveText('街を守りUFO50機を撃破 · 味方残機は自機込み');await expectAnnouncementLayout(page);await expectMarkerLabelsClear(page,['UFO','味方','city']);
   await capture(page,info,'hud-notices');
 
   for(const [name,title] of [['victory','防衛成功'],['defeat','防衛失敗'],['interrupted','作戦中断']] as const){
@@ -182,7 +234,7 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.locator('#retry').tap();await expect(page.locator('#result')).toBeHidden();
   await expect(page.locator('#hud')).toBeVisible();await expectFixedUi(page,'playing','playing');
 
-  await show(page,'startup-error');await expect(page.locator('#startup-error')).toBeVisible();
+  await show(page,'startup-error');await expect(page.locator('#startup-error')).toBeVisible();await expect(page.locator('#announcement')).toBeEmpty();
   await expect(page.locator('#start')).toBeDisabled();await expect(page.locator('#reload')).toBeVisible();
   await captureScrollSegments(page,info,'startup-error','#home',['#reload']);
   await expectFixedUi(page,'home','ready');
@@ -190,6 +242,7 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.locator('#reload').tap();await expect(page.locator('#startup-error')).toBeHidden();
   await expect(page.locator('#reload')).toBeHidden();await expect(page.locator('#start')).toBeEnabled();
   await expectFixedUi(page,'home','ready');
+  await show(page,'normal');await expectMarkerLabelsClear(page,['UFO','味方']);await expectActualHitTargets(page,['#pause','#game-sound','#loop','#fire','#throttle']);
   expect(mainFrameNavigations).toHaveLength(navigationsBeforeRetry);
   expect(errors,'No uncaught/rejected runtime or console errors').toEqual([]);
   expect(failures,'No failed local assets').toEqual([]);expect(outbound,'No external requests').toEqual([]);

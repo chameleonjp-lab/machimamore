@@ -1,7 +1,7 @@
 // Loaded only by main.ts in Vite's explicit DEV ui-test mode; never shipped.
 import { PerspectiveCamera, Vector3 } from 'three';
 import { createGame, getPlayer, startGame } from './simulation';
-import { drawFlightMarkers } from './flight-markers';
+import { drawFlightMarkers, MarkerKeepOutCache, type MarkerLabelBox } from './flight-markers';
 import { FLIGHT_FAR, FLIGHT_FOV, getFlightCameraPose } from './flight-view';
 import type { GameResult, GameState } from './types';
 
@@ -11,6 +11,7 @@ export type UiScreen = 'home' | 'playing' | 'paused' | 'result';
 export interface UiFixtureDriver {
   show(name: UiFixtureName): void;
   read(): { screen: UiScreen; tick: number; phase: GameState['phase']; frameScheduled: boolean };
+  markerBoxes(): readonly MarkerLabelBox[];
 }
 
 /** Fixed display examples, not simulated outcomes or combat acceptance evidence. */
@@ -53,8 +54,10 @@ export function installUiTestDriver(host: {
 }) {
   const context=host.overlay.getContext('2d');
   if (!context) throw new Error('UI fixture needs the actual Canvas2D marker layer');
+  const markerKeepOuts=new MarkerKeepOutCache(document);
   const camera=new PerspectiveCamera(FLIGHT_FOV,1,1,FLIGHT_FAR);
   let last: {state: GameState; flight: boolean} | null=null;
+  let markerBoxes: MarkerLabelBox[]=[];
   const scene={
     render(state: GameState, flight: boolean) {
       last={state,flight};
@@ -65,22 +68,28 @@ export function installUiTestDriver(host: {
       const player=getPlayer(state);
       if(player)getFlightCameraPose(player,state.mode,camera.position,camera.quaternion);
       camera.updateMatrixWorld();
-      drawFlightMarkers(context,width,height,state,flight,position=>{
+      markerBoxes=drawFlightMarkers(context,width,height,state,flight,position=>{
         const local=position.clone().sub(camera.position).applyQuaternion(camera.quaternion.clone().invert()),point=position.clone().project(camera);
         return {x:(point.x*.5+.5)*width,y:(.5-point.y*.5)*height,visible:local.z<-.5&&point.z<1&&Math.abs(point.x)<.97&&Math.abs(point.y)<.94,behind:local.z>=-.5};
-      },camera);
+      },camera,markerKeepOuts.read());
     },
-    resize(){if(last)this.render(last.state,last.flight);},
-    dispose(){context.clearRect(0,0,host.overlay.width,host.overlay.height);},
+    resize(){markerKeepOuts.invalidate();if(last)this.render(last.state,last.flight);},
+    dispose(){markerKeepOuts.dispose();context.clearRect(0,0,host.overlay.width,host.overlay.height);},
     setReducedMotion(_value: boolean){},
     metrics(){return {uiOnly:true,worldRendered:false};},
   };
   const driver: UiFixtureDriver={
     show(name){
+      const announcement=document.getElementById('announcement');
+      if(announcement)announcement.textContent=name==='notices'?'街を守りUFO50機を撃破 · 味方残機は自機込み':'';
+      const allyAnnouncement=document.getElementById('ally-announcements');
+      if(allyAnnouncement)allyAnnouncement.textContent='';
+      markerKeepOuts.invalidate();
       const {state,screen}=uiFixtureState(name);host.present(state,screen);
       if(name==='startup-error')host.startupError();
     },
     read:host.read,
+    markerBoxes:()=>markerBoxes,
   };
   Object.defineProperty(window,'__machimamoreUi',{configurable:true,value:driver});
   document.documentElement.dataset.uiFixtureReady='true';
