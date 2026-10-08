@@ -1,4 +1,4 @@
-import { drawFlightMarkers } from './flight-markers';
+import { drawFlightMarkers, MarkerKeepOutCache } from './flight-markers';
 import { ACESFilmicToneMapping, BackSide, BoxGeometry, BufferAttribute, BufferGeometry, Color, ConeGeometry, CylinderGeometry, DirectionalLight, Fog, Group, HemisphereLight, InstancedMesh, Line, LineBasicMaterial, LineDashedMaterial, LineSegments, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Quaternion, Scene, ShaderMaterial, SphereGeometry, SRGBColorSpace, TorusGeometry, Vector3, Vector4, WebGLRenderer, type Material } from 'three';
 import { AircraftFactory, type AircraftVisual } from './aircraft';
 import { AircraftBatchFactory } from './aircraft-batch';
@@ -32,6 +32,7 @@ export class MachiMamoreScene {
   private tracers: LineSegments;
   private sea: ShaderMaterial;
   private ctx: CanvasRenderingContext2D;
+  private markerKeepOuts: MarkerKeepOutCache;
   private width = 1;
   private height = 1;
   private dpr = 1;
@@ -47,6 +48,7 @@ export class MachiMamoreScene {
 
   constructor(private canvas: HTMLCanvasElement, private overlay: HTMLCanvasElement) {
     this.renderer = new WebGLRenderer({ canvas, antialias:false, alpha:false, powerPreference:'high-performance' });
+    this.markerKeepOuts=new MarkerKeepOutCache(document);
     this.renderer.outputColorSpace=SRGBColorSpace;this.renderer.toneMapping=ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.05;
     const ctx=overlay.getContext('2d');if(!ctx)throw new Error('危険マーカーを描画できません');this.ctx=ctx;
     this.world.fog=new Fog(0xb5c4bf,1600,6100);this.world.background=new Color(0xb5c4bf);
@@ -169,7 +171,7 @@ export class MachiMamoreScene {
   }
   setReducedMotion(value:boolean):void{this.reducedMotion=value;}
   resize():void{
-    if(this.disposed)return;this.width=Math.max(1,window.innerWidth);this.height=Math.max(1,window.innerHeight);this.dpr=Math.min(window.devicePixelRatio||1,1.5);
+    if(this.disposed)return;this.markerKeepOuts.invalidate();this.width=Math.max(1,window.innerWidth);this.height=Math.max(1,window.innerHeight);this.dpr=Math.min(window.devicePixelRatio||1,1.5);
     this.renderer.setPixelRatio(this.dpr);this.renderer.setSize(this.width,this.height,false);this.camera.aspect=this.width/this.height;this.camera.updateProjectionMatrix();this.overlay.width=Math.round(this.width*this.dpr);this.overlay.height=Math.round(this.height*this.dpr);this.ctx.setTransform(this.dpr,0,0,this.dpr,0,0);
   }
   private syncWorld(state:GameState,alpha:number,resultAnimationTime=0):void{
@@ -197,7 +199,7 @@ export class MachiMamoreScene {
   }
   render(state:GameState,flight:boolean,alpha=1,resultAnimationTime=0):void{if(this.disposed||!this.ready)return;this.syncWorld(state,alpha,resultAnimationTime);this.updateCamera(state,flight,alpha);this.renderer.render(this.world,this.camera);this.drawMarkers(state,flight);}
   private project(position:Vector3):{x:number;y:number;visible:boolean;behind:boolean}{const local=position.clone().sub(this.camera.position).applyQuaternion(this.camera.quaternion.clone().invert()),point=position.clone().project(this.camera);return{x:(point.x*.5+.5)*this.width,y:(.5-point.y*.5)*this.height,visible:local.z<-.5&&point.z<1&&Math.abs(point.x)<.97&&Math.abs(point.y)<.94,behind:local.z>=-.5};}
-  private drawMarkers(state:GameState,flight:boolean):void{drawFlightMarkers(this.ctx,this.width,this.height,state,flight,position=>this.project(position),this.camera);}
+  private drawMarkers(state:GameState,flight:boolean):void{drawFlightMarkers(this.ctx,this.width,this.height,state,flight,position=>this.project(position),this.camera,this.markerKeepOuts.read());}
   metrics(){const debrisMeshes=this.districts.filter(d=>d.rubble.visible).length,smokeMeshes=this.districts.filter(d=>d.smoke.visible).length*3;return{ready:this.ready,aircraft:(this.current?.fighters.length??0)+(this.current?.ufos.length??0),activeLasers:this.current?.beams.length??0,projectiles:this.current?.bullets.length??0,decorations:debrisMeshes,debrisMeshes,smokeMeshes,drawCalls:this.renderer.info.render.calls,geometries:this.renderer.info.memory.geometries,textures:this.renderer.info.memory.textures,programs:this.renderer.info.programs?.length??0};}
-  dispose():void{if(this.disposed)return;this.disposed=true;this.ready=false;this.world.clear();this.batches.dispose();this.factory.dispose();for(const geometry of this.geometries)geometry.dispose();for(const material of this.materials)material.dispose();this.renderer.dispose();this.ctx.clearRect(0,0,this.width,this.height);}
+  dispose():void{if(this.disposed)return;this.disposed=true;this.ready=false;this.markerKeepOuts.dispose();this.world.clear();this.batches.dispose();this.factory.dispose();for(const geometry of this.geometries)geometry.dispose();for(const material of this.materials)material.dispose();this.renderer.dispose();this.ctx.clearRect(0,0,this.width,this.height);}
 }
