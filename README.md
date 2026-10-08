@@ -14,8 +14,6 @@ npm run dev
 
 ```sh
 npm test
-npm run test:review
-npm run test:evidence
 npm run build
 npm run check:dist
 npx playwright install --with-deps chromium webkit
@@ -37,3 +35,11 @@ Normalの加速/減速タッチ2ボタンを上下1本の速度レバーへ統�
 ## 2026-10-07 共通UI・速度レバー候補
 
 ローカル候補でNormalを射撃・宙返り・速度レバーの3操作、Easyを宙返り1操作へ統合しています。PC9キーは維持し、上で加速・下で減速、離すと調整済み速度を保持します。旧touch v1は保持し、明示保存は本作専用v2へ行います。Home/共通panelはカイセン基準へ揃え、都市の説明・HUD・勝敗は保持しています。実装範囲、独立review、検査結果、ブラウザー未確認と復元手順は[今回の記録](docs/COMMON_UI_THROTTLE_VERIFICATION.md)を参照してください。
+
+## 通常の短時間UI確認（2026-10-08）
+
+通常の `npm run test:browser` は実製品のHome、HUD、操作設定、ルール、一時停止、結果、エラー表示を固定表示データで確認します。実index/CSS/画面遷移handler/Canvas2D照準・マーカーを使い、ゲームの時間進行・戦闘・3D描画は起動しません。画面検査本体は約1分を目標とし、依存install、build、server準備、画像の人手レビューは別計測です。現在のローカル環境ではブラウザー起動制限により実画像・所要時間は未確認です。
+
+`npm run dev:ui` の専用開発modeで `/?ui=normal`、`/?ui=easy`、`/?ui=victory` などの表示を直接開けます。本番buildにはfixtureの入口・API・標本dataを含めません。詳細と範囲は [UI専用確認](docs/UI_ONLY_CHECKS.md) を参照してください。
+
+通常の単体・型・build検査は維持します。旧ブラウザー検査は削除せず、必要な変更を依頼された場合だけ `npm run test:browser:gameplay` で明示実行できます。`npm run test:review`（物理等）と `npm run test:evidence`（旧作戦記録）も明示実行用に保持し、通常CIからは外しています。プレイによる受入は本人が行います。

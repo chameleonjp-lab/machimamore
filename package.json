@@ -14,7 +14,9 @@
     "preview": "vite preview --host 127.0.0.1 --port 4177 --strictPort",
     "test:balance": "tsx scripts/balance.ts",
     "test:review": "node --import tsx scripts/review-rounded-box-equivalence.ts && node --import tsx scripts/review-ir10-fixtures.ts",
-    "test:evidence": "node scripts/review-balance-evidence.mjs"
+    "test:evidence": "node scripts/review-balance-evidence.mjs",
+    "test:browser:gameplay": "playwright test --config playwright.gameplay.config.ts",
+    "dev:ui": "vite --host 127.0.0.1 --mode ui-test"
   },
   "dependencies": {
     "three": "0.186.1"

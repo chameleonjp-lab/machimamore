@@ -12,9 +12,11 @@ import { FlightAudio } from './audio';
 import { Hud, modeName } from './hud';
 import type { FlightInput, GameMode, GameState } from './types';
 
+type SceneView = Pick<MachiMamoreScene, 'render' | 'resize' | 'dispose' | 'setReducedMotion'> & { metrics(): unknown };
+
 function el<T extends HTMLElement=HTMLElement>(id:string):T{const node=document.getElementById(id);if(!node)throw new Error(`Missing UI: ${id}`);return node as T;}
 const app=el('app'),canvas=el<HTMLCanvasElement>('flight'),overlay=el<HTMLCanvasElement>('markers'),hud=new Hud(),audio=new FlightAudio();
-let selectedMode:GameMode='easy',state=createGame({mode:selectedMode}),screen:'home'|'playing'|'paused'|'result'='home',scene:MachiMamoreScene|null=null;
+let selectedMode:GameMode='easy',state=createGame({mode:selectedMode}),screen:'home'|'playing'|'paused'|'result'='home',scene:SceneView|null=null;
 let graphicsReady=false,contextLost=false,preparing=false,disposed=false,preparationGeneration=0,frameId=0,lastFrame=0,accumulator=0;
 let cancelPreparation:(()=>void)|null=null,presentationPending=false;
 let pendingLoop=false,pendingFire=false,pendingAccelerate=false,pendingBrake=false,lastPlayerIdentity='',lastEventId=-1,lastEventMission=-1,announcementUntil=0,lastNoticeTick=-999,resultPresentationStart=0;
@@ -87,7 +89,8 @@ async function prepareGraphics(){
     if(generation===preparationGeneration){preparing=false;lastFrame=0;}
   }
 }
-for(const id of ['reload','pause-reload'])el(id).addEventListener('click',()=>{if(contextLost)window.location.reload();else void prepareGraphics();});
+let retryGraphics = prepareGraphics;
+for(const id of ['reload','pause-reload'])el(id).addEventListener('click',()=>{if(contextLost)window.location.reload();else void retryGraphics();});
 function processEvents(){if(lastEventMission!==state.missionId){lastEventMission=state.missionId;lastEventId=-1;}for(const event of state.events){if(event.id<=lastEventId)continue;lastEventId=event.id;if((event.type==='respawn'||event.type==='takeover')&&event.owner===state.playerId)announce(event.type==='takeover'?'僚機の操縦を引き継ぎました':'自機が復帰しました',2);if((event.type==='kill'||event.type==='city-destroyed')&&state.tick-lastNoticeTick>=120){lastNoticeTick=state.tick;el('ally-announcements').textContent=event.type==='city-destroyed'?'街の区画が破壊されました。残る街を守ろう。':'交戦中 · 残機と街の耐久を確認';}}
   audio.updatePlayer(getPlayer(state));audio.consume(state.events);}
 const frameIntervals:number[]=[];let gapCount=0,maxFrameGap=0;
@@ -102,7 +105,36 @@ function frame(now:number){if(disposed)return;frameId=requestAnimationFrame(fram
   }
   renderScene(screen!=='home',screen==='playing'?Math.min(1,accumulator/FIXED_DT):1,resultPresentationStart?Math.max(0,(now-resultPresentationStart)/1000):0);
 }
-canvas.inert=true;syncMode();syncAudio();void prepareGraphics();frameId=requestAnimationFrame(frame);
+canvas.inert=true;syncMode();syncAudio();
+// This branch is removed from release builds. It runs the real UI with direct
+// presentation data, no WebGL world and no game frame/step scheduler.
+if(import.meta.env.DEV && import.meta.env.MODE === 'ui-test') {
+  void import('./ui-test-driver').then(({ installUiTestDriver }) => {
+    const ready = () => {
+      graphicsReady=true; contextLost=false; preparing=false;
+      el<HTMLButtonElement>('start').disabled=false; el('start').textContent='街を守りに出撃';
+      el('startup-error').hidden=true; el('reload').hidden=true;
+      el<HTMLButtonElement>('resume').disabled=false; el('pause-reload').hidden=true;
+    };
+    let fixtureScene: SceneView | null=null;
+    const driver = installUiTestDriver({
+      overlay,
+      present(next, nextScreen) {
+        scene=fixtureScene;ready();selectedMode=next.mode; state=next;
+        for(const radio of document.querySelectorAll<HTMLInputElement>('input[name="game-mode"]'))radio.checked=radio.value===next.mode;
+        syncMode(); setScreen(nextScreen); hud.update(state,getHudSnapshot(state));
+        if(nextScreen==='result')finish();
+        if(nextScreen==='paused')pause('manual');
+        syncAudio(); renderScene(nextScreen!=='home');
+      },
+      startupError() { graphicsFailure('画面を準備できません。WebGL対応とブラウザの描画設定を確認して再試行してください。'); },
+      read:()=>({screen, tick:state.tick, phase:state.phase, frameScheduled:frameId!==0}),
+    });
+    fixtureScene=driver.scene;
+    retryGraphics=async()=>{scene=driver.scene;ready();renderScene(screen!=='home');};
+    void retryGraphics();driver.show(driver.initial);
+  });
+} else { void prepareGraphics();frameId=requestAnimationFrame(frame); }
 // Only read-only development observation; Vite removes this branch from release builds.
 if(import.meta.env.DEV){Object.defineProperty(window,'__machimamoreRead',{configurable:true,value:()=>JSON.parse(JSON.stringify({phase:state.phase,screen,tick:state.tick,missionId:state.missionId,seed:state.seed,mode:state.mode,rulesVersion:RULES_VERSION,pauseReasons:state.pauseReasons,playerId:state.playerId,player:getPlayer(state),ufos:state.ufos.map(u=>({id:u.id,token:u.token,generation:u.generation,position:u.position,velocity:u.velocity,health:u.health,movement:u.movement})),input:controls.peek(),acceptedInput:state.input,hud:getHudSnapshot(state),render:scene?.metrics()??null,audio:{enabled:audio.enabled,active:audio.active,contextCount:audio.contextCount,activeSources:audio.activeSources,activeEffectSources:audio.activeEffectSourceCount,contextState:audio.contextState},timing:{gapCount,maxFrameGap,frameIntervals}}))});}
 function dispose(){if(disposed)return;disposed=true;preparationGeneration++;cancelPreparation?.();cancelPreparation=null;cancelAnimationFrame(frameId);clearInput();controls.dispose();settings.dispose();rules?.dispose();unsubscribeKeys();unsubscribePresentation();presentation.dispose();scene?.dispose();audio.dispose();}
