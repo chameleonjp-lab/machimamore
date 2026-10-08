@@ -100,7 +100,7 @@ async function expectAnnouncementLayout(page:Page) {
   expect(layout.x).toBeGreaterThanOrEqual(0);expect(layout.y).toBeGreaterThanOrEqual(0);
   expect(layout.x+layout.width).toBeLessThanOrEqual(layout.viewportWidth);expect(layout.y+layout.height).toBeLessThanOrEqual(layout.viewportHeight);
   if(layout.viewportWidth===320&&layout.viewportHeight===568){
-    expect(layout.x).toBeCloseTo(167.2,1);expect(layout.y).toBeCloseTo(230.2,1);expect(layout.lines).toBe(2);
+    expect(layout.x).toBeCloseTo(184,0);expect(layout.y).toBeCloseTo(230.2,1);expect(layout.width).toBeCloseTo(124,0);expect(layout.lines).toBe(3);
   }
   if(layout.viewportWidth===568&&layout.viewportHeight===320){
     expect(layout.x).toBeCloseTo(150,0);expect(layout.y).toBeCloseTo(12,0);expect(layout.width).toBeCloseTo(268,0);expect(layout.lines).toBe(1);

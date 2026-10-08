@@ -14,6 +14,11 @@
 .ammo{display:flex;justify-content:space-between;gap:8px}.ammo>span{white-space:nowrap}
 .flight-button{z-index:4}
 .hud-notices{display:contents}
+@media(min-width:901px) and (min-height:561px){
+  #app[data-mode="normal"] .hud-notices:has(> :not([hidden]) ~ :not([hidden])){position:absolute;top:55%;left:50%;right:auto;transform:translateX(-50%);width:min(320px,calc(100% - 32px));display:flex;flex-direction:column;gap:6px;z-index:1}
+  #app[data-mode="normal"] .hud-notices:has(> :not([hidden]) ~ :not([hidden])) > :is(.reload-status,.player-wait,.city-warning,.warning){position:static;transform:none;align-self:stretch;max-width:none;width:100%;margin:0;padding:5px 8px;font-size:.75rem;line-height:1.35}
+  #app[data-mode="normal"] .hud-notices:has(> :not([hidden]) ~ :not([hidden])) > #reload-progress{position:static;align-self:stretch;width:100%;height:7px}
+}
 /* Keep the fixed camera's reticle and aircraft clear. Normal's sight is at
    about .363H; Easy's circle is at .5H and its aircraft sits lower. */
 @media(orientation:portrait) and (max-width:440px){
@@ -33,13 +38,13 @@
   .flight-data .ammo{gap:4px}
   .flight-data .score-readout b{font-size:.85rem}
   .flight-data .bonus-note{display:block;font-size:.75rem;line-height:1.4;margin-top:2px}
-  .hud-notices{position:absolute;top:calc(36.3% + 24px);left:max(12px,var(--safe-left));right:auto;width:min(46vw,164px);display:flex;flex-direction:column;gap:6px}
+  .hud-notices{position:absolute;top:calc(36.3% + 24px);left:max(12px,var(--safe-left));right:auto;width:min(51.25vw,164px);display:flex;flex-direction:column;gap:6px}
   .reload-status,.player-wait,.city-warning,.warning{position:static;transform:none;flex-shrink:0;align-self:stretch;max-width:none;margin:0;padding:4px 8px;font-size:.75rem;line-height:1.5}
   #reload-progress{position:static;flex-shrink:0;align-self:stretch;width:100%;height:7px}
   /* Concurrent reload and low-altitude notices must leave the aircraft clear. */
   #app[data-mode="normal"] .hud-notices:has(#reload-status:not([hidden])):has(#warning:not([hidden])){gap:4px}
   #app[data-screen="playing"] .announcement,.ally-announcements{top:calc(50% + 2px);left:max(12px,var(--safe-left));right:max(12px,var(--safe-right));transform:none;width:auto;bottom:auto;margin:0;font-size:.75rem;line-height:1.4}
-  #app[data-mode="normal"][data-screen="playing"]:has(.hud-notices > :not([hidden])) :is(.announcement,.ally-announcements){top:calc(36.3% + 24px);left:calc(max(12px,var(--safe-left)) + min(46vw,164px) + 8px);right:max(12px,var(--safe-right));transform:none;width:auto;bottom:auto;margin:0;text-align:left}
+  #app[data-mode="normal"][data-screen="playing"]:has(.hud-notices > :not([hidden])) :is(.announcement,.ally-announcements){top:calc(36.3% + 24px);left:calc(max(12px,var(--safe-left)) + min(51.25vw,164px) + 8px);right:max(12px,var(--safe-right));transform:none;width:auto;bottom:auto;margin:0;text-align:left}
   .ally-announcements{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
   #app:has(.announcement:not(:empty)) .ally-announcements{display:none}
   #app[data-mode="easy"]{--easy-status-width:min(130px,calc(50vw - 78px))}
