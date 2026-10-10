@@ -3,6 +3,7 @@ import type { UiFixtureDriver, UiFixtureName, UiScreen } from '../../src/ui-test
 
 declare global { interface Window { __machimamoreUi: UiFixtureDriver; } }
 
+
 async function show(page: Page, name: UiFixtureName) {
   await page.evaluate(name => window.__machimamoreUi.show(name), name);
   expect(await page.evaluate(() => window.__machimamoreUi.read())).toMatchObject({ tick:0, frameScheduled:false });
@@ -194,6 +195,12 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await expect(page.locator('#hud-mode')).toHaveText('ノーマル');
   await noHorizontalOverflow(page);expect(await canvasPixels(page)).toBeGreaterThan(30);
   await capture(page,info,'normal-hud');
+  await page.keyboard.press('q');
+  await expect(page.locator('#app')).toHaveAttribute('data-input', 'keyboard');
+  await fits(page, ['#fire', '#loop', '#throttle'], true);
+  await expectActualHitTargets(page, ['#fire', '#loop', '#throttle']);
+  await expectFixedUi(page, 'playing', 'playing');
+  await capture(page, info, 'normal-keyboard-common-controls');
   await page.locator('#pause').tap();await expect(page.locator('#pause-screen')).toBeVisible();
   await expectFixedUi(page,'paused','paused');
   await capture(page,info,'pause');
