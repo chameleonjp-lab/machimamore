@@ -66,7 +66,7 @@ export interface GameState {
   missionId: number; phase: 'ready' | 'playing' | 'paused' | 'ended'; mode: GameMode; seed: number; randomState: number;
   tick: number; elapsed: number; rosters: { friendly: Roster; enemy: Roster };
   fighters: Aircraft[]; ufos: Ufo[]; city: CityDistrict[]; bullets: Bullet[]; beams: LaserBeam[]; events: GameEvent[];
-  playerId: number | null; playerSlot: number; pilotReadyTick: number; controller: PlayerController;
+  playerId: number | null; playerSlot: number; pilotReadyTick: number; pilotAimReadyTick: number; controller: PlayerController;
   stats: MissionStats; result: GameResult | null; endReason: EndReason | null; pauseReasons: string[]; fault: string | null;
   nextAttackId: number; nextEventId: number; input: FlightInput;
 }

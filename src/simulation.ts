@@ -1,3 +1,4 @@
+import { createFlightTargetLock, clearFlightAssistance, smoothFlightAssistance } from './flight-target';
 import { Euler, Quaternion, Vector3 } from 'three';
 import { advanceThrottle, CRUISE_SPEED, desiredFlightInput, forwardOf, MAX_SPEED, updateAircraftMotion, updatePlayerLoop } from './flight';
 import { applyEasyShotCorrection, autoFireTarget, getFlightAssist, predictedShotDirection } from './flight-assist';
@@ -31,7 +32,7 @@ export function createGame(config: MissionConfig = { mode: 'easy' }): GameState 
   const seed = (config.seed ?? 0x4d414348) >>> 0;
   const state: GameState = { missionId: nextMissionId++, phase: 'ready', mode: config.mode, seed, randomState: seed || 1, tick: 0, elapsed: 0,
     rosters: { friendly: createRoster('friendly'), enemy: createRoster('enemy') }, fighters: [], ufos: [], city: createCity(), bullets: [], beams: [], events: [],
-    playerId: 0, playerSlot: 0, pilotReadyTick: 0, controller: { loopHeld: false, assistTurn: 0, assistClimb: 0, responseMultiplier: 1, playerTargetSpeed: CRUISE_SPEED, playerLoopActive: false, loopStartYaw: 0, loopStartPitch: 0, loopStartTurn: 0, loopStartClimb: 0, loopStartSteeringRevision: undefined },
+    playerId: 0, playerSlot: 0, pilotReadyTick: 0, pilotAimReadyTick: 0, controller: { targetLock: createFlightTargetLock(), loopHeld: false, assistTurn: 0, assistClimb: 0, responseMultiplier: 1, playerTargetSpeed: CRUISE_SPEED, playerLoopActive: false, loopStartYaw: 0, loopStartPitch: 0, loopStartTurn: 0, loopStartClimb: 0, loopStartSteeringRevision: undefined },
     stats: createStats(), result: null, endReason: null, pauseReasons: [], fault: null, nextAttackId: 1, nextEventId: 1, input: { ...NEUTRAL_INPUT } };
   for (let slot = 0; slot < ACTIVE_LIMIT; slot++) { state.fighters.push(makeFighter(slot, slot, 1, spawnCandidates('friendly', slot)[0])); state.ufos.push(makeUfo(slot, slot, 1, spawnCandidates('enemy', slot)[0], 0)); }
   state.fighters[0].role = 'player';
@@ -39,7 +40,7 @@ export function createGame(config: MissionConfig = { mode: 'easy' }): GameState 
 }
 export function startGame(state: GameState): void { if (state.phase === 'ready') { state.phase = 'playing'; state.input = { ...NEUTRAL_INPUT }; } }
 export function pauseGame(state: GameState, reason = 'manual'): void {
-  if (state.phase === 'playing' || state.phase === 'paused') { state.phase = 'paused'; if (!state.pauseReasons.includes(reason)) state.pauseReasons.push(reason); state.input = { ...NEUTRAL_INPUT }; }
+  if (state.phase === 'playing' || state.phase === 'paused') { state.phase = 'paused'; clearFlightAssistance(state.controller); if (!state.pauseReasons.includes(reason)) state.pauseReasons.push(reason); state.input = { ...NEUTRAL_INPUT }; }
 }
 /** Resume is explicitly invoked by the UI. Closing a dialog never calls it. */
 export function resumeGame(state: GameState): void { if (state.phase === 'paused' && !state.fault) { state.pauseReasons = []; state.phase = 'playing'; state.input = { ...NEUTRAL_INPUT }; } }
@@ -101,7 +102,8 @@ function spawnDue(state: GameState): void {
 }
 function assignPilot(state: GameState, fighter: Aircraft, event: 'respawn' | 'takeover'): void {
   for (const f of state.fighters) f.role = f === fighter ? 'player' : 'wingman';
-  state.playerId = fighter.id; state.playerSlot = fighter.slot; state.controller.playerTargetSpeed = fighter.speed; state.controller.playerLoopActive = fighter.loopProgress > 0;
+  state.pilotAimReadyTick = state.tick + 18;
+  clearFlightAssistance(state.controller); state.playerId = fighter.id; state.playerSlot = fighter.slot; state.controller.playerTargetSpeed = fighter.speed; state.controller.playerLoopActive = fighter.loopProgress > 0;
   state.controller.loopStartYaw = fighter.yaw; state.controller.loopStartPitch = fighter.pitch;
   state.input = { ...NEUTRAL_INPUT };
   if (event === 'takeover') emit(state, event, fighter.position, fighter.id);
@@ -183,11 +185,13 @@ function updateFighters(state: GameState, input: FlightInput): void {
     let firing = false, firingTarget: Ufo | null = target;
     if (fighter.id === state.playerId) {
       const unobstructed = (u: { position: Vector3 }) => clearLine(state, fighter.position, u.position, fighter.id, state.ufos.find(e => e === u)?.id);
-      const assist = getFlightAssist(fighter, state.ufos, input, state.mode, unobstructed);
+      const aimTargets = state.tick >= state.pilotAimReadyTick ? state.ufos : [];
+      const assist = getFlightAssist(fighter, aimTargets, input, state.mode, unobstructed, state.controller.targetLock);
       const speed = advanceThrottle(state.controller, input, state.mode, FIXED_DT);
-      const completed = updatePlayerLoop(fighter, state.controller, { ...input, turn: assist.turn, climb: assist.climb }, input, input.loop, FIXED_DT, speed, MAX_SPEED, assist.responseMultiplier);
+      const adjusted = { ...input, ...smoothFlightAssistance(state.controller, input, assist, FIXED_DT) };
+      const completed = updatePlayerLoop(fighter, state.controller, adjusted, input, input.loop, FIXED_DT, speed, MAX_SPEED, state.controller.responseMultiplier);
       if (completed) { state.stats.loops++; emit(state, 'loop', fighter.position, fighter.id); }
-      const automatic = autoFireTarget(fighter, state.ufos, state.mode, input.viewAspect, unobstructed);
+      const automatic = autoFireTarget(fighter, aimTargets, state.mode, input.viewAspect, unobstructed, state.controller.targetLock);
       firing = input.fire || automatic !== null; firingTarget = automatic as Ufo | null;
     } else {
       const objective = target ? target.position.clone().addScaledVector(target.velocity, 0.4) : new Vector3(0, 280, -700);

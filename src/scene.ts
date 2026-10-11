@@ -193,7 +193,7 @@ export class MachiMamoreScene {
     if(!player)return;
     const position=new Vector3(),rotation=new Quaternion();getFlightCameraPose({...player,position:new Vector3().lerpVectors(player.previous,player.position,alpha)},state.mode,position,rotation);
     if(this.cameraMission!==state.missionId){this.cameraMission=state.missionId;this.cameraPlayer=player.id;this.cameraTransferTick=-1;}
-    else if(this.cameraPlayer!==player.id){this.cameraPlayer=player.id;this.cameraTransferTick=state.tick;this.transferPosition.copy(this.camera.position);this.transferQuaternion.copy(this.camera.quaternion);}
+    else if(this.cameraPlayer!==player.id){this.cameraPlayer=player.id;this.cameraTransferTick=state.pilotAimReadyTick-18;this.transferPosition.copy(this.camera.position);this.transferQuaternion.copy(this.camera.quaternion);}
     const blend=this.cameraTransferTick<0?1:Math.min(1,(state.tick-this.cameraTransferTick+alpha)/18);
     this.camera.position.copy(this.transferPosition).lerp(position,blend);this.camera.quaternion.copy(this.transferQuaternion).slerp(rotation,blend);
   }

@@ -1,3 +1,4 @@
+import { flightTargetKey, revalidateProjectedTarget, selectProjectedTarget, type FlightTargetLock } from './flight-target';
 // Flight assistance adapted from pinned Kaisen; see docs/PROVENANCE_CONTROLS.md.
 import type { Aircraft, CombatTarget, FlightInput, GameMode } from './flight-types';
 import { Vector3 } from 'three';
@@ -42,15 +43,13 @@ function normalizedAspect(aspect: number | undefined): number {
   return Number.isFinite(aspect) && (aspect ?? 0) > 0 ? aspect! : 393 / 852;
 }
 
-function closestVisibleTarget(player: Aircraft, enemies: readonly CombatTarget[], aspect: number, mode: GameMode, unobstructed?: TargetVisibility) {
-  let closest: { enemy: CombatTarget; projection: ReturnType<typeof projectFlightTarget> } | null = null;
-  for (const enemy of enemies) {
-    if (enemy.health <= 0 || (unobstructed && !unobstructed(enemy))) continue;
-    const projection = projectFlightTarget(player, targetAimPoint(enemy), aspect, mode);
-    if (!projection.visible) continue;
-    if (!closest || projection.distance < closest.projection.distance) closest = { enemy, projection };
-  }
-  return closest;
+function closestVisibleTarget(player: Aircraft, enemies: readonly CombatTarget[], aspect: number, mode: GameMode,
+  lock?: FlightTargetLock, manual = lock?.manual ?? false, unobstructed?: TargetVisibility, firePhase = false) {
+  const candidates = enemies.filter(enemy => enemy.health > 0 && (!('team' in enemy) || enemy.team === 'enemy') && (!unobstructed || unobstructed(enemy))).map(enemy => ({ enemy,
+    key: flightTargetKey(enemy), projection: projectFlightTarget(player, targetAimPoint(enemy), aspect, mode),
+  }));
+  return firePhase && lock ? revalidateProjectedTarget(candidates, lock)
+    : selectProjectedTarget(candidates, aspect, EASY_AUTO_FIRE_RANGE, mode === 'easy' ? lock : undefined, manual);
 }
 
 /**
@@ -64,17 +63,18 @@ export function getFlightAssist(
   input: FlightInput,
   mode: GameMode,
   unobstructed?: TargetVisibility,
+  lock?: FlightTargetLock,
 ): FlightAssistResult {
   const manualTurn = clamp(input.turn, -1, 1);
   const manualClimb = clamp(input.climb, -1, 1);
   const aspect = normalizedAspect(input.viewAspect);
-  const target = closestVisibleTarget(player, enemies, aspect, mode, unobstructed);
+  const target = closestVisibleTarget(player, enemies, aspect, mode, lock, !!input.steeringActive || Math.max(Math.abs(manualTurn), Math.abs(manualClimb)) > 1e-4, unobstructed);
   const hasVisibleTarget = target !== null;
   const responseMultiplier = enemies.some((enemy) => enemy.health > 0) && !hasVisibleTarget
     ? OFFSCREEN_RESPONSE_MULTIPLIER
     : 1;
 
-  if (mode !== 'easy') {
+  if (mode !== 'easy' || input.steeringActive) {
     return { turn: manualTurn, climb: manualClimb, responseMultiplier, hasVisibleTarget };
   }
 
@@ -137,21 +137,11 @@ export function shouldAutoFire(
   return autoFireTarget(player, enemies, mode, aspect, unobstructed) !== null;
 }
 
-export function autoFireTarget(player: Aircraft, enemies: readonly CombatTarget[], mode: GameMode, aspect: number | undefined, unobstructed?: TargetVisibility): CombatTarget | null {
+export function autoFireTarget(player: Aircraft, enemies: readonly CombatTarget[], mode: GameMode, aspect: number | undefined, unobstructed?: TargetVisibility, lock?: FlightTargetLock): CombatTarget | null {
   if (mode !== 'easy') return null;
   const safeAspect = normalizedAspect(aspect);
-  let best: CombatTarget | null = null;
-  let bestRadius = Infinity;
-  for (const enemy of enemies) {
-    if (enemy.health <= 0 || (unobstructed && !unobstructed(enemy))) continue;
-    const projection = projectFlightTarget(player, targetAimPoint(enemy), safeAspect, mode);
-    const radius = Math.hypot(projection.x * Math.max(1, safeAspect), projection.y * Math.max(1, 1 / safeAspect));
-    if (projection.inCircle && projection.distance <= EASY_AUTO_FIRE_RANGE && radius < bestRadius) {
-      best = enemy;
-      bestRadius = radius;
-    }
-  }
-  return best;
+  const selected = closestVisibleTarget(player, enemies, safeAspect, mode, lock, lock?.manual, unobstructed, true);
+  return selected?.projection.inCircle && selected.projection.distance <= EASY_AUTO_FIRE_RANGE ? selected.enemy : null;
 }
 
 /** Constant velocity prediction; UFO maneuvers after launch can still evade the shot. */

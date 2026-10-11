@@ -150,6 +150,7 @@ export class FlightControls {
       brake,
       ...(this.throttle ? { throttle: normal ? this.sampleThrottleInput(consumeThrottle, accelerate, brake) : 0 } : {}),
       steeringRevision: this.steeringRevision,
+      ...(this.steerPointer !== null || [...STEERING_ACTIONS].some(keyHeld) ? { steeringActive: true } : {}),
     };
   }
 

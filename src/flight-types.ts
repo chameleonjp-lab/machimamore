@@ -15,7 +15,7 @@ export interface Aircraft {
 export type GameMode = 'normal' | 'easy';
 
 /** Accepted inputs for one fixed tick. Loop is an edge; fire and throttle are holds. */
-export interface FlightInput {
+export interface FlightInput { steeringActive?: boolean;
   /** Explicit rate axis (including zero) overrides legacy accelerate/brake. */
   throttle?: number;
   turn: number;
@@ -30,6 +30,7 @@ export interface FlightInput {
 
 /** UFO movement is independent of the aircraft's forward flight constraint. */
 export interface CombatTarget {
+  id?: number; generation?: number; team?: string;
   position: Vector3;
   health: number;
   velocity: Vector3;
