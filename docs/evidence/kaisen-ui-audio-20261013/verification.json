@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "referenceKaisenCommit": "b5c44346139901c195084000d172f89374a623b9",
-  "machimamoreBaseCommit": "28960ba326679f7ca32531483495c60dc7fceaf9",
-  "verificationInputDigest": "0463d6a75c5f4b8edf86909748b097958a7f2a99a540de16b08feb36e1a64573",
+  "machimamoreBaseCommit": "5ef75c6061b0740687ecaac26e0b932604deb3d2",
+  "verificationInputDigest": "00ab74944bd56635621099f8ef13b79f2034ee50812e9c930aa1c90af737bccf",
   "verificationInputFileCount": 100,
   "scope": "Fixed display states using product Canvas2D and Three.js in local software Chromium; no gameplay or physical iPhone claim",
   "localChecks": {
@@ -492,14 +492,15 @@
         "kaisenRmsRatio": 0.38258747268256565
       }
     ],
-    "errors": []
+    "errors": [],
+    "appliedIn": "PR16 (already adopted); PR17 retains that audio code without changes"
   },
   "screenshots": [
     {
       "name": "candidate-easy-notices-landscape.png",
       "width": 852,
       "height": 393,
-      "sha256": "b376815b48781ac3d1beccaa5eac09cc88fd4e426d8ac3f0fd825f7c92ef3ae5",
+      "sha256": "84babd2d6e631f5d3b5d3594e01d9043efb371cb61cf026b2cefdfae0065ce99",
       "repositoryPath": null,
       "openedAtOriginalSizeBy": [
         "browser_verification",
@@ -510,7 +511,7 @@
       "name": "candidate-easy-notices-portrait.png",
       "width": 393,
       "height": 852,
-      "sha256": "b2f4321cf2402efcd1d2dac3da6bb8f3778450a0bccbd6ae3642b1755107eddc",
+      "sha256": "bd49eb4f5386191b9a4c7146a4d7a09b1fef30e749b483fb51644f6ae5f4da3a",
       "repositoryPath": null,
       "openedAtOriginalSizeBy": [
         "browser_verification",
@@ -521,7 +522,7 @@
       "name": "candidate-easy-notices-small-landscape.png",
       "width": 568,
       "height": 320,
-      "sha256": "5061b9d29a5e6b1c20cb207c4aac1eeaa3fdf1974e1fe4593608fe25b3c4e4dd",
+      "sha256": "65a66936d3dea742cc0c2322df0e6ce04712bb7581f1521b2a1e7b47d8b78749",
       "repositoryPath": "docs/evidence/kaisen-ui-audio-20261013/easy-notices-small-landscape.png",
       "openedAtOriginalSizeBy": [
         "browser_verification",
@@ -532,7 +533,7 @@
       "name": "candidate-easy-notices-small-portrait.png",
       "width": 320,
       "height": 568,
-      "sha256": "140f850f2ee1f5994f37dd95194b6dc25d2475a4d3f12cb99ae0de2a1769f06f",
+      "sha256": "9dde1fa99887db505c8d814fda215f960fe5f6444460e0ee79148004772ecdac",
       "repositoryPath": "docs/evidence/kaisen-ui-audio-20261013/easy-notices-small-portrait.png",
       "openedAtOriginalSizeBy": [
         "browser_verification",
@@ -543,7 +544,7 @@
       "name": "candidate-easy-portrait.png",
       "width": 393,
       "height": 852,
-      "sha256": "82dbca8637171a7256623db432a494bd376ba5c375669b11cc84ca0512e27b94",
+      "sha256": "246d5878ab533ed88808d25a903ef137dcbc271d5653efa7192a63e53420cdbe",
       "repositoryPath": null,
       "openedAtOriginalSizeBy": [
         "browser_verification",
@@ -554,7 +555,7 @@
       "name": "candidate-normal-landscape.png",
       "width": 852,
       "height": 393,
-      "sha256": "16de77c20d7be7ecb07caed2be359fcbf6790c9bca6f7f8020c44c3aae9b5ca3",
+      "sha256": "1d72aeb5b99f9b80e2b5cbc98d75697e79dcd2048d52ba898a02e5a5b283a076",
       "repositoryPath": "docs/evidence/kaisen-ui-audio-20261013/normal-landscape.png",
       "openedAtOriginalSizeBy": [
         "browser_verification",
@@ -565,7 +566,7 @@
       "name": "candidate-normal-portrait.png",
       "width": 393,
       "height": 852,
-      "sha256": "b12b062971ca965196924cfd718fa9d33feec104da8da2e919dda6c883681eea",
+      "sha256": "fd8f981d43ca6aec27e1cb17ca8da2e2dc46664a868c46fcccb6955554f41d0d",
       "repositoryPath": "docs/evidence/kaisen-ui-audio-20261013/normal-portrait.png",
       "openedAtOriginalSizeBy": [
         "browser_verification",
@@ -576,7 +577,7 @@
       "name": "candidate-small-landscape-notices.png",
       "width": 568,
       "height": 320,
-      "sha256": "203f8d83d3a643fd4d1ed17b49a112fcb45c20cad57eadf517d1352359f5594a",
+      "sha256": "c671eaba9540048d5957659c2195917d3cf9a05fa0b8baf6388b0cdd2309505f",
       "repositoryPath": null,
       "openedAtOriginalSizeBy": [
         "browser_verification",
@@ -587,7 +588,7 @@
       "name": "candidate-small-notices.png",
       "width": 320,
       "height": 568,
-      "sha256": "52c87ae269bfa08e9d916271e09d8515b3201d15b0aeec5db8f7a0dd65eb6955",
+      "sha256": "f292b5a971b1d104b53d3b16d9e825b98e7e2b68898cacf554574b140404b118",
       "repositoryPath": null,
       "openedAtOriginalSizeBy": [
         "browser_verification",
@@ -599,11 +600,12 @@
     "agent": "independent_review",
     "model": "gpt-6.1-sol",
     "effort": "xhigh",
-    "inputDigest": "0463d6a75c5f4b8edf86909748b097958a7f2a99a540de16b08feb36e1a64573",
+    "inputDigest": "00ab74944bd56635621099f8ef13b79f2034ee50812e9c930aa1c90af737bccf",
     "sourceReview": "All source diff and fixed Kaisen comparison reviewed; Easy simultaneous-notice collisions, radar disappearance, ally fixture reset, city-label self overlap, plane-covering small portrait message and empty-message bars corrected",
     "focusedTests": {
-      "passed": 7,
-      "failed": 0
+      "passed": 6,
+      "failed": 0,
+      "scope": "UI contract after PR16 integration; earlier 7 UI/audio tests also passed before integration and audio bytes are unchanged from PR16"
     },
     "domInspections": {
       "sizes": [
@@ -636,14 +638,18 @@
       "outOfBounds": 0,
       "bothMessagesVisible": true,
       "tick": 0,
-      "frameScheduled": false
+      "frameScheduled": false,
+      "inputDigest": "0463d6a75c5f4b8edf86909748b097958a7f2a99a540de16b08feb36e1a64573",
+      "scope": "Before PR16 integration; current integrated candidate separately reviewed by source diff, 6 UI contract tests, local UI suite and 9 updated product-rendered images"
     },
-    "finalImages": "9/9 opened at original size; no unresolved P1/P2 findings"
+    "finalImages": "9/9 opened at original size after PR16 integration; no unresolved P1/P2 findings; PR17 update accepted for submission"
   },
   "unverified": [
     "physical iPhone Safari",
     "touch feel",
     "device speaker perceived loudness"
   ],
-  "publication": "Draft PR only; main merge and production publication remain user-controlled"
+  "publication": "Draft PR only; main merge and production publication remain user-controlled",
+  "machimamoreInitialComparisonCommit": "28960ba326679f7ca32531483495c60dc7fceaf9",
+  "integration": "PR16 adopted while PR17 was being prepared; its source labels, Normal notice placement, audio, game logic and previous evidence are retained. PR17 contains only remaining display refinements and Easy simultaneous-notice fixes."
 }

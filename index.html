@@ -48,7 +48,7 @@
         </div>
         <div class="flight-data">
           <div class="player-health"><div class="health-label">機体 <b id="health">100</b><small>%</small></div><div class="health-track"><i id="health-bar"></i></div></div>
-          <div class="tally friendly-tally"><span>味方数（自機込み）</span><strong id="allies-count">50 / 50</strong><small id="allies-total">出撃8 · 予備＋待機42</small></div>
+          <div class="tally friendly-tally"><span>味方（自機含む）</span><strong id="allies-count">50 / 50</strong><small id="allies-total">出撃8 · 予備＋待機42</small></div>
           <div class="instrument"><span id="altitude">220m</span><span id="speed">396km/h</span></div>
           <div class="ammo" aria-label="残弾数"><span>機銃 <b id="mg-ammo">288</b></span><span>機関砲 <b id="cannon-ammo">96</b></span></div>
           <div class="score-readout">暫定得点 <b id="score">0</b></div><div class="accuracy">暫定命中率<b id="accuracy">—</b></div>
@@ -59,7 +59,7 @@
           <progress id="reload-progress" max="360" value="0" aria-label="再装填の進行" hidden></progress>
           <p id="player-wait" class="player-wait" role="status" hidden></p>
           <p id="city-warning" class="city-warning" role="status" aria-live="polite" hidden></p>
-          <p id="warning" class="warning" role="status" hidden>低空注意 · 機首上げ</p>
+          <p id="warning" class="warning" role="status" hidden>低空注意・機首上げ</p>
         </div>
         <div id="ally-announcements" class="ally-announcements" role="status" aria-live="polite" aria-atomic="true"></div>
         <p id="flight-tip" class="flight-tip">触れた位置からドラッグして操縦</p>

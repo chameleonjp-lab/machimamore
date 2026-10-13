@@ -32,7 +32,7 @@ export class Hud {
     if(attacked.length&&(state.tick-this.lastCityNotice>=90||!el('city-warning').textContent)){
       this.lastCityNotice=state.tick;const d=attacked.sort((a,b)=>a.health-b.health||a.token-b.token)[0]!,local=p?d.position.clone().sub(p.position).applyQuaternion(p.quaternion.clone().invert()):null;
       const direction=!local?'街':Math.abs(local.x)>Math.abs(local.z)?local.x>0?'右側':'左側':local.z<0?'前方':'後方';
-      text('city-warning',`△${direction}街攻撃中 · ${d.token+1}区 ${Math.ceil(d.health)}HP${attacked.length>1?` · 計${attacked.length}区`:''}`);
+      text('city-warning',`△${direction}街攻撃・区${d.token+1}:${Math.ceil(d.health)}HP${attacked.length>1?`・計${attacked.length}区`:''}`);
     }
   }
   result(r:GameResult):void{

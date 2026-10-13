@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "generatedAt": "2026-10-13T08:47:43.317Z",
-  "commit": "28960ba326679f7ca32531483495c60dc7fceaf9",
+  "generatedAt": "2026-10-13T09:08:44.655Z",
+  "commit": "087d37bfbf09fb5ced28fcb94afab9f1e8d707cc",
   "workingTreeDirty": true,
-  "contentDigest": "0463d6a75c5f4b8edf86909748b097958a7f2a99a540de16b08feb36e1a64573",
+  "contentDigest": "00ab74944bd56635621099f8ef13b79f2034ee50812e9c930aa1c90af737bccf",
   "files": [
     {
       "path": ".github/workflows/checks.yml",
@@ -67,13 +67,13 @@
     },
     {
       "path": "browser-tests/ui-only/screens.spec.ts",
-      "bytes": 26924,
-      "sha256": "b461122667d23a001e6fcffe5f98f45f7613b372e1fa9b332860ce10c5e06315"
+      "bytes": 27409,
+      "sha256": "7fb1570afce755b6ca658ed322586b69163f0efc6eec46146dfa31b75c4eea85"
     },
     {
       "path": "index.html",
-      "bytes": 10075,
-      "sha256": "18733ba8e960cf67a9efa93ac591cbeac21e554bf07e7c0734ddc37d1510d60e"
+      "bytes": 10071,
+      "sha256": "c2a6f6426d9bd1fe6a988dd008460501b66f1e5ea2e328f8e7bc2d1a2cbe5e52"
     },
     {
       "path": "package-lock.json",
@@ -262,8 +262,8 @@
     },
     {
       "path": "src/hud.ts",
-      "bytes": 6531,
-      "sha256": "fa5b194dfe23a8dc1063d09622a3611e3790896018eda78b35b63539ac02e494"
+      "bytes": 6526,
+      "sha256": "3d1bf7436db106614dacdcd8bb193608efdf711956eb4a0cc509810b215794ca"
     },
     {
       "path": "src/input.ts",
@@ -322,8 +322,8 @@
     },
     {
       "path": "src/style.css",
-      "bytes": 28686,
-      "sha256": "d725fbf4bb09c9de05567f791cbf9bf00644afec73f94f949c47a6c41c5d127f"
+      "bytes": 28699,
+      "sha256": "2cce09f7aebc172c1a59b9f5f22ff0ec47dc462abd230ffa56223061ffb29ab1"
     },
     {
       "path": "src/throttle-control.ts",
@@ -487,8 +487,8 @@
     },
     {
       "path": "tests/ui-contract.test.ts",
-      "bytes": 19463,
-      "sha256": "e00376f7b95ca6a5441644d75a8dde2a7e5b4382cd0593bc526e9bc724f6aa21"
+      "bytes": 19578,
+      "sha256": "8f68e89ebb98fef55daa8593e8b474f89796e861aebf201ad0b5be7ad69c3a31"
     },
     {
       "path": "tsconfig.json",

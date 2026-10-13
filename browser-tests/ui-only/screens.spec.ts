@@ -65,16 +65,18 @@ async function expectActualHitTargets(page:Page,selectors:string[]) {
   }),selectors);
   for(const result of results){expect(result.width,result.selector).toBeGreaterThanOrEqual(44);expect(result.height,result.selector).toBeGreaterThanOrEqual(44);expect(result.hit,`${result.selector} receives a center-point hit (${result.top})`).toBe(true);}
 }
-async function expectKaisenHudLayout(page:Page) {
+async function expectKaisenHudLayout(page:Page,radarRequired=true) {
   const layout=await page.evaluate(()=>{
     const rect=(selector:string)=>{const element=document.querySelector<HTMLElement>(selector)!,box=element.getBoundingClientRect();return{x:box.x,y:box.y,width:box.width,height:box.height};};
     const optional=(selector:string)=>{const element=document.querySelector<HTMLElement>(selector);if(!element||element.hidden||element.closest('[hidden]'))return null;const box=element.getBoundingClientRect();if(box.width<=0||box.height<=0)return null;return{x:box.x,y:box.y,width:box.width,height:box.height};};
     const flight=rect('#hud .flight-data'),mission=rect('#hud .mission-hud'),friendly=rect('#hud .friendly-tally'),view={width:innerWidth,height:innerHeight};
     const controls=['#loop','#fire','#throttle'].map(optional).filter((box):box is NonNullable<typeof box>=>box!==null);
+    const noticeElement=document.querySelector<HTMLElement>('#hud .hud-notices')!,noticeBox=noticeElement.getBoundingClientRect();
+    const noticeStack={x:noticeBox.x,y:noticeBox.y,width:noticeBox.width,height:noticeBox.height,scrollHeight:noticeElement.scrollHeight,clientHeight:noticeElement.clientHeight};
     const notices=[...document.querySelectorAll<HTMLElement>('#hud .hud-notices > :not([hidden])')].map(element=>{const box=element.getBoundingClientRect();return{x:box.x,y:box.y,width:box.width,height:box.height};});
     const messages=['#announcement:not(:empty)','#ally-announcements:not(:empty)'].map(optional).filter((box):box is NonNullable<typeof box>=>box!==null);
     const radar=window.__machimamoreUi.radarBounds(),sight=window.__machimamoreUi.sightBounds();
-    return{flight,mission,friendly,controls,notices,messages,radar,sight,view,tallies:document.querySelectorAll('#hud .mission-hud .tally').length,
+    return{flight,mission,friendly,controls,notices,noticeStack,messages,radar,sight,view,tallies:document.querySelectorAll('#hud .mission-hud .tally').length,
       flightBackground:getComputedStyle(document.querySelector<HTMLElement>('#hud .flight-data')!).backgroundColor,
       flightBorder:getComputedStyle(document.querySelector<HTMLElement>('#hud .flight-data')!).borderTopWidth,
       shortFields:{accuracy:getComputedStyle(document.querySelector<HTMLElement>('#hud .accuracy')!).display,
@@ -88,10 +90,11 @@ async function expectKaisenHudLayout(page:Page) {
   expect(overlaps(layout.flight,layout.mission)).toBe(false);
   expect(layout.friendly.x).toBeGreaterThanOrEqual(layout.flight.x);expect(layout.friendly.x+layout.friendly.width).toBeLessThanOrEqual(layout.flight.x+layout.flight.width);
   expect(layout.flightBackground).toBe('rgba(0, 0, 0, 0)');expect(layout.flightBorder).toBe('0px');
-  expect(layout.radar,'the 2.4km radar stays visible in the right-side slot').not.toBeNull();
-  for(const obstacle of [layout.flight,layout.mission,...layout.controls,...layout.notices,...layout.messages])expect(overlaps(layout.radar!,obstacle),`radar clears ${JSON.stringify(obstacle)}`).toBe(false);
+  if(radarRequired)expect(layout.radar,'the 2.4km radar stays visible in the right-side slot').not.toBeNull();
+  if(layout.notices.length)expect(layout.noticeStack.scrollHeight).toBeLessThanOrEqual(layout.noticeStack.clientHeight+1);
+  if(layout.radar)for(const obstacle of [layout.flight,layout.mission,...layout.controls,...layout.notices,...layout.messages])expect(overlaps(layout.radar,obstacle),`radar clears ${JSON.stringify(obstacle)}`).toBe(false);
   if(layout.sight){
-    for(const obstacle of [layout.flight,layout.mission,layout.radar!,...layout.controls,...layout.notices,...layout.messages])expect(overlaps(layout.sight,obstacle),`aim clears ${JSON.stringify(obstacle)}`).toBe(false);
+    for(const obstacle of [layout.flight,layout.mission,...(layout.radar?[layout.radar]:[]),...layout.controls,...layout.notices,...layout.messages])expect(overlaps(layout.sight,obstacle),`aim clears ${JSON.stringify(obstacle)}`).toBe(false);
   }
   if((layout.view.width<=900&&layout.view.height<=560)||(layout.view.width<=350&&layout.view.height<=650)){expect(layout.shortFields.accuracy).toBe('none');expect(layout.shortFields.bonus).toBe('none');expect(layout.shortFields.reserve).toBe('none');expect(layout.shortFields.cityBar).toBe('none');}
   if(layout.view.width<=350&&layout.view.height<=650)expect(layout.shortFields.enemyDetail).toBe('none');
@@ -128,7 +131,7 @@ async function expectMarkerLabelsClear(page:Page,expected:string[]) {
 }
 async function expectPauseStatusDetails(page:Page) {
   const details=page.locator('#pause-status-details');await expect(details).toBeVisible();
-  if(!await details.evaluate(element=>(element as HTMLDetailsElement).open))await details.locator('summary').tap();
+  if(await details.getAttribute('open')===null)await details.locator('summary').tap();
   await expect(details).toHaveAttribute('open','');
   for(const selector of ['#pause-time','#pause-enemy-status','#pause-friendly-status','#pause-city-status','#pause-player-status','#pause-flight-status','#pause-score-status','#pause-time-bonus']){
     await expect(page.locator(selector)).not.toBeEmpty();
@@ -147,7 +150,7 @@ async function expectAnnouncementLayout(page:Page) {
     expect(layout.x).toBeCloseTo(122,0);expect(layout.y).toBeCloseTo(248.2,1);expect(layout.width).toBeCloseTo(84,0);expect(layout.lines).toBeGreaterThanOrEqual(2);
   }
   if(layout.viewportWidth===568&&layout.viewportHeight===320){
-    expect(layout.x).toBeCloseTo(200,0);expect(layout.y).toBeCloseTo(12,0);expect(layout.width).toBeCloseTo(168,0);expect(layout.lines).toBeGreaterThanOrEqual(1);expect(layout.lines).toBeLessThanOrEqual(3);
+    expect(layout.x).toBeCloseTo(184,0);expect(layout.y).toBeCloseTo(12,0);expect(layout.width).toBeCloseTo(200,0);expect(layout.lines).toBeGreaterThanOrEqual(2);
   }
 }
 
@@ -272,7 +275,7 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   expect(await canvasPixels(page)).toBeGreaterThan(30);await capture(page,info,'easy-hud');
   await show(page,'reload');await expect(page.locator('#reload-status')).toHaveText('再装填 3.0秒');
   await expect(page.locator('#reload-progress')).toBeVisible();
-  await show(page,'wait');await expect(page.locator('#player-wait')).toContainText('操縦引継待ち');await capture(page,info,'waiting-hud');
+  await show(page,'wait');await expect(page.locator('#player-wait')).toContainText('操縦引継待ち');await expectKaisenHudLayout(page,false);await capture(page,info,'waiting-hud');
   await page.locator('#pause').tap();await expectPauseStatusDetails(page);
   await expect(page.locator('#pause-player-status')).toContainText('操縦引継待ち');await expect(page.locator('#pause-player-status')).toContainText('3.0秒');
   await page.locator('#resume').tap();await expect(page.locator('#pause-screen')).toBeHidden();

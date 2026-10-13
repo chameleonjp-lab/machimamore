@@ -154,13 +154,14 @@ test('UI driver uses the product entry/styles, guarded boot and a separate legac
   assert.match(styles,/width:min\(132px,calc\(50vw - 72px\)\)/);
   assert.match(styles,/left:calc\(50% - 38px\);right:auto;transform:none;width:84px/);
   assert.match(styles,/left:calc\(50% - 70px\);right:auto;top:calc\(50% \+ 32px\);width:min\(92px,calc\(100% - 436px\)\)/);
-  assert.match(styles,/width:min\(300px,calc\(100% - 400px\)\)/);
+  assert.match(styles,/left:max\(184px,calc\(50% - 110px\)\);right:auto;transform:none;width:min\(220px,calc\(100% - 368px\)\);/);
   assert.doesNotMatch(styles,/#app:has\(#announcement:not\(:empty\)\) #ally-announcements\{display:none\}/);
   assert.match(driver,/announcement\.textContent=\(name==='notices'\|\|name==='easy-notices'\)\?'街を守りUFO50機を撃破 · 味方残機は自機込み':''/);assert.match(driver,/allyAnnouncement\.textContent='交戦中 · 残機と街の耐久を確認'/);
   assert.match(config,/testDir: '\.\/browser-tests\/ui-only'/);assert.doesNotMatch(config,/swiftshader|waitForMission|test:balance/);
   assert.match(source('playwright.gameplay.config.ts'),/testIgnore: '\*\*\/ui-only\/\*\*'/);
   const missionStart=index.indexOf('<div class="mission-hud">'),flightStart=index.indexOf('<div class="flight-data">'),friendlyStart=index.indexOf('class="tally friendly-tally"');
   assert.ok(missionStart>=0&&flightStart>missionStart&&friendlyStart>flightStart,'friendly reserve information is kept with the left flight data');
+  assert.match(index,/味方（自機含む）/);
   assert.ok(!index.slice(missionStart,flightStart).includes('friendly-tally'),'right mission tally contains only enemy and city summaries');
   assert.match(styles,/#app #hud \.mission-hud\{[^}]*right:max\(18px,var\(--safe-right\)\)/);
   assert.match(styles,/#app #hud \.flight-data\{[^}]*left:max\(18px,var\(--safe-left\)\)[^}]*background:transparent[^}]*border:0/);
