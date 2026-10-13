@@ -1,0 +1,655 @@
+{
+  "schema": 1,
+  "referenceKaisenCommit": "b5c44346139901c195084000d172f89374a623b9",
+  "machimamoreBaseCommit": "5ef75c6061b0740687ecaac26e0b932604deb3d2",
+  "verificationInputDigest": "00ab74944bd56635621099f8ef13b79f2034ee50812e9c930aa1c90af737bccf",
+  "verificationInputFileCount": 100,
+  "scope": "Fixed display states using product Canvas2D and Three.js in local software Chromium; no gameplay or physical iPhone claim",
+  "localChecks": {
+    "dependencyInstall": "npm ci --ignore-scripts --offline passed",
+    "unit": {
+      "passed": 173,
+      "failed": 0,
+      "skipped": 0
+    },
+    "typecheckAndBuild": "passed",
+    "distribution": "passed, 4 files",
+    "diffCheck": "passed",
+    "uiBrowser": {
+      "passed": 3,
+      "failed": 0,
+      "projects": [
+        "chromium-portrait",
+        "chromium-small-landscape",
+        "chromium-desktop"
+      ],
+      "font": "Noto Sans JP",
+      "executable": "local Chromium 153",
+      "pinnedChromiumAndWebKit": "Latest PR head CI pending"
+    },
+    "maximumRenderFixture": {
+      "passed": 1,
+      "failed": 0,
+      "scope": "same scene resource ownership; 16 aircraft, 40 beams, 2048 projectiles, 8 firework slots"
+    }
+  },
+  "capture": {
+    "scope": "Fixed display states plus actual product Three.js renderer in local software Chromium; no gameplay or iPhone claim",
+    "files": [
+      "artifacts/kaisen-ui-audio-20261013/candidate-normal-portrait.png",
+      "artifacts/kaisen-ui-audio-20261013/candidate-easy-portrait.png",
+      "artifacts/kaisen-ui-audio-20261013/candidate-normal-landscape.png",
+      "artifacts/kaisen-ui-audio-20261013/candidate-small-notices.png",
+      "artifacts/kaisen-ui-audio-20261013/candidate-small-landscape-notices.png",
+      "artifacts/kaisen-ui-audio-20261013/candidate-easy-notices-portrait.png",
+      "artifacts/kaisen-ui-audio-20261013/candidate-easy-notices-small-portrait.png",
+      "artifacts/kaisen-ui-audio-20261013/candidate-easy-notices-landscape.png",
+      "artifacts/kaisen-ui-audio-20261013/candidate-easy-notices-small-landscape.png"
+    ],
+    "observations": [
+      {
+        "name": "normal-portrait",
+        "fixture": "normal",
+        "tick": 0,
+        "worldRendered": true,
+        "stateUnchanged": true,
+        "glError": 0,
+        "metrics": {
+          "ready": true,
+          "aircraft": 3,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 0,
+          "drawCalls": 154,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "markerLabels": [
+          {
+            "text": "506m",
+            "x": 86.32654514107725,
+            "y": 282.5313639295391,
+            "width": 35,
+            "height": 11,
+            "anchorX": 103.82654514107725,
+            "anchorY": 290.5313639295391
+          }
+        ]
+      },
+      {
+        "name": "easy-portrait",
+        "fixture": "easy",
+        "tick": 0,
+        "worldRendered": true,
+        "stateUnchanged": true,
+        "glError": 0,
+        "metrics": {
+          "ready": true,
+          "aircraft": 3,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 0,
+          "drawCalls": 154,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "markerLabels": [
+          {
+            "text": "506m",
+            "x": 88.67043002356382,
+            "y": 399.3658141969552,
+            "width": 35,
+            "height": 11,
+            "anchorX": 106.17043002356382,
+            "anchorY": 407.3658141969552
+          }
+        ]
+      },
+      {
+        "name": "normal-landscape",
+        "fixture": "normal",
+        "tick": 0,
+        "worldRendered": true,
+        "stateUnchanged": true,
+        "glError": 0,
+        "metrics": {
+          "ready": true,
+          "aircraft": 3,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 0,
+          "drawCalls": 195,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "markerLabels": [
+          {
+            "text": "506m",
+            "x": 336.2527373714124,
+            "y": 141.09721364355502,
+            "width": 35,
+            "height": 11,
+            "anchorX": 353.7527373714124,
+            "anchorY": 149.09721364355502
+          }
+        ]
+      },
+      {
+        "name": "small-notices",
+        "fixture": "notices",
+        "tick": 0,
+        "worldRendered": true,
+        "stateUnchanged": true,
+        "glError": 0,
+        "metrics": {
+          "ready": true,
+          "aircraft": 3,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 6,
+          "drawCalls": 162,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "markerLabels": [
+          {
+            "text": "506m",
+            "x": 80.71769676071817,
+            "y": 218.0209092863594,
+            "width": 35,
+            "height": 11,
+            "anchorX": 98.21769676071817,
+            "anchorY": 226.0209092863594
+          },
+          {
+            "text": "街 1 · 125HP",
+            "x": 203.31256897375096,
+            "y": 317.7596220556826,
+            "width": 76,
+            "height": 13,
+            "anchorX": 241.31256897375096,
+            "anchorY": 328.7596220556826
+          }
+        ]
+      },
+      {
+        "name": "small-landscape-notices",
+        "fixture": "notices",
+        "tick": 0,
+        "worldRendered": true,
+        "stateUnchanged": true,
+        "glError": 0,
+        "metrics": {
+          "ready": true,
+          "aircraft": 3,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 6,
+          "drawCalls": 191,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "markerLabels": [
+          {
+            "text": "506m",
+            "x": 231.6930685975877,
+            "y": 164.60332917541373,
+            "width": 35,
+            "height": 11,
+            "anchorX": 249.1930685975877,
+            "anchorY": 172.60332917541373
+          },
+          {
+            "text": "街 1 · 125HP",
+            "x": 324,
+            "y": 271,
+            "width": 76,
+            "height": 13,
+            "anchorX": 362,
+            "anchorY": 282
+          }
+        ]
+      },
+      {
+        "name": "easy-notices-portrait",
+        "fixture": "easy-notices",
+        "tick": 0,
+        "worldRendered": true,
+        "stateUnchanged": true,
+        "glError": 0,
+        "metrics": {
+          "ready": true,
+          "aircraft": 3,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 6,
+          "drawCalls": 158,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "markerLabels": [
+          {
+            "text": "506m",
+            "x": 88.67043002356382,
+            "y": 399.3658141969552,
+            "width": 35,
+            "height": 11,
+            "anchorX": 106.17043002356382,
+            "anchorY": 407.3658141969552
+          },
+          {
+            "text": "街 1 · 125HP",
+            "x": 280.63897398753113,
+            "y": 506.79087277630197,
+            "width": 76,
+            "height": 13,
+            "anchorX": 318.63897398753113,
+            "anchorY": 517.790872776302
+          }
+        ]
+      },
+      {
+        "name": "easy-notices-small-portrait",
+        "fixture": "easy-notices",
+        "tick": 0,
+        "worldRendered": true,
+        "stateUnchanged": true,
+        "glError": 0,
+        "metrics": {
+          "ready": true,
+          "aircraft": 3,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 6,
+          "drawCalls": 163,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "markerLabels": [
+          {
+            "text": "506m",
+            "x": 52.78028668237587,
+            "y": 272.91054279797015,
+            "width": 35,
+            "height": 11,
+            "anchorX": 70.28028668237587,
+            "anchorY": 280.91054279797015
+          },
+          {
+            "text": "街 1 · 125HP",
+            "x": 203.4259826583541,
+            "y": 418.86058185086796,
+            "width": 76,
+            "height": 13,
+            "anchorX": 241.4259826583541,
+            "anchorY": 429.86058185086796
+          }
+        ]
+      },
+      {
+        "name": "easy-notices-landscape",
+        "fixture": "easy-notices",
+        "tick": 0,
+        "worldRendered": true,
+        "stateUnchanged": true,
+        "glError": 0,
+        "metrics": {
+          "ready": true,
+          "aircraft": 3,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 6,
+          "drawCalls": 198,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "markerLabels": [
+          {
+            "text": "506m",
+            "x": 307.8338955390383,
+            "y": 194.98916077394767,
+            "width": 35,
+            "height": 11,
+            "anchorX": 325.3338955390383,
+            "anchorY": 202.98916077394767
+          },
+          {
+            "text": "街 1 · 125HP",
+            "x": 444.3387520857978,
+            "y": 268.4633955411815,
+            "width": 76,
+            "height": 13,
+            "anchorX": 482.3387520857978,
+            "anchorY": 279.4633955411815
+          }
+        ]
+      },
+      {
+        "name": "easy-notices-small-landscape",
+        "fixture": "easy-notices",
+        "tick": 0,
+        "worldRendered": true,
+        "stateUnchanged": true,
+        "glError": 0,
+        "metrics": {
+          "ready": true,
+          "aircraft": 3,
+          "activeLasers": 0,
+          "projectiles": 0,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 6,
+          "drawCalls": 191,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "markerLabels": [
+          {
+            "text": "506m",
+            "x": 232.5734009478174,
+            "y": 231.48481284392685,
+            "width": 35,
+            "height": 11,
+            "anchorX": 250.0734009478174,
+            "anchorY": 239.48481284392685
+          },
+          {
+            "text": "街 1 · 125HP",
+            "x": 291.87379304696003,
+            "y": 276.58342639485517,
+            "width": 76,
+            "height": 13,
+            "anchorX": 329.87379304696003,
+            "anchorY": 287.58342639485517
+          }
+        ]
+      }
+    ],
+    "errors": []
+  },
+  "audioMeasurement": {
+    "scope": "Actual FlightAudio node graph rendered by browser OfflineAudioContext; no speaker or iPhone listening claim",
+    "cases": [
+      {
+        "speed": 65,
+        "before": {
+          "rms": 0.0053380112183173895,
+          "peak": 0.010736891068518162,
+          "sources": 1,
+          "disposedSources": 0,
+          "sampleRate": 24000,
+          "sampledSeconds": 1
+        },
+        "candidate": {
+          "rms": 0.002701346107772892,
+          "peak": 0.004863133653998375,
+          "sources": 3,
+          "disposedSources": 0,
+          "sampleRate": 24000,
+          "sampledSeconds": 1
+        },
+        "kaisen": {
+          "rms": 0.007042588090714938,
+          "peak": 0.012782381847500801,
+          "sources": 3,
+          "disposedSources": 0,
+          "sampleRate": 24000,
+          "sampledSeconds": 1
+        },
+        "rmsReductionPercent": 49.394147046689966,
+        "kaisenRmsRatio": 0.38357292418314093
+      },
+      {
+        "speed": 110,
+        "before": {
+          "rms": 0.005350034345819549,
+          "peak": 0.01072525791823864,
+          "sources": 1,
+          "disposedSources": 0,
+          "sampleRate": 24000,
+          "sampledSeconds": 1
+        },
+        "candidate": {
+          "rms": 0.0027012307312270383,
+          "peak": 0.004829408600926399,
+          "sources": 3,
+          "disposedSources": 0,
+          "sampleRate": 24000,
+          "sampledSeconds": 1
+        },
+        "kaisen": {
+          "rms": 0.0070366076584863066,
+          "peak": 0.012597444467246532,
+          "sources": 3,
+          "disposedSources": 0,
+          "sampleRate": 24000,
+          "sampledSeconds": 1
+        },
+        "rmsReductionPercent": 49.510030092839564,
+        "kaisenRmsRatio": 0.383882527252929
+      },
+      {
+        "speed": 140,
+        "before": {
+          "rms": 0.00534467248838288,
+          "peak": 0.010801105760037899,
+          "sources": 1,
+          "disposedSources": 0,
+          "sampleRate": 24000,
+          "sampledSeconds": 1
+        },
+        "candidate": {
+          "rms": 0.0026960304084087954,
+          "peak": 0.004866797011345625,
+          "sources": 3,
+          "disposedSources": 0,
+          "sampleRate": 24000,
+          "sampledSeconds": 1
+        },
+        "kaisen": {
+          "rms": 0.0070468339946031175,
+          "peak": 0.012697875499725342,
+          "sources": 3,
+          "disposedSources": 0,
+          "sampleRate": 24000,
+          "sampledSeconds": 1
+        },
+        "rmsReductionPercent": 49.556676966290134,
+        "kaisenRmsRatio": 0.38258747268256565
+      }
+    ],
+    "errors": [],
+    "appliedIn": "PR16 (already adopted); PR17 retains that audio code without changes"
+  },
+  "screenshots": [
+    {
+      "name": "candidate-easy-notices-landscape.png",
+      "width": 852,
+      "height": 393,
+      "sha256": "84babd2d6e631f5d3b5d3594e01d9043efb371cb61cf026b2cefdfae0065ce99",
+      "repositoryPath": null,
+      "openedAtOriginalSizeBy": [
+        "browser_verification",
+        "independent_review"
+      ]
+    },
+    {
+      "name": "candidate-easy-notices-portrait.png",
+      "width": 393,
+      "height": 852,
+      "sha256": "bd49eb4f5386191b9a4c7146a4d7a09b1fef30e749b483fb51644f6ae5f4da3a",
+      "repositoryPath": null,
+      "openedAtOriginalSizeBy": [
+        "browser_verification",
+        "independent_review"
+      ]
+    },
+    {
+      "name": "candidate-easy-notices-small-landscape.png",
+      "width": 568,
+      "height": 320,
+      "sha256": "65a66936d3dea742cc0c2322df0e6ce04712bb7581f1521b2a1e7b47d8b78749",
+      "repositoryPath": "docs/evidence/kaisen-ui-audio-20261013/easy-notices-small-landscape.png",
+      "openedAtOriginalSizeBy": [
+        "browser_verification",
+        "independent_review"
+      ]
+    },
+    {
+      "name": "candidate-easy-notices-small-portrait.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "9dde1fa99887db505c8d814fda215f960fe5f6444460e0ee79148004772ecdac",
+      "repositoryPath": "docs/evidence/kaisen-ui-audio-20261013/easy-notices-small-portrait.png",
+      "openedAtOriginalSizeBy": [
+        "browser_verification",
+        "independent_review"
+      ]
+    },
+    {
+      "name": "candidate-easy-portrait.png",
+      "width": 393,
+      "height": 852,
+      "sha256": "246d5878ab533ed88808d25a903ef137dcbc271d5653efa7192a63e53420cdbe",
+      "repositoryPath": null,
+      "openedAtOriginalSizeBy": [
+        "browser_verification",
+        "independent_review"
+      ]
+    },
+    {
+      "name": "candidate-normal-landscape.png",
+      "width": 852,
+      "height": 393,
+      "sha256": "1d72aeb5b99f9b80e2b5cbc98d75697e79dcd2048d52ba898a02e5a5b283a076",
+      "repositoryPath": "docs/evidence/kaisen-ui-audio-20261013/normal-landscape.png",
+      "openedAtOriginalSizeBy": [
+        "browser_verification",
+        "independent_review"
+      ]
+    },
+    {
+      "name": "candidate-normal-portrait.png",
+      "width": 393,
+      "height": 852,
+      "sha256": "fd8f981d43ca6aec27e1cb17ca8da2e2dc46664a868c46fcccb6955554f41d0d",
+      "repositoryPath": "docs/evidence/kaisen-ui-audio-20261013/normal-portrait.png",
+      "openedAtOriginalSizeBy": [
+        "browser_verification",
+        "independent_review"
+      ]
+    },
+    {
+      "name": "candidate-small-landscape-notices.png",
+      "width": 568,
+      "height": 320,
+      "sha256": "c671eaba9540048d5957659c2195917d3cf9a05fa0b8baf6388b0cdd2309505f",
+      "repositoryPath": null,
+      "openedAtOriginalSizeBy": [
+        "browser_verification",
+        "independent_review"
+      ]
+    },
+    {
+      "name": "candidate-small-notices.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "f292b5a971b1d104b53d3b16d9e825b98e7e2b68898cacf554574b140404b118",
+      "repositoryPath": null,
+      "openedAtOriginalSizeBy": [
+        "browser_verification",
+        "independent_review"
+      ]
+    }
+  ],
+  "independentReview": {
+    "agent": "independent_review",
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "inputDigest": "00ab74944bd56635621099f8ef13b79f2034ee50812e9c930aa1c90af737bccf",
+    "sourceReview": "All source diff and fixed Kaisen comparison reviewed; Easy simultaneous-notice collisions, radar disappearance, ally fixture reset, city-label self overlap, plane-covering small portrait message and empty-message bars corrected",
+    "focusedTests": {
+      "passed": 6,
+      "failed": 0,
+      "scope": "UI contract after PR16 integration; earlier 7 UI/audio tests also passed before integration and audio bytes are unchanged from PR16"
+    },
+    "domInspections": {
+      "sizes": [
+        [
+          320,
+          568
+        ],
+        [
+          393,
+          852
+        ],
+        [
+          568,
+          320
+        ],
+        [
+          852,
+          393
+        ],
+        [
+          1280,
+          720
+        ],
+        [
+          1366,
+          768
+        ]
+      ],
+      "uiCollisions": 0,
+      "outOfBounds": 0,
+      "bothMessagesVisible": true,
+      "tick": 0,
+      "frameScheduled": false,
+      "inputDigest": "0463d6a75c5f4b8edf86909748b097958a7f2a99a540de16b08feb36e1a64573",
+      "scope": "Before PR16 integration; current integrated candidate separately reviewed by source diff, 6 UI contract tests, local UI suite and 9 updated product-rendered images"
+    },
+    "finalImages": "9/9 opened at original size after PR16 integration; no unresolved P1/P2 findings; PR17 update accepted for submission"
+  },
+  "unverified": [
+    "physical iPhone Safari",
+    "touch feel",
+    "device speaker perceived loudness"
+  ],
+  "publication": "Draft PR only; main merge and production publication remain user-controlled",
+  "machimamoreInitialComparisonCommit": "28960ba326679f7ca32531483495c60dc7fceaf9",
+  "integration": "PR16 adopted while PR17 was being prepared; its source labels, Normal notice placement, audio, game logic and previous evidence are retained. PR17 contains only remaining display refinements and Easy simultaneous-notice fixes."
+}

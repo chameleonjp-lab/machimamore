@@ -90,13 +90,14 @@ let lastRadarSignature='',lastRadarLayout:RadarLayout|null=null;
 
 /** Find the closest open viewport slot while reserving HUD, controls and sight space. */
 export function chooseRadarLayout(width:number,height:number,keepOuts:readonly MarkerKeepOut[],sightKeepOut?:MarkerKeepOut):RadarLayout|null {
-  const radius=width<360?42:49,boxWidth=radius*2+8,boxHeight=radius*2+34,padding=4;
-  const minX=boxWidth/2+8,maxX=width-boxWidth/2-8,minY=boxHeight/2+8,maxY=height-boxHeight/2-8;
-  if(minX>maxX||minY>maxY)return null;
   const obstacles=sightKeepOut?[...keepOuts,sightKeepOut]:keepOuts;
   const quantize=(value:number)=>Math.round(value*2)/2;
-  const signature=[width,height,radius,...obstacles.flatMap(box=>[box.x,box.y,box.width,box.height].map(quantize))].join(':');
+  const signature=[width,height,...obstacles.flatMap(box=>[box.x,box.y,box.width,box.height].map(quantize))].join(':');
   if(signature===lastRadarSignature)return lastRadarLayout;
+  const search=(radius:number):RadarLayout|null=>{
+  const boxWidth=radius*2+8,boxHeight=radius*2+34,padding=4;
+  const minX=boxWidth/2+8,maxX=width-boxWidth/2-8,minY=boxHeight/2+8,maxY=height-boxHeight/2-8;
+  if(minX>maxX||minY>maxY)return null;
   const preferredX=maxX,preferredY=Math.max(minY,Math.min(maxY,Math.min(height*.33,180)));
   const xs=[preferredX,minX,maxX];
   for(const box of obstacles){xs.push(box.x-boxWidth/2-padding,box.x+box.width+boxWidth/2+padding);}
@@ -113,9 +114,12 @@ export function chooseRadarLayout(width:number,height:number,keepOuts:readonly M
     for(const [from,to] of blocked){if(to<minY||from>maxY)continue;consider(cursor,Math.min(maxY,from));cursor=Math.max(cursor,to);if(cursor>maxY)break;}
     consider(cursor,maxY);
   }
-  lastRadarSignature=signature;
   const chosen=best as {x:number;y:number;distance:number}|null;
-  lastRadarLayout=chosen?{x:chosen.x,y:chosen.y,radius,bounds:{x:chosen.x-boxWidth/2,y:chosen.y-boxHeight/2,width:boxWidth,height:boxHeight}}:null;
+  return chosen?{x:chosen.x,y:chosen.y,radius,bounds:{x:chosen.x-boxWidth/2,y:chosen.y-boxHeight/2,width:boxWidth,height:boxHeight}}:null;
+  };
+  lastRadarSignature=signature;
+  // Use Kaisen's compact radius if concurrent notices leave no full-size slot.
+  lastRadarLayout=width<360?search(42):search(49)??search(42);
   return lastRadarLayout;
 }
 function placeMarkerLabel(context: CanvasRenderingContext2D, text: string, anchorX: number, anchorY: number, preferredBaseline: number,
@@ -192,7 +196,7 @@ function drawRadar(context:CanvasRenderingContext2D,state:GameState,layout:Radar
     const dx=target.position.x-player.position.x,dz=target.position.z-player.position.z;
     let x=((dx*cy-dz*sy)/range)*r,y=((dx*sy+dz*cy)/range)*r;const distance=Math.hypot(x,y),outside=distance>r-4;
     if(outside){x*=((r-4)/distance);y*=((r-4)/distance);}
-    const friendly=target.kind==='aircraft';c.fillStyle=friendly?ALLY_COLOR:ENEMY_COLOR;c.strokeStyle=c.fillStyle;c.beginPath();
+    const friendly=target.kind==='aircraft';c.fillStyle=friendly?'#70d8c7':'#ffb78c';c.strokeStyle=c.fillStyle;c.beginPath();
     if(friendly)c.arc(x,y,2.2,0,Math.PI*2);
     else{c.moveTo(x,y-3);c.lineTo(x+3,y);c.lineTo(x,y+3);c.lineTo(x-3,y);c.closePath();}
     if(outside)c.stroke();else c.fill();
@@ -231,11 +235,12 @@ export function drawFlightMarkers(context:CanvasRenderingContext2D,width:number,
   const sightKeepOut=sight.visible?{x:sight.x-radius-(player?.reloadTicksRemaining?11:3),y:sight.y-radius-(player?.reloadTicksRemaining?11:3),width:(radius+(player?.reloadTicksRemaining?11:3))*2,height:(radius+(player?.reloadTicksRemaining?11:3))*2}:undefined;
   if(sightKeepOut)visibleKeepOuts.push(sightKeepOut);
   const radar=player?chooseRadarLayout(width,height,keepOuts,sightKeepOut):null;
-  if(radar){visibleKeepOuts.push(radar.bounds);drawRadar(c,state,radar);}
+  if(radar)visibleKeepOuts.push(radar.bounds);
   const addLabel=(text:string,x:number,anchorY:number,preferredBaseline:number,color:string)=>{
     const box=placeMarkerLabel(c,text,x,anchorY,preferredBaseline,width,height,visibleKeepOuts,occupied);
     drawMarkerLabel(c,box,x,anchorY,color);labels.push(box);occupied.push(box);
   };
+  if(player){c.shadowBlur=0;drawSight(c,state,width,height,sight,radius,aimColor(state,sight,radius,project));c.shadowBlur=3;}
   for(const target of [...state.ufos,...state.fighters]){
     if(target.kind==='aircraft'&&target.id===state.playerId)continue;if(target.health<=0)continue;
     const p=project(target.position),distance=player?player.position.distanceTo(target.position):0;
@@ -255,12 +260,13 @@ export function drawFlightMarkers(context:CanvasRenderingContext2D,width:number,
     if(!district.attacked||district.destroyed)continue;
     const p=project(district.position);c.strokeStyle='#ffe6a6';c.fillStyle='#ffe6a6';
     if(p.visible){c.beginPath();c.moveTo(p.x,p.y-13);c.lineTo(p.x+13,p.y+10);c.lineTo(p.x-13,p.y+10);c.closePath();c.stroke();
+      visibleKeepOuts.push({x:p.x-14,y:p.y-14,width:28,height:26});
       addLabel(`街 ${district.token+1} · ${Math.ceil(district.health)}HP`,p.x,p.y,p.y+29,'#ffe6a6');
     }else{
       const local=district.position.clone().sub(camera.position).applyQuaternion(camera.quaternion.clone().invert()),angle=Math.atan2(local.x,-local.z),x=width*.5+Math.sin(angle)*width*.41,y=height*.5-Math.cos(angle)*height*.34;
       c.save();c.translate(x,y);c.rotate(angle);c.beginPath();c.moveTo(0,-9);c.lineTo(7,5);c.lineTo(-7,5);c.closePath();c.stroke();c.restore();
     }
   }
-  if(player){const color=aimColor(state,sight,radius,project);drawSight(c,state,width,height,sight,radius,color);}
+  c.shadowBlur=0;if(radar)drawRadar(c,state,radar);
   return labels;
 }

@@ -13,6 +13,7 @@ test('every UI sample is directly reachable without advancing a game tick',()=>{
   for(const name of UI_FIXTURES){const {state,screen}=uiFixtureState(name);assert.equal(state.tick,0);assert.equal(state.elapsed,0);
     assert.ok(['home','playing','paused','result'].includes(screen));if(screen==='result')assert.equal(state.result?.outcome,name);}
   assert.equal(uiFixtureState('reload').state.fighters[0].reloadTicksRemaining,180);
+  const easyNotices=uiFixtureState('easy-notices').state;assert.equal(easyNotices.mode,'easy');assert.equal(easyNotices.fighters[0].reloadTicksRemaining,180);assert.ok(easyNotices.city.some(district=>district.attacked));
   assert.equal(uiFixtureState('wait').state.playerId,null);
   const driver=source('src/ui-test-driver.ts');
   assert.doesNotMatch(driver,/\bstepGame\s*\(|\brequestAnimationFrame\s*\(|\bset(?:Timeout|Interval)\s*\(|new\s+WebGLRenderer/);
@@ -155,7 +156,7 @@ test('UI driver uses the product entry/styles, guarded boot and a separate legac
   assert.match(styles,/left:calc\(50% - 70px\);right:auto;top:calc\(50% \+ 32px\);width:min\(92px,calc\(100% - 436px\)\)/);
   assert.match(styles,/left:max\(184px,calc\(50% - 110px\)\);right:auto;transform:none;width:min\(220px,calc\(100% - 368px\)\);/);
   assert.doesNotMatch(styles,/#app:has\(#announcement:not\(:empty\)\) #ally-announcements\{display:none\}/);
-  assert.match(driver,/announcement\.textContent=name==='notices'\?'街を守りUFO50機を撃破 · 味方残機は自機込み':''/);assert.match(driver,/allyAnnouncement\.textContent=''/);
+  assert.match(driver,/announcement\.textContent=\(name==='notices'\|\|name==='easy-notices'\)\?'街を守りUFO50機を撃破 · 味方残機は自機込み':''/);assert.match(driver,/allyAnnouncement\.textContent='交戦中 · 残機と街の耐久を確認'/);
   assert.match(config,/testDir: '\.\/browser-tests\/ui-only'/);assert.doesNotMatch(config,/swiftshader|waitForMission|test:balance/);
   assert.match(source('playwright.gameplay.config.ts'),/testIgnore: '\*\*\/ui-only\/\*\*'/);
   const missionStart=index.indexOf('<div class="mission-hud">'),flightStart=index.indexOf('<div class="flight-data">'),friendlyStart=index.indexOf('class="tally friendly-tally"');

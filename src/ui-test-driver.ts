@@ -5,7 +5,7 @@ import { chooseRadarLayout, drawFlightMarkers, MarkerKeepOutCache, type MarkerLa
 import { EASY_AIM_RADIUS, FLIGHT_FAR, FLIGHT_FOV, getFlightCameraPose } from './flight-view';
 import type { GameResult, GameState } from './types';
 
-export const UI_FIXTURES = ['home','easy','normal','reload','wait','notices','paused','victory','defeat','interrupted','startup-error'] as const;
+export const UI_FIXTURES = ['home','easy','normal','reload','wait','notices','easy-notices','paused','victory','defeat','interrupted','startup-error'] as const;
 export type UiFixtureName = typeof UI_FIXTURES[number];
 export type UiScreen = 'home' | 'playing' | 'paused' | 'result';
 export interface UiFixtureDriver {
@@ -18,19 +18,20 @@ export interface UiFixtureDriver {
 
 /** Fixed display examples, not simulated outcomes or combat acceptance evidence. */
 export function uiFixtureState(name: UiFixtureName): {state: GameState; screen: UiScreen} {
-  const state = createGame({ mode: ['home','easy','startup-error'].includes(name) ? 'easy' : 'normal', seed: 1 });
+  const state = createGame({ mode: ['home','easy','easy-notices','startup-error'].includes(name) ? 'easy' : 'normal', seed: 1 });
   if (name === 'home' || name === 'startup-error') return {state, screen:'home'};
   startGame(state); // Initializes phase only; never stepGame, physics, AI, or wall-clock waiting.
   const player = getPlayer(state)!;
-  if (name === 'notices') player.position.y=50;
+  const notices=name==='notices'||name==='easy-notices';
+  if (notices) player.position.y=50;
   state.ufos = state.ufos.slice(0, 1);
   state.fighters = state.fighters.slice(0, 2);
   state.ufos[0].position.copy(player.position).add(new Vector3(-70, 35, -500));
   state.fighters[1].position.copy(player.position).add(new Vector3(70, 35, -500));
   state.city[0].position.copy(player.position).add(new Vector3(95, -50, -500));
   state.city[1].position.copy(player.position).add(new Vector3(2000, 0, -500));
-  if (name === 'reload' || name === 'notices') {player.mg=0;player.cannon=0;player.reloadTicksRemaining=180;}
-  if (name === 'notices') {
+  if (name === 'reload' || notices) {player.mg=0;player.cannon=0;player.reloadTicksRemaining=180;}
+  if (notices) {
     for (const district of state.city.slice(0,2)) {district.attacked=true;district.health=125;}
   }
   if (name === 'wait') {state.playerId=null;state.pilotReadyTick=180;}
@@ -62,7 +63,7 @@ export function installUiTestDriver(host: {
   let markerBoxes: MarkerLabelBox[]=[];
   const project=(position:Vector3,width:number,height:number)=>{
     const local=position.clone().sub(camera.position).applyQuaternion(camera.quaternion.clone().invert()),point=position.clone().project(camera);
-    return{x:(point.x*.5+.5)*width,y:(.5-point.y*.5)*height,visible:local.z<-.5&&point.z<1&&Math.abs(point.x)<.97&&Math.abs(point.y)<.94,behind:local.z>=-.5};
+    return{x:(point.x*.5+.5)*width,y:(.5-point.y*.5)*height,visible:local.z<-.5&&point.z<1&&Math.abs(point.x)<.94&&Math.abs(point.y)<.82,behind:local.z>=-.5};
   };
   const sightBounds=()=>{
     if(!last)return null;
@@ -100,11 +101,15 @@ export function installUiTestDriver(host: {
   const driver: UiFixtureDriver={
     show(name){
       const announcement=document.getElementById('announcement');
-      if(announcement)announcement.textContent=name==='notices'?'街を守りUFO50機を撃破 · 味方残機は自機込み':'';
+      if(announcement)announcement.textContent=(name==='notices'||name==='easy-notices')?'街を守りUFO50機を撃破 · 味方残機は自機込み':'';
       const allyAnnouncement=document.getElementById('ally-announcements');
       if(allyAnnouncement)allyAnnouncement.textContent='';
       markerKeepOuts.invalidate();
       const {state,screen}=uiFixtureState(name);host.present(state,screen);
+      if(name==='easy-notices'&&allyAnnouncement){
+        allyAnnouncement.textContent='交戦中 · 残機と街の耐久を確認';
+        markerKeepOuts.invalidate();scene.render(state,true);
+      }
       if(name==='startup-error')host.startupError();
     },
     read:host.read,

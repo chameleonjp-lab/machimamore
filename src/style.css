@@ -14,14 +14,14 @@
 .ammo{display:flex;justify-content:space-between;gap:8px}.ammo>span{white-space:nowrap}
 .flight-button{z-index:4}
 .hud-notices{display:contents}
-#app[data-screen="playing"] #announcement:empty,#app[data-screen="playing"] #ally-announcements:empty{display:none}
 @media(min-width:901px) and (min-height:561px){
   #app[data-mode="normal"] .hud-notices:has(> :not([hidden]) ~ :not([hidden])){position:absolute;top:55%;left:50%;right:auto;transform:translateX(-50%);width:min(320px,calc(100% - 32px));display:flex;flex-direction:column;gap:6px;z-index:1}
   #app[data-mode="normal"] .hud-notices:has(> :not([hidden]) ~ :not([hidden])) > :is(.reload-status,.player-wait,.city-warning,.warning){position:static;transform:none;align-self:stretch;max-width:none;width:100%;margin:0;padding:5px 8px;font-size:.75rem;line-height:1.35}
   #app[data-mode="normal"] .hud-notices:has(> :not([hidden]) ~ :not([hidden])) > #reload-progress{position:static;align-self:stretch;width:100%;height:7px}
 }
 /* The opening message temporarily replaces the flight hint on larger screens. */
-#app[data-screen="playing"]:has(.announcement:not(:empty)) .flight-tip{display:none}
+#app[data-screen="playing"]:has(.announcement:not(:empty),.ally-announcements:not(:empty)) .flight-tip{display:none}
+#app #announcement:empty,#app #ally-announcements:empty{display:none}
 
 /* Spring-centred rate lever: rectangular bounds match the settings preview. */
 #app #hud #throttle {
@@ -67,12 +67,15 @@
 #app #hud .flight-data .friendly-tally small{grid-column:1/-1}
 #app #hud .health-track{height:3px;background:#b2c3c34a;border-radius:0;margin:3px 0 5px}
 #app #hud .health-track i{background:#e4d598}
-#app #hud .health-label{font-size:12px;color:#caddd8}
-#app #hud .health-label b{color:#f6ead1;font-weight:450}
+#app #hud .player-health{width:118px;max-width:100%}
+#app #hud .health-label{display:flex;align-items:baseline;gap:3px;font-size:9px;letter-spacing:1px;color:#caddd8}
+#app #hud .health-label b{font-size:15px;margin-left:auto;color:#f6ead1;font-weight:450}
+#app #hud .health-label small{font-size:9px;margin-right:0}
 #app #hud .flight-data .instrument,#app #hud .flight-data .ammo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
 #app #hud .score-readout b{color:#f1e3c4}
 #app #hud .ammo,#app #hud .accuracy{color:#c7d7d5}
 #app #hud .bonus-note{color:#b8cfce;font-size:11px}
+#app #hud .warning{background:#5a2a1acf;border-color:#e9a468;border-radius:3px;color:#ffe5c0}
 @media(min-width:801px) and (min-height:561px){
   #app #hud .mission-hud{width:min(360px,42vw);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
 }
@@ -120,7 +123,6 @@
   #app #hud .flight-data .instrument,#app #hud .flight-data .ammo{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
   #app #hud .flight-data .tally{padding:0;border:0;background:transparent}
   #app #hud .health-track{margin:2px 0 3px}
-  #app #hud .health-label{font-size:11px}
   #app #hud .flight-data .friendly-tally span{font-size:11px}
   #app #hud .flight-data .friendly-tally strong{font-size:12px}
   #app #hud .mission-hud .tally{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:5px;row-gap:1px;align-items:center;padding:4px 6px}
@@ -142,6 +144,28 @@
 #app .pause-status-list>div{display:grid;grid-template-columns:minmax(105px,.8fr) minmax(0,1.2fr);gap:8px;border-bottom:1px solid #c9e5e51a;padding:5px 0;font-size:.78rem;line-height:1.45}
 #app .pause-status-list dt{color:#b8cfce}
 #app .pause-status-list dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+
+/* Easy's central sight and reload ring reserve different space from Normal. */
+#app[data-mode="easy"] #hud .hud-notices{position:absolute;left:max(18px,var(--safe-left));right:auto;top:55%;width:min(220px,28vw);display:flex;flex-direction:column;gap:4px;z-index:1;max-height:calc(45dvh - 16px);overflow-y:auto;overscroll-behavior:contain;pointer-events:auto}
+#app[data-mode="easy"] #hud .hud-notices>:is(.reload-status,.player-wait,.city-warning,.warning){position:static;transform:none;align-self:stretch;max-width:none;width:100%;margin:0;padding:4px 6px;font-size:11px;line-height:1.35;text-align:left}
+#app[data-mode="easy"] #hud .hud-notices>#reload-progress{position:static;align-self:stretch;width:100%;height:7px}
+#app[data-mode="easy"][data-screen="playing"] #announcement,#app[data-mode="easy"][data-screen="playing"] #ally-announcements{bottom:auto;left:50%;right:auto;transform:translateX(-50%);width:min(300px,calc(100% - 400px));margin:0;padding:0;background:transparent;font-size:11px;line-height:1.2;text-align:center}
+#app[data-mode="easy"][data-screen="playing"] #announcement{top:max(12px,var(--safe-top))}
+#app[data-mode="easy"][data-screen="playing"] #ally-announcements{top:calc(max(12px,var(--safe-top)) + 32px)}
+@media(orientation:portrait) and (max-width:440px){
+  #app[data-mode="easy"]{--easy-notice-top:calc(50% + min(13.5vw,13.5vh) + 24px)}
+  #app[data-mode="easy"] #hud .hud-notices{left:max(12px,var(--safe-left));top:var(--easy-notice-top);width:min(132px,calc(50vw - 72px));max-height:96px}
+  #app[data-mode="easy"] #hud .hud-notices>:is(.reload-status,.player-wait,.city-warning,.warning){font-size:10px;line-height:1.2;padding:3px 5px}
+  #app[data-mode="easy"][data-screen="playing"] #announcement,#app[data-mode="easy"][data-screen="playing"] #ally-announcements{left:calc(50% - 38px);transform:none;width:84px;padding:4px 6px;background:#092434d9;font-size:10px;line-height:1.25;text-align:left}
+  #app[data-mode="easy"][data-screen="playing"] #announcement{top:var(--easy-notice-top)}
+  #app[data-mode="easy"][data-screen="playing"] #ally-announcements{top:calc(var(--easy-notice-top) + 76px)}
+}
+@media(orientation:portrait) and (max-width:350px){
+  #app[data-mode="easy"] #hud .hud-notices{width:min(108px,calc(50vw - 54px));max-height:86px}
+  #app[data-mode="easy"] #hud .hud-notices>:is(.reload-status,.player-wait,.city-warning,.warning){font-size:9px;line-height:1.12;padding:3px 4px}
+  #app[data-mode="easy"][data-screen="playing"] #announcement,#app[data-mode="easy"][data-screen="playing"] #ally-announcements{font-size:9px;line-height:1.22}
+  #app[data-mode="easy"][data-screen="playing"] #ally-announcements{top:auto;bottom:max(12px,var(--safe-bottom))}
+}
 
 
 #hud [data-flight-control] { pointer-events: auto; }

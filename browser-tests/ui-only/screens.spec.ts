@@ -270,6 +270,7 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await expectFixedUi(page,'home','ready');
 
   await show(page,'easy');await expectKaisenHudLayout(page);await expect(page.locator('#loop')).toBeVisible();await expectMarkerLabelsClear(page,['506m']);
+  await expect(page.locator('#announcement')).toBeHidden();await expect(page.locator('#ally-announcements')).toBeHidden();
   await expect(page.locator('#fire')).toBeHidden();await expect(page.locator('#throttle')).toBeHidden();
   expect(await canvasPixels(page)).toBeGreaterThan(30);await capture(page,info,'easy-hud');
   await show(page,'reload');await expect(page.locator('#reload-status')).toHaveText('再装填 3.0秒');
@@ -283,6 +284,13 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.locator('#pause').tap();await expectPauseStatusDetails(page);
   await expect(page.locator('#pause-city-status')).toContainText('4,750 / 5,000HP');await expect(page.locator('#pause-flight-status')).toContainText('機銃0 / 機関砲0');
   await page.locator('#resume').tap();await expect(page.locator('#pause-screen')).toBeHidden();
+
+  await show(page,'easy-notices');await expectKaisenHudLayout(page);await expectFixedUi(page,'playing','playing');
+  await expect(page.locator('#ally-announcements')).toBeVisible();await expect(page.locator('#ally-announcements')).toHaveText('交戦中 · 残機と街の耐久を確認');
+  await fits(page,['#warning','#city-warning','#reload-status','#reload-progress']);await expectMarkerLabelsClear(page,['506m','city']);
+  await capture(page,info,'easy-hud-notices');
+  await page.locator('#announcement').evaluate(element=>{element.textContent='';});
+  await expect(page.locator('#flight-tip')).toBeHidden();await expectKaisenHudLayout(page);await expectMarkerLabelsClear(page,['506m','city']);
 
   for(const [name,title] of [['victory','防衛成功'],['defeat','防衛失敗'],['interrupted','作戦中断']] as const){
     await show(page,name);await expect(page.locator('#result')).toBeVisible();
