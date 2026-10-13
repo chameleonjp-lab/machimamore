@@ -1,0 +1,200 @@
+{
+  "scope": "Fixed display states plus actual product Three.js renderer in local software Chromium; no gameplay or iPhone claim",
+  "files": [
+    "docs/evidence/ui-audio-parity-20261013/normal-portrait.png",
+    "docs/evidence/ui-audio-parity-20261013/easy-portrait.png",
+    "docs/evidence/ui-audio-parity-20261013/normal-landscape.png",
+    "docs/evidence/ui-audio-parity-20261013/small-notices.png",
+    "docs/evidence/ui-audio-parity-20261013/small-landscape-notices.png"
+  ],
+  "observations": [
+    {
+      "name": "normal-portrait",
+      "fixture": "normal",
+      "tick": 0,
+      "worldRendered": true,
+      "stateUnchanged": true,
+      "glError": 0,
+      "metrics": {
+        "ready": true,
+        "aircraft": 3,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "activeUfoFireworks": 0,
+        "decorations": 0,
+        "debrisMeshes": 0,
+        "smokeMeshes": 0,
+        "drawCalls": 154,
+        "geometries": 74,
+        "textures": 5,
+        "programs": 17
+      },
+      "markerLabels": [
+        {
+          "text": "506m",
+          "x": 86.32654514107725,
+          "y": 282.5313639295391,
+          "width": 35,
+          "height": 11,
+          "anchorX": 103.82654514107725,
+          "anchorY": 290.5313639295391
+        }
+      ]
+    },
+    {
+      "name": "easy-portrait",
+      "fixture": "easy",
+      "tick": 0,
+      "worldRendered": true,
+      "stateUnchanged": true,
+      "glError": 0,
+      "metrics": {
+        "ready": true,
+        "aircraft": 3,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "activeUfoFireworks": 0,
+        "decorations": 0,
+        "debrisMeshes": 0,
+        "smokeMeshes": 0,
+        "drawCalls": 154,
+        "geometries": 74,
+        "textures": 5,
+        "programs": 17
+      },
+      "markerLabels": [
+        {
+          "text": "506m",
+          "x": 88.67043002356382,
+          "y": 399.3658141969552,
+          "width": 35,
+          "height": 11,
+          "anchorX": 106.17043002356382,
+          "anchorY": 407.3658141969552
+        }
+      ]
+    },
+    {
+      "name": "normal-landscape",
+      "fixture": "normal",
+      "tick": 0,
+      "worldRendered": true,
+      "stateUnchanged": true,
+      "glError": 0,
+      "metrics": {
+        "ready": true,
+        "aircraft": 3,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "activeUfoFireworks": 0,
+        "decorations": 0,
+        "debrisMeshes": 0,
+        "smokeMeshes": 0,
+        "drawCalls": 195,
+        "geometries": 74,
+        "textures": 5,
+        "programs": 17
+      },
+      "markerLabels": [
+        {
+          "text": "506m",
+          "x": 336.2527373714124,
+          "y": 141.09721364355502,
+          "width": 35,
+          "height": 11,
+          "anchorX": 353.7527373714124,
+          "anchorY": 149.09721364355502
+        }
+      ]
+    },
+    {
+      "name": "small-notices",
+      "fixture": "notices",
+      "tick": 0,
+      "worldRendered": true,
+      "stateUnchanged": true,
+      "glError": 0,
+      "metrics": {
+        "ready": true,
+        "aircraft": 3,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "activeUfoFireworks": 0,
+        "decorations": 0,
+        "debrisMeshes": 0,
+        "smokeMeshes": 6,
+        "drawCalls": 162,
+        "geometries": 74,
+        "textures": 5,
+        "programs": 17
+      },
+      "markerLabels": [
+        {
+          "text": "506m",
+          "x": 80.71769676071817,
+          "y": 218.0209092863594,
+          "width": 35,
+          "height": 11,
+          "anchorX": 98.21769676071817,
+          "anchorY": 226.0209092863594
+        },
+        {
+          "text": "街 1 · 125HP",
+          "x": 203.31256897375096,
+          "y": 317.7596220556826,
+          "width": 76,
+          "height": 13,
+          "anchorX": 241.31256897375096,
+          "anchorY": 328.7596220556826
+        }
+      ]
+    },
+    {
+      "name": "small-landscape-notices",
+      "fixture": "notices",
+      "tick": 0,
+      "worldRendered": true,
+      "stateUnchanged": true,
+      "glError": 0,
+      "metrics": {
+        "ready": true,
+        "aircraft": 3,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "activeUfoFireworks": 0,
+        "decorations": 0,
+        "debrisMeshes": 0,
+        "smokeMeshes": 6,
+        "drawCalls": 191,
+        "geometries": 74,
+        "textures": 5,
+        "programs": 17
+      },
+      "markerLabels": [
+        {
+          "text": "506m",
+          "x": 231.6930685975877,
+          "y": 164.60332917541373,
+          "width": 35,
+          "height": 11,
+          "anchorX": 249.1930685975877,
+          "anchorY": 172.60332917541373
+        },
+        {
+          "text": "街 1 · 125HP",
+          "x": 324,
+          "y": 271,
+          "width": 76,
+          "height": 13,
+          "anchorX": 362,
+          "anchorY": 282
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "finalVerificationInputDigest": "ad3440fc637784ddc5b91303755e00eb3cf19c7115eb83dc061fffa832e2644c",
+  "changesAfterCapture": [
+    "Removed one trailing blank line from src/style.css; no CSS rule or layout change."
+  ]
+}

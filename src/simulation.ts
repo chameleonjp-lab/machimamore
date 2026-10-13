@@ -62,7 +62,7 @@ function resolveRef(state: GameState, ref: EntityRef | null): Aircraft | Ufo | C
   const entities = ref.kind === 'city' ? state.city : ref.kind === 'ufo' ? state.ufos : state.fighters;
   return entities.find(e => e.token === ref.token && e.generation === ref.generation && e.health > 0) ?? null;
 }
-function collidersFor(state: GameState, excludedId?: number, beamRadius = 0): Collider[] {
+function collidersFor(state: Pick<GameState, 'fighters' | 'ufos' | 'city'>, excludedId?: number, beamRadius = 0): Collider[] {
   const colliders: Collider[] = [];
   for (const e of [...state.fighters, ...state.ufos]) if (e.health > 0 && e.id !== excludedId) colliders.push({ shape: 'sphere', key: `${e.kind}:${String(e.token).padStart(2, '0')}:${e.generation}`, ref: refOf(e), previous: e.previous, position: e.position, radius: e.radius + beamRadius });
   for (const d of state.city) if (!d.destroyed) colliders.push({ shape: 'box', key: `city:${String(d.token).padStart(2, '0')}`, ref: refOf(d), min: d.position.clone().sub(d.halfExtent), max: d.position.clone().add(d.halfExtent), radius: beamRadius });
@@ -74,6 +74,15 @@ function clearLine(state: GameState, start: Vector3, point: Vector3, ownerId: nu
   const hit = nearestBeamContact(start, point, collidersFor(state, ownerId), 1);
   if (!hit || !hit.collider.ref) return hit === null;
   return resolveRef(state, hit.collider.ref)?.id === intendedId;
+}
+
+/** Read-only view helpers for the product aim overlay; both reuse live combat facts. */
+export function flightTargetLineOfSight(state: GameState, target: Aircraft | Ufo): boolean {
+  const player = state.fighters.find(fighter => fighter.id === state.playerId && fighter.health > 0);
+  return !!player && clearLine(state, player.position, target.position, player.id, target.id);
+}
+export function selectedFlightTargetKey(state: Pick<GameState, 'controller'>): string | null {
+  return state.controller.targetLock.key;
 }
 function spawnSafe(state: GameState, point: Vector3, radius: number): boolean {
   if (point.y - radius <= groundHeight(point)) return false;

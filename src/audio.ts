@@ -1,5 +1,8 @@
 import type { Aircraft, GameEvent } from './types';
 
+const MAX_AUDIO_SOURCES=10;
+const ENGINE_PARTIAL_LEVELS=[.45,.2,.12] as const;
+
 /** One lazily created context. Engine + effects are capped at ten live sources. */
 export class FlightAudio {
   enabled = false;
@@ -7,7 +10,8 @@ export class FlightAudio {
   failed = false;
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
-  private engine: OscillatorNode | null = null;
+  private engine: OscillatorNode[] = [];
+  private engineNodes: AudioNode[] = [];
   private engineGain: GainNode | null = null;
   private effects = new Map<OscillatorNode, AudioNode[]>();
   private lastMission = -1;
@@ -17,7 +21,7 @@ export class FlightAudio {
   private unlocking: Promise<void> | null = null;
   private disposed = false;
   get activeEffectSourceCount() { return this.effects.size; }
-  get activeSources() { return this.effects.size + Number(this.engine !== null); }
+  get activeSources() { return this.effects.size + this.engine.length; }
   get contextCount() { return Number(this.ctx !== null); }
   get contextState() { return this.ctx?.state ?? 'uncreated'; }
 
@@ -51,17 +55,24 @@ export class FlightAudio {
   }
   updatePlayer(player: Aircraft | null): void {
     this.player=player;
-    if (this.engine && this.ctx) this.engine.frequency.setTargetAtTime(player ? 48 + player.speed * .34 : 35, this.ctx.currentTime, .12);
+    if (this.ctx) this.engine.forEach((engine,index)=>engine.frequency.setTargetAtTime((player?40+player.speed*.13:35)*(index+1),this.ctx!.currentTime,.12));
     if (this.engineGain && this.ctx) this.engineGain.gain.setTargetAtTime(player ? .0475 : .012, this.ctx.currentTime, .1);
   }
   private startEngine(): void {
-    if(this.engine || !this.ctx || !this.master)return;
-    const engine=this.ctx.createOscillator(), gain=this.ctx.createGain(); engine.type='sawtooth'; engine.frequency.value=85; gain.gain.value=.0475;
-    engine.connect(gain); gain.connect(this.master); engine.start(); this.engine=engine; this.engineGain=gain;
+    if(this.engine.length || !this.ctx || !this.master)return;
+    const ctx=this.ctx,base=this.player?40+this.player.speed*.13:35,gain=ctx.createGain();gain.gain.value=.0475;gain.connect(this.master);this.engineGain=gain;
+    try{
+      for(const [index,level] of ENGINE_PARTIAL_LEVELS.entries()){
+        const engine=ctx.createOscillator(),partial=ctx.createGain();engine.type=index===0?'sawtooth':'sine';engine.frequency.value=base*(index+1);partial.gain.value=level;
+        engine.connect(partial);partial.connect(gain);this.engine.push(engine);this.engineNodes.push(engine,partial);engine.start();
+      }
+    }catch{this.stopEngine();this.failed=true;}
   }
   private stopEngine(): void {
-    if(this.engine){try{this.engine.stop();}catch{}this.engine.disconnect();this.engine=null;}
-    this.engineGain?.disconnect(); this.engineGain=null;
+    for(const engine of this.engine){try{engine.stop();}catch{}}
+    for(const node of this.engineNodes)node.disconnect();
+    this.engine.length=0;this.engineNodes.length=0;
+    this.engineGain?.disconnect();this.engineGain=null;
   }
   consume(events: readonly GameEvent[]): void {
     for(const event of events) {
@@ -83,7 +94,7 @@ export class FlightAudio {
         case 'kill': case 'city-destroyed': preset=[95,18,.45,'sawtooth',.27];break;
         case 'respawn': case 'takeover': preset=[280,560,.25,'sine',.15];break;
       }
-      if(!preset || this.effects.size>=9)continue;
+      if(!preset || this.activeSources>=MAX_AUDIO_SOURCES)continue;
       this.lastSoundTick.set(category,event.tick);this.tone(event,...preset);
     }
   }
