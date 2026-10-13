@@ -1,3 +1,5 @@
+import { chooseRadarLayout, collectMarkerKeepOuts } from './flight-markers';
+
 /** Unscaled layout-CSS-pixel centre rectangles shared by live placement, preview and Save. */
 export type ControlObstacle = { x: number; y: number; width: number; height: number };
 
@@ -25,16 +27,23 @@ export function measureHudObstacles(app: HTMLElement): ControlObstacle[] {
   }
   const copy = hud.cloneNode(true) as HTMLElement;
   copy.removeAttribute('hidden'); host.append(copy);
+  const normalControls=copy.querySelector<HTMLElement>('#normal-controls');if(normalControls)normalControls.hidden=false;
   app.parentElement?.append(host);
   try {
     if (!host.isConnected) return [];
     const origin = host.getBoundingClientRect();
     const scaleX = rect.width / origin.width, scaleY = rect.height / origin.height;
-    return [...copy.querySelectorAll<HTMLElement>('button:not(.action-control):not(.flight-button):not([data-flight-control])')]
+    const obstacles:ControlObstacle[]=[...copy.querySelectorAll<HTMLElement>('button:not(.action-control):not(.flight-button):not([data-flight-control])')]
       .filter(element => !element.hidden && !element.closest('[hidden]'))
       .map(element => element.getBoundingClientRect())
       .filter(item => item.width > 0 && item.height > 0)
       .map(item => ({ x:(item.left-origin.left+item.width/2)*scaleX, y:(item.top-origin.top+item.height/2)*scaleY, width:item.width*scaleX, height:item.height*scaleY }));
+    const uiBoxes=collectMarkerKeepOuts(host,true).map(item=>({x:(item.x-origin.left)*scaleX,y:(item.y-origin.top)*scaleY,width:item.width*scaleX,height:item.height*scaleY}));
+    const shortEdge=Math.min(rect.width,rect.height),radius=Math.max(26,Math.min(38,shortEdge*.085))+11;
+    const sight={x:rect.width/2-radius,y:rect.height*.363-radius,width:radius*2,height:radius*2};
+    const radar=chooseRadarLayout(rect.width,rect.height,uiBoxes,sight);
+    if(radar)obstacles.push({x:radar.x,y:radar.y,width:radar.bounds.width,height:radar.bounds.height});
+    return obstacles;
   } finally { host.remove(); }
 }
 

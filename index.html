@@ -44,11 +44,11 @@
         </div>
         <div class="mission-hud">
           <div class="tally enemy-tally"><span>UFO撃破</span><strong id="enemy-count">0 / 50</strong><small id="enemy-total">残機50 · 出撃8 · 予備＋待機42</small></div>
-          <div class="tally friendly-tally"><span>味方（自機込み）</span><strong id="allies-count">残機50</strong><small id="allies-total">出撃8 · 予備＋待機42</small></div>
           <div class="tally city-tally"><span>街の耐久</span><strong id="city-health">100%</strong><small id="city-destroyed">破壊 0 / 20区画</small><div class="health-track"><i id="city-bar"></i></div></div>
         </div>
         <div class="flight-data">
           <div class="player-health"><div class="health-label">機体 <b id="health">100</b><small>%</small></div><div class="health-track"><i id="health-bar"></i></div></div>
+          <div class="tally friendly-tally"><span>味方数（自機込み）</span><strong id="allies-count">50 / 50</strong><small id="allies-total">出撃8 · 予備＋待機42</small></div>
           <div class="instrument"><span id="altitude">220m</span><span id="speed">396km/h</span></div>
           <div class="ammo" aria-label="残弾数"><span>機銃 <b id="mg-ammo">288</b></span><span>機関砲 <b id="cannon-ammo">96</b></span></div>
           <div class="score-readout">暫定得点 <b id="score">0</b></div><div class="accuracy">暫定命中率<b id="accuracy">—</b></div>
@@ -59,7 +59,7 @@
           <progress id="reload-progress" max="360" value="0" aria-label="再装填の進行" hidden></progress>
           <p id="player-wait" class="player-wait" role="status" hidden></p>
           <p id="city-warning" class="city-warning" role="status" aria-live="polite" hidden></p>
-          <p id="warning" class="warning" role="status" hidden>低空注意 · 機首を上げて</p>
+          <p id="warning" class="warning" role="status" hidden>低空注意 · 機首上げ</p>
         </div>
         <div id="ally-announcements" class="ally-announcements" role="status" aria-live="polite" aria-atomic="true"></div>
         <p id="flight-tip" class="flight-tip">触れた位置からドラッグして操縦</p>
@@ -71,7 +71,7 @@
           <span id="throttle-help" class="visually-hidden">上で加速、下で減速。離すと中央に戻り、調整した速度を保持します。フォーカス中は矢印キーで調整できます。</span></div>
       </section>
       <section id="pause-screen" class="screen modal-screen" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
-        <div class="panel"><p class="eyebrow">PAUSED</p><h2 id="pause-title">一時停止</h2><p id="pause-reason">作戦の時計も止まっています。</p><button id="pause-reload" class="primary" hidden>画面の準備を再試行</button><button id="resume" class="primary">飛行を再開</button><button id="pause-restart" class="secondary">はじめから出撃</button><button id="pause-home" class="text-button">ホームへ戻る</button><div class="panel-actions"><button id="pause-rules" class="secondary">ルールと操作方法</button><button id="pause-controls" class="secondary">操作設定</button></div></div>
+        <div class="panel"><p class="eyebrow">PAUSED</p><h2 id="pause-title">一時停止</h2><p id="pause-reason">作戦の時計も止まっています。</p><button id="pause-reload" class="primary" hidden>画面の準備を再試行</button><button id="resume" class="primary">飛行を再開</button><button id="pause-restart" class="secondary">はじめから出撃</button><button id="pause-home" class="text-button">ホームへ戻る</button><details id="pause-status-details" class="pause-status-details"><summary>戦況詳細</summary><dl class="pause-status-list"><div><dt>作戦時間</dt><dd id="pause-time">00:00.00</dd></div><div><dt>敵UFO</dt><dd id="pause-enemy-status">残機50 · 出撃8 · 予備42 · 待機0</dd></div><div><dt>味方（自機込み）</dt><dd id="pause-friendly-status">残機50 · 出撃8 · 予備42 · 待機0</dd></div><div><dt>街の耐久 / 破壊</dt><dd id="pause-city-status">5000 / 5000HP · 0 / 20区画</dd></div><div><dt>自機HP / 高度</dt><dd id="pause-player-status">100% · 220m</dd></div><div><dt>速度 / 残弾</dt><dd id="pause-flight-status">396km/h · 機銃288 / 機関砲96</dd></div><div><dt>暫定得点 / 命中率</dt><dd id="pause-score-status">0 · 0%</dd></div><div><dt>時間点</dt><dd id="pause-time-bonus">勝利時に加算</dd></div></dl></details><div class="panel-actions"><button id="pause-rules" class="secondary">ルールと操作方法</button><button id="pause-controls" class="secondary">操作設定</button></div></div>
       </section>
       <section id="result" class="screen modal-screen" aria-labelledby="result-title" hidden>
         <div class="panel result-panel"><p id="result-kicker" class="eyebrow">MISSION REPORT</p><h2 id="result-title" tabindex="-1">作戦終了</h2><p id="result-mode" class="mode-label">イージー</p><p id="result-reason"></p><div class="result-time"><span>能動作戦時間</span><strong id="result-time">00:00.00</strong></div><p class="result-score">最終得点 <b id="result-score">0</b></p><dl id="score-breakdown" class="result-stats"></dl><dl class="result-stats"><div><dt>自機のUFO撃破</dt><dd id="player-kills">0機</dd></div><div><dt>僚機のUFO撃破</dt><dd id="ally-kills">0機</dd></div><div><dt>自機 / 僚機損失</dt><dd id="losses">0 / 0機</dd></div><div><dt>街の残耐久 / 破壊</dt><dd id="city-result">5000 / 5000HP · 0区画</dd></div><div><dt>自機 命中 / 発射</dt><dd id="accuracy-result">0 / 0発 · —（未射撃）</dd></div><div><dt>味方 / 敵の残機</dt><dd id="survivors">50 / 50機</dd></div></dl><button id="retry" class="primary">もう一度出撃</button><button id="result-home" class="secondary">ホームへ戻る</button><button id="result-controls" class="text-button">操作設定</button></div>

@@ -65,6 +65,37 @@ async function expectActualHitTargets(page:Page,selectors:string[]) {
   }),selectors);
   for(const result of results){expect(result.width,result.selector).toBeGreaterThanOrEqual(44);expect(result.height,result.selector).toBeGreaterThanOrEqual(44);expect(result.hit,`${result.selector} receives a center-point hit (${result.top})`).toBe(true);}
 }
+async function expectKaisenHudLayout(page:Page) {
+  const layout=await page.evaluate(()=>{
+    const rect=(selector:string)=>{const element=document.querySelector<HTMLElement>(selector)!,box=element.getBoundingClientRect();return{x:box.x,y:box.y,width:box.width,height:box.height};};
+    const optional=(selector:string)=>{const element=document.querySelector<HTMLElement>(selector);if(!element||element.hidden||element.closest('[hidden]'))return null;const box=element.getBoundingClientRect();if(box.width<=0||box.height<=0)return null;return{x:box.x,y:box.y,width:box.width,height:box.height};};
+    const flight=rect('#hud .flight-data'),mission=rect('#hud .mission-hud'),friendly=rect('#hud .friendly-tally'),view={width:innerWidth,height:innerHeight};
+    const controls=['#loop','#fire','#throttle'].map(optional).filter((box):box is NonNullable<typeof box>=>box!==null);
+    const notices=[...document.querySelectorAll<HTMLElement>('#hud .hud-notices > :not([hidden])')].map(element=>{const box=element.getBoundingClientRect();return{x:box.x,y:box.y,width:box.width,height:box.height};});
+    const messages=['#announcement:not(:empty)','#ally-announcements:not(:empty)'].map(optional).filter((box):box is NonNullable<typeof box>=>box!==null);
+    const radar=window.__machimamoreUi.radarBounds(),sight=window.__machimamoreUi.sightBounds();
+    return{flight,mission,friendly,controls,notices,messages,radar,sight,view,tallies:document.querySelectorAll('#hud .mission-hud .tally').length,
+      flightBackground:getComputedStyle(document.querySelector<HTMLElement>('#hud .flight-data')!).backgroundColor,
+      flightBorder:getComputedStyle(document.querySelector<HTMLElement>('#hud .flight-data')!).borderTopWidth,
+      shortFields:{accuracy:getComputedStyle(document.querySelector<HTMLElement>('#hud .accuracy')!).display,
+        bonus:getComputedStyle(document.querySelector<HTMLElement>('#hud .bonus-note')!).display,
+        reserve:getComputedStyle(document.querySelector<HTMLElement>('#hud .friendly-tally small')!).display,
+        enemyDetail:getComputedStyle(document.querySelector<HTMLElement>('#hud .enemy-tally small')!).display,
+        cityBar:getComputedStyle(document.querySelector<HTMLElement>('#hud .city-tally .health-track')!).display}};
+  });
+  const overlaps=(a:{x:number;y:number;width:number;height:number},b:{x:number;y:number;width:number;height:number})=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
+  expect(layout.tallies).toBe(2);expect(layout.flight.x).toBeLessThan(layout.view.width/2);expect(layout.mission.x).toBeGreaterThan(layout.view.width/2);
+  expect(overlaps(layout.flight,layout.mission)).toBe(false);
+  expect(layout.friendly.x).toBeGreaterThanOrEqual(layout.flight.x);expect(layout.friendly.x+layout.friendly.width).toBeLessThanOrEqual(layout.flight.x+layout.flight.width);
+  expect(layout.flightBackground).toBe('rgba(0, 0, 0, 0)');expect(layout.flightBorder).toBe('0px');
+  expect(layout.radar,'the 2.4km radar stays visible in the right-side slot').not.toBeNull();
+  for(const obstacle of [layout.flight,layout.mission,...layout.controls,...layout.notices,...layout.messages])expect(overlaps(layout.radar!,obstacle),`radar clears ${JSON.stringify(obstacle)}`).toBe(false);
+  if(layout.sight){
+    for(const obstacle of [layout.flight,layout.mission,layout.radar!,...layout.controls,...layout.notices,...layout.messages])expect(overlaps(layout.sight,obstacle),`aim clears ${JSON.stringify(obstacle)}`).toBe(false);
+  }
+  if((layout.view.width<=900&&layout.view.height<=560)||(layout.view.width<=350&&layout.view.height<=650)){expect(layout.shortFields.accuracy).toBe('none');expect(layout.shortFields.bonus).toBe('none');expect(layout.shortFields.reserve).toBe('none');expect(layout.shortFields.cityBar).toBe('none');}
+  if(layout.view.width<=350&&layout.view.height<=650)expect(layout.shortFields.enemyDetail).toBe('none');
+}
 async function expectMarkerLabelsClear(page:Page,expected:string[]) {
   const report=await page.evaluate(()=>{
     const labels=window.__machimamoreUi.markerBoxes().map(box=>({text:box.text,x:box.x,y:box.y,width:box.width,height:box.height}));
@@ -76,6 +107,7 @@ async function expectMarkerLabelsClear(page:Page,expected:string[]) {
       if(style.display==='none'||style.visibility==='hidden'||rect.width<=0||rect.height<=0)return[];
       return[{selector,x:rect.x,y:rect.y,width:rect.width,height:rect.height}];
     }));
+    const radar=window.__machimamoreUi.radarBounds();if(radar)obstacles.push({selector:'#markers radar',...radar});
     const overlaps=(a:{x:number;y:number;width:number;height:number},b:{x:number;y:number;width:number;height:number})=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
     const conflicts=labels.flatMap(label=>obstacles.filter(obstacle=>overlaps(label,obstacle)).map(obstacle=>`${label.text} overlaps ${obstacle.selector}`));
     for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++)if(overlaps(labels[i]!,labels[j]!))conflicts.push(`${labels[i]!.text} overlaps ${labels[j]!.text}`);
@@ -87,11 +119,22 @@ async function expectMarkerLabelsClear(page:Page,expected:string[]) {
     const otherProtectedUi=protectedUi.filter(box=>!messages.includes(box));
     for(const message of messages)for(const target of otherProtectedUi)if(overlaps(message,target))conflicts.push(`${message.selector} overlaps ${target.selector}`);
     for(let i=0;i<messages.length;i++)for(let j=i+1;j<messages.length;j++)if(overlaps(messages[i]!,messages[j]!))conflicts.push('announcement messages overlap each other');
-    return{width:innerWidth,height:innerHeight,labels,conflicts};
+    return{width:innerWidth,height:innerHeight,labels,conflicts,radar};
   });
+  expect(report.radar,'marker layout has a visible radar panel and caption').not.toBeNull();
   expect(report.labels.map(label=>label.text.startsWith('街')?'city':label.text)).toEqual(expected);
   for(const label of report.labels){expect(label.x).toBeGreaterThanOrEqual(0);expect(label.y).toBeGreaterThanOrEqual(0);expect(label.x+label.width).toBeLessThanOrEqual(report.width);expect(label.y+label.height).toBeLessThanOrEqual(report.height);}
   expect(report.conflicts).toEqual([]);
+}
+async function expectPauseStatusDetails(page:Page) {
+  const details=page.locator('#pause-status-details');await expect(details).toBeVisible();
+  if(!await details.evaluate(element=>(element as HTMLDetailsElement).open))await details.locator('summary').tap();
+  await expect(details).toHaveAttribute('open','');
+  for(const selector of ['#pause-time','#pause-enemy-status','#pause-friendly-status','#pause-city-status','#pause-player-status','#pause-flight-status','#pause-score-status','#pause-time-bonus']){
+    await expect(page.locator(selector)).not.toBeEmpty();
+  }
+  await expect(page.locator('#pause-enemy-status')).toContainText('予備');await expect(page.locator('#pause-enemy-status')).toContainText('待機');
+  await expect(page.locator('#pause-friendly-status')).toContainText('予備');await expect(page.locator('#pause-score-status')).toContainText('発');
 }
 async function expectAnnouncementLayout(page:Page) {
   const layout=await page.locator('#announcement').evaluate((element:HTMLElement)=>{
@@ -101,10 +144,10 @@ async function expectAnnouncementLayout(page:Page) {
   expect(layout.x).toBeGreaterThanOrEqual(0);expect(layout.y).toBeGreaterThanOrEqual(0);
   expect(layout.x+layout.width).toBeLessThanOrEqual(layout.viewportWidth);expect(layout.y+layout.height).toBeLessThanOrEqual(layout.viewportHeight);
   if(layout.viewportWidth===320&&layout.viewportHeight===568){
-    expect(layout.x).toBeCloseTo(184,0);expect(layout.y).toBeCloseTo(230.2,1);expect(layout.width).toBeCloseTo(124,0);expect(layout.lines).toBe(3);
+    expect(layout.x).toBeCloseTo(122,0);expect(layout.y).toBeCloseTo(248.2,1);expect(layout.width).toBeCloseTo(84,0);expect(layout.lines).toBeGreaterThanOrEqual(2);
   }
   if(layout.viewportWidth===568&&layout.viewportHeight===320){
-    expect(layout.x).toBeCloseTo(150,0);expect(layout.y).toBeCloseTo(12,0);expect(layout.width).toBeCloseTo(268,0);expect(layout.lines).toBe(1);
+    expect(layout.x).toBeCloseTo(200,0);expect(layout.y).toBeCloseTo(12,0);expect(layout.width).toBeCloseTo(168,0);expect(layout.lines).toBeGreaterThanOrEqual(1);expect(layout.lines).toBeLessThanOrEqual(3);
   }
 }
 
@@ -187,9 +230,10 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await expect(page.locator('#app')).toHaveAttribute('data-input','touch');
   await expect(page.locator('#app')).toHaveAttribute('data-screen','playing');
   await expectFixedUi(page,'playing','playing');
+  await expectKaisenHudLayout(page);
   await fits(page,['#pause','#game-sound','#loop','#fire','#throttle'],true);
   await expectActualHitTargets(page,['#pause','#game-sound','#loop','#fire','#throttle']);
-  await expectMarkerLabelsClear(page,['UFO','味方']);
+  await expectMarkerLabelsClear(page,['506m']);
   await expect(page.locator('#throttle')).toHaveAttribute('aria-valuenow','0');
   await expect(page.locator('#throttle')).toHaveAttribute('aria-orientation','vertical');
   await expect(page.locator('#hud-mode')).toHaveText('ノーマル');
@@ -203,6 +247,12 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await capture(page, info, 'normal-keyboard-common-controls');
   await page.locator('#pause').tap();await expect(page.locator('#pause-screen')).toBeVisible();
   await expectFixedUi(page,'paused','paused');
+  await page.keyboard.press('Tab');await page.keyboard.press('Tab');await page.keyboard.press('Tab');
+  await expect(page.locator('#pause-status-details summary')).toBeFocused();
+  await page.keyboard.press('Enter');await expect(page.locator('#pause-status-details')).toHaveAttribute('open','');
+  await page.keyboard.press('Tab');await expect(page.locator('#pause-rules')).toBeFocused();
+  await page.keyboard.press('Tab');await expect(page.locator('#pause-controls')).toBeFocused();
+  await page.locator('#pause-status-details summary').tap();await expectPauseStatusDetails(page);
   await capture(page,info,'pause');
   await page.locator('#pause-rules').tap();await page.locator('#rules-close').tap();
   await expect(page.locator('#app')).toHaveAttribute('data-screen','paused');
@@ -216,14 +266,28 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.locator('#pause-home').tap();await expect(page.locator('#home')).toBeVisible();
   await expectFixedUi(page,'home','ready');
 
-  await show(page,'easy');await expect(page.locator('#loop')).toBeVisible();await expectMarkerLabelsClear(page,['UFO','味方']);
+  await show(page,'easy');await expectKaisenHudLayout(page);await expect(page.locator('#loop')).toBeVisible();await expectMarkerLabelsClear(page,['506m']);
+  await expect(page.locator('#announcement')).toBeHidden();await expect(page.locator('#ally-announcements')).toBeHidden();
   await expect(page.locator('#fire')).toBeHidden();await expect(page.locator('#throttle')).toBeHidden();
   expect(await canvasPixels(page)).toBeGreaterThan(30);await capture(page,info,'easy-hud');
   await show(page,'reload');await expect(page.locator('#reload-status')).toHaveText('再装填 3.0秒');
   await expect(page.locator('#reload-progress')).toBeVisible();
-  await show(page,'wait');await expect(page.locator('#player-wait')).toContainText('引き継ぎ待ち');await capture(page,info,'waiting-hud');
-  await show(page,'notices');await fits(page,['#warning','#city-warning','#reload-status','#reload-progress']);await expect(page.locator('#announcement')).toBeVisible();await expect(page.locator('#announcement')).toHaveText('街を守りUFO50機を撃破 · 味方残機は自機込み');await expectAnnouncementLayout(page);await expectMarkerLabelsClear(page,['UFO','味方','city']);
+  await show(page,'wait');await expect(page.locator('#player-wait')).toContainText('操縦引継待ち');await capture(page,info,'waiting-hud');
+  await page.locator('#pause').tap();await expectPauseStatusDetails(page);
+  await expect(page.locator('#pause-player-status')).toContainText('操縦引継待ち');await expect(page.locator('#pause-player-status')).toContainText('3.0秒');
+  await page.locator('#resume').tap();await expect(page.locator('#pause-screen')).toBeHidden();
+  await show(page,'notices');await expectKaisenHudLayout(page);await fits(page,['#warning','#city-warning','#reload-status','#reload-progress']);await expect(page.locator('#announcement')).toBeVisible();await expect(page.locator('#announcement')).toHaveText('街を守りUFO50機を撃破 · 味方残機は自機込み');await expectAnnouncementLayout(page);await expectMarkerLabelsClear(page,['506m','city']);
   await capture(page,info,'hud-notices');
+  await page.locator('#pause').tap();await expectPauseStatusDetails(page);
+  await expect(page.locator('#pause-city-status')).toContainText('4,750 / 5,000HP');await expect(page.locator('#pause-flight-status')).toContainText('機銃0 / 機関砲0');
+  await page.locator('#resume').tap();await expect(page.locator('#pause-screen')).toBeHidden();
+
+  await show(page,'easy-notices');await expectKaisenHudLayout(page);await expectFixedUi(page,'playing','playing');
+  await expect(page.locator('#ally-announcements')).toBeVisible();await expect(page.locator('#ally-announcements')).toHaveText('交戦中 · 残機と街の耐久を確認');
+  await fits(page,['#warning','#city-warning','#reload-status','#reload-progress']);await expectMarkerLabelsClear(page,['506m','city']);
+  await capture(page,info,'easy-hud-notices');
+  await page.locator('#announcement').evaluate(element=>{element.textContent='';});
+  await expect(page.locator('#flight-tip')).toBeHidden();await expectKaisenHudLayout(page);await expectMarkerLabelsClear(page,['506m','city']);
 
   for(const [name,title] of [['victory','防衛成功'],['defeat','防衛失敗'],['interrupted','作戦中断']] as const){
     await show(page,name);await expect(page.locator('#result')).toBeVisible();
@@ -249,7 +313,7 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.locator('#reload').tap();await expect(page.locator('#startup-error')).toBeHidden();
   await expect(page.locator('#reload')).toBeHidden();await expect(page.locator('#start')).toBeEnabled();
   await expectFixedUi(page,'home','ready');
-  await show(page,'normal');await expectMarkerLabelsClear(page,['UFO','味方']);await expectActualHitTargets(page,['#pause','#game-sound','#loop','#fire','#throttle']);
+  await show(page,'normal');await expectKaisenHudLayout(page);await expectMarkerLabelsClear(page,['506m']);await expectActualHitTargets(page,['#pause','#game-sound','#loop','#fire','#throttle']);
   expect(mainFrameNavigations).toHaveLength(navigationsBeforeRetry);
   expect(errors,'No uncaught/rejected runtime or console errors').toEqual([]);
   expect(failures,'No failed local assets').toEqual([]);expect(outbound,'No external requests').toEqual([]);

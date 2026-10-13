@@ -14,19 +14,25 @@ export class Hud {
     text('timer',formatTime(h.time));text('hud-mode',modeName(h.mode));
     text('enemy-count',`${h.enemy.D} / ${TOTAL_AIRCRAFT}`);text('enemy-total',`残機${h.enemy.remaining} · 出撃${h.enemy.A} · 予備＋待機${h.enemy.R+h.enemy.Q}`);
     text('allies-count',`残機${h.friendly.remaining}`);text('allies-total',`出撃${h.friendly.A} · 予備＋待機${h.friendly.R+h.friendly.Q}`);
+    const rosterDetail=(counts:HudSnapshot['friendly'])=>`残機${counts.remaining} · 出撃${counts.A} · 予備${counts.R} · 待機${counts.Q}`;
+    text('pause-time',formatTime(h.time));text('pause-enemy-status',rosterDetail(h.enemy));text('pause-friendly-status',rosterDetail(h.friendly));
+    text('pause-city-status',`${Math.ceil(h.cityHealth).toLocaleString('ja-JP')} / ${CITY_TOTAL_HEALTH.toLocaleString('ja-JP')}HP · ${h.cityDestroyed} / ${CITY_DISTRICTS}区画`);
     text('city-health',`${Math.ceil(h.cityPercent)}%`);text('city-destroyed',`破壊 ${h.cityDestroyed} / ${CITY_DISTRICTS}区画`);el('city-bar').style.width=`${h.cityPercent}%`;
     const p=h.player;text('health',p?String(Math.ceil(p.health/p.maxHealth*100)):'—');el('health-bar').style.width=`${p?p.health/p.maxHealth*100:0}%`;
     text('altitude',p?`${Math.round(p.position.y)}m`:'待機中');text('speed',p?`${Math.round(p.speed*3.6)}km/h`:'—');text('mg-ammo',p?String(p.mg):'—');text('cannon-ammo',p?String(p.cannon):'—');
     text('score',h.score.toLocaleString('ja-JP'));text('accuracy',formatAccuracy(h.accuracy));
+    text('pause-player-status',p?`${Math.ceil(p.health/p.maxHealth*100)}% · ${Math.round(p.position.y)}m`:`待機中 · ${h.waitingFor==='takeover'?'操縦引継待ち':'自機復帰待ち'} ${h.respawnSeconds.toFixed(1)}秒`);
+    text('pause-flight-status',p?`${Math.round(p.speed*3.6)}km/h · 機銃${p.mg} / 機関砲${p.cannon}`:'速度・残弾 —');
+    text('pause-score-status',`${h.score.toLocaleString('ja-JP')} · ${state.stats.hits} / ${state.stats.shots}発 · ${formatAccuracy(h.accuracy)}`);
     const reload=p?.reloadTicksRemaining??0;el('reload-status').hidden=reload===0;el('reload-progress').hidden=reload===0;if(reload>0){text('reload-status',`再装填 ${(reload/TICK_RATE).toFixed(1)}秒`);el<HTMLProgressElement>('reload-progress').value=RELOAD_TICKS-reload;}
     text('loop-status',!p?'待機中':p.loopProgress>0?'宙返り中':p.loopCooldown>0?`${p.loopCooldown.toFixed(1)}秒`:'すぐ使える');
-    el('player-wait').hidden=!!p;if(!p)text('player-wait',`${h.waitingFor==='takeover'?'僚機の操縦引き継ぎ':'自機の復帰'}待ち · ${Math.max(0,h.respawnSeconds).toFixed(1)}秒 · 味方残機${h.friendly.remaining}`);
+    el('player-wait').hidden=!!p;if(!p)text('player-wait',`${h.waitingFor==='takeover'?'操縦引継待ち':'自機復帰待ち'} · ${Math.max(0,h.respawnSeconds).toFixed(1)}秒 · 味方${h.friendly.remaining}`);
     el('warning').hidden=!p||p.position.y>=70;
     const attacked=state.city.filter(d=>d.attacked&&!d.destroyed);el('city-warning').hidden=attacked.length===0;
     if(attacked.length&&(state.tick-this.lastCityNotice>=90||!el('city-warning').textContent)){
       this.lastCityNotice=state.tick;const d=attacked.sort((a,b)=>a.health-b.health||a.token-b.token)[0]!,local=p?d.position.clone().sub(p.position).applyQuaternion(p.quaternion.clone().invert()):null;
       const direction=!local?'街':Math.abs(local.x)>Math.abs(local.z)?local.x>0?'右側':'左側':local.z<0?'前方':'後方';
-      text('city-warning',`△ ${direction}の街が攻撃中 · 区画${d.token+1} ${Math.ceil(d.health)}HP${attacked.length>1?` · 計${attacked.length}区画`:''}`);
+      text('city-warning',`△${direction}街攻撃中 · ${d.token+1}区 ${Math.ceil(d.health)}HP${attacked.length>1?` · 計${attacked.length}区`:''}`);
     }
   }
   result(r:GameResult):void{
