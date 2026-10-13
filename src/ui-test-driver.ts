@@ -1,8 +1,8 @@
 // Loaded only by main.ts in Vite's explicit DEV ui-test mode; never shipped.
 import { PerspectiveCamera, Vector3 } from 'three';
 import { createGame, getPlayer, startGame } from './simulation';
-import { drawFlightMarkers, MarkerKeepOutCache, type MarkerLabelBox } from './flight-markers';
-import { FLIGHT_FAR, FLIGHT_FOV, getFlightCameraPose } from './flight-view';
+import { chooseRadarLayout, drawFlightMarkers, MarkerKeepOutCache, type MarkerLabelBox } from './flight-markers';
+import { EASY_AIM_RADIUS, FLIGHT_FAR, FLIGHT_FOV, getFlightCameraPose } from './flight-view';
 import type { GameResult, GameState } from './types';
 
 export const UI_FIXTURES = ['home','easy','normal','reload','wait','notices','paused','victory','defeat','interrupted','startup-error'] as const;
@@ -12,6 +12,8 @@ export interface UiFixtureDriver {
   show(name: UiFixtureName): void;
   read(): { screen: UiScreen; tick: number; phase: GameState['phase']; frameScheduled: boolean };
   markerBoxes(): readonly MarkerLabelBox[];
+  radarBounds(): {x:number;y:number;width:number;height:number}|null;
+  sightBounds(): {x:number;y:number;width:number;height:number}|null;
 }
 
 /** Fixed display examples, not simulated outcomes or combat acceptance evidence. */
@@ -58,6 +60,26 @@ export function installUiTestDriver(host: {
   const camera=new PerspectiveCamera(FLIGHT_FOV,1,1,FLIGHT_FAR);
   let last: {state: GameState; flight: boolean} | null=null;
   let markerBoxes: MarkerLabelBox[]=[];
+  const project=(position:Vector3,width:number,height:number)=>{
+    const local=position.clone().sub(camera.position).applyQuaternion(camera.quaternion.clone().invert()),point=position.clone().project(camera);
+    return{x:(point.x*.5+.5)*width,y:(.5-point.y*.5)*height,visible:local.z<-.5&&point.z<1&&Math.abs(point.x)<.97&&Math.abs(point.y)<.94,behind:local.z>=-.5};
+  };
+  const sightBounds=()=>{
+    if(!last)return null;
+    const {state}=last,width=innerWidth,height=innerHeight,player=getPlayer(state);let point:{x:number;y:number;visible:boolean;behind:boolean};
+    if(state.mode==='easy')point={x:width/2,y:height/2,visible:true,behind:false};
+    else if(player)point=project(new Vector3(0,0,-504.5).applyQuaternion(player.quaternion).add(player.position),width,height);
+    else return null;
+    if(!point.visible)return null;
+    const radius=state.mode==='normal'?Math.max(26,Math.min(38,Math.min(width,height)*.085)):Math.min(width,height)*EASY_AIM_RADIUS;
+    const outer=radius+(player?.reloadTicksRemaining?11:3);
+    return{x:point.x-outer,y:point.y-outer,width:outer*2,height:outer*2};
+  };
+  const radarBounds=()=>{
+    if(!last)return null;
+    const layout=chooseRadarLayout(innerWidth,innerHeight,markerKeepOuts.read(),sightBounds()??undefined);
+    return layout?.bounds??null;
+  };
   const scene={
     render(state: GameState, flight: boolean) {
       last={state,flight};
@@ -68,10 +90,7 @@ export function installUiTestDriver(host: {
       const player=getPlayer(state);
       if(player)getFlightCameraPose(player,state.mode,camera.position,camera.quaternion);
       camera.updateMatrixWorld();
-      markerBoxes=drawFlightMarkers(context,width,height,state,flight,position=>{
-        const local=position.clone().sub(camera.position).applyQuaternion(camera.quaternion.clone().invert()),point=position.clone().project(camera);
-        return {x:(point.x*.5+.5)*width,y:(.5-point.y*.5)*height,visible:local.z<-.5&&point.z<1&&Math.abs(point.x)<.97&&Math.abs(point.y)<.94,behind:local.z>=-.5};
-      },camera,markerKeepOuts.read());
+      markerBoxes=drawFlightMarkers(context,width,height,state,flight,position=>project(position,width,height),camera,markerKeepOuts.read());
     },
     resize(){markerKeepOuts.invalidate();if(last)this.render(last.state,last.flight);},
     dispose(){markerKeepOuts.dispose();context.clearRect(0,0,host.overlay.width,host.overlay.height);},
@@ -90,6 +109,8 @@ export function installUiTestDriver(host: {
     },
     read:host.read,
     markerBoxes:()=>markerBoxes,
+    radarBounds,
+    sightBounds,
   };
   Object.defineProperty(window,'__machimamoreUi',{configurable:true,value:driver});
   document.documentElement.dataset.uiFixtureReady='true';

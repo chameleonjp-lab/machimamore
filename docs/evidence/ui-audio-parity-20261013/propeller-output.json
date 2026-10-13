@@ -1,0 +1,66 @@
+{
+  "scope": "Actual FlightAudio node graph rendered by browser OfflineAudioContext; no speaker or iPhone listening claim",
+  "cases": [
+    {
+      "speed": 65,
+      "before": {
+        "rms": 0.0053380112183173895,
+        "peak": 0.010736891068518162,
+        "sources": 1,
+        "disposedSources": 0,
+        "sampleRate": 24000,
+        "sampledSeconds": 1
+      },
+      "candidate": {
+        "rms": 0.0027013461086940875,
+        "peak": 0.004863133653998375,
+        "sources": 3,
+        "disposedSources": 0,
+        "sampleRate": 24000,
+        "sampledSeconds": 1
+      },
+      "rmsReductionPercent": 49.39414702943268
+    },
+    {
+      "speed": 110,
+      "before": {
+        "rms": 0.005350034345819549,
+        "peak": 0.01072525791823864,
+        "sources": 1,
+        "disposedSources": 0,
+        "sampleRate": 24000,
+        "sampledSeconds": 1
+      },
+      "candidate": {
+        "rms": 0.002701230732658102,
+        "peak": 0.004829408600926399,
+        "sources": 3,
+        "disposedSources": 0,
+        "sampleRate": 24000,
+        "sampledSeconds": 1
+      },
+      "rmsReductionPercent": 49.510030066090884
+    },
+    {
+      "speed": 140,
+      "before": {
+        "rms": 0.00534467248838288,
+        "peak": 0.010801105760037899,
+        "sources": 1,
+        "disposedSources": 0,
+        "sampleRate": 24000,
+        "sampledSeconds": 1
+      },
+      "candidate": {
+        "rms": 0.0026960304077843344,
+        "peak": 0.004866797011345625,
+        "sources": 3,
+        "disposedSources": 0,
+        "sampleRate": 24000,
+        "sampledSeconds": 1
+      },
+      "rmsReductionPercent": 49.55667697797394
+    }
+  ],
+  "errors": []
+}
