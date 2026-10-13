@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "requirement": "U14",
+  "date": "2026-10-13",
+  "baseCommit": "220d903fc57406c2003a94235be3fde308f9a21b",
+  "branch": "work/ufo-fireworks-20261013",
+  "verificationInputDigest": "2f5a494abda90e8b15ac405cb7d1931544122445e7c28733a50c121bdb4b5c7e",
+  "changedCodeInputs": [
+    {
+      "path": "browser-tests/render-capacity.spec.ts",
+      "bytes": 4572,
+      "sha256": "05158810aacc986d1354179f17e5eafa53cd013cdedb94da04fa0bb9559a063b"
+    },
+    {
+      "path": "src/main.ts",
+      "bytes": 20303,
+      "sha256": "8eb881413d9dadbdc08bfd829d85098f2ee459f6867cc4e2a006debd8f25c89f"
+    },
+    {
+      "path": "src/scene.ts",
+      "bytes": 23195,
+      "sha256": "c50181af746c5ccd388e98077fac3de609d85051671bd81e4f050dcf69468d0e"
+    },
+    {
+      "path": "src/ufo-fireworks.ts",
+      "bytes": 13187,
+      "sha256": "71db64e7e24b111663bd17d83edbb7fe1eb037970c06619e615e8b2e8918c96e"
+    },
+    {
+      "path": "tests/ufo-fireworks.test.ts",
+      "bytes": 4627,
+      "sha256": "1357db3fba6104d78eebb6b9f25e544fbdac262d1ab9f7d3d9108449a62593fc"
+    }
+  ],
+  "checks": {
+    "unit": {
+      "passed": 170,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 5032.542262
+    },
+    "typecheckAndBuild": "passed",
+    "distribution": "passed: four allowed public files and exact Three.js LICENSE",
+    "localUi": {
+      "startTime": "2026-10-13T02:03:32.162Z",
+      "duration": 32754.980999999996,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "localMaximumRenderer": {
+      "startTime": "2026-10-13T02:04:21.550Z",
+      "duration": 7638.575,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "visualObservation": {
+    "browser": "153.0.8010.0",
+    "environment": "Linux headless Chromium 153 / software WebGL; not physical Safari",
+    "setup": {
+      "prepared": {
+        "ready": true,
+        "aircraft": 2,
+        "activeLasers": 0,
+        "projectiles": 0,
+        "activeUfoFireworks": 0,
+        "decorations": 0,
+        "debrisMeshes": 0,
+        "smokeMeshes": 0,
+        "drawCalls": 177,
+        "geometries": 74,
+        "textures": 5,
+        "programs": 17
+      },
+      "initial": {
+        "ready": true,
+        "aircraft": 1,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "activeUfoFireworks": 1,
+        "decorations": 0,
+        "debrisMeshes": 0,
+        "smokeMeshes": 0,
+        "drawCalls": 169,
+        "geometries": 74,
+        "textures": 5,
+        "programs": 17
+      },
+      "birthTick": 44,
+      "position": [
+        0,
+        250,
+        50
+      ],
+      "stateUnchangedByRender": true
+    },
+    "samples": [
+      {
+        "age": 0.055,
+        "metrics": {
+          "ready": true,
+          "aircraft": 1,
+          "activeLasers": 0,
+          "projectiles": 12,
+          "activeUfoFireworks": 1,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 0,
+          "drawCalls": 169,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "glError": 0
+      },
+      {
+        "age": 0.45,
+        "metrics": {
+          "ready": true,
+          "aircraft": 1,
+          "activeLasers": 0,
+          "projectiles": 12,
+          "activeUfoFireworks": 1,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 0,
+          "drawCalls": 168,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "glError": 0
+      },
+      {
+        "age": 1.05,
+        "metrics": {
+          "ready": true,
+          "aircraft": 1,
+          "activeLasers": 0,
+          "projectiles": 12,
+          "activeUfoFireworks": 1,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 0,
+          "drawCalls": 168,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "glError": 0
+      },
+      {
+        "age": 1.85,
+        "metrics": {
+          "ready": true,
+          "aircraft": 1,
+          "activeLasers": 0,
+          "projectiles": 12,
+          "activeUfoFireworks": 0,
+          "decorations": 0,
+          "debrisMeshes": 0,
+          "smokeMeshes": 0,
+          "drawCalls": 166,
+          "geometries": 74,
+          "textures": 5,
+          "programs": 17
+        },
+        "glError": 0
+      }
+    ],
+    "repeated": {
+      "initial": {
+        "ready": true,
+        "aircraft": 1,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "activeUfoFireworks": 0,
+        "decorations": 0,
+        "debrisMeshes": 0,
+        "smokeMeshes": 0,
+        "drawCalls": 166,
+        "geometries": 74,
+        "textures": 5,
+        "programs": 17
+      },
+      "final": {
+        "ready": true,
+        "aircraft": 1,
+        "activeLasers": 0,
+        "projectiles": 12,
+        "activeUfoFireworks": 0,
+        "decorations": 0,
+        "debrisMeshes": 0,
+        "smokeMeshes": 0,
+        "drawCalls": 166,
+        "geometries": 74,
+        "textures": 5,
+        "programs": 17
+      },
+      "glError": 0
+    },
+    "errors": []
+  },
+  "captureScope": "Pre-start fixture with one fighter and one UFO. Normal fire through startGame/stepGame produced the real kill at tick 44. After the kill, presentation time was sampled at fixed ages for images. The later eight-effect/mission/result samples are presentation fixtures; they do not demonstrate a full normal-play campaign win.",
+  "images": [
+    {
+      "path": "docs/evidence/ufo-fireworks-20261013/bloom-landscape.png",
+      "bytes": 90253,
+      "sha256": "2a2ea851bca5d2ee7c8b480a758d42ec775c8ce1e87bbe78566af15c945f5d27",
+      "visuallyOpenedAtOriginalResolution": true
+    },
+    {
+      "path": "docs/evidence/ufo-fireworks-20261013/bloom-portrait.png",
+      "bytes": 72454,
+      "sha256": "7aeb5fab0e3a5d1a0bbadaab4121e541a0d25de37f2e63f98a76af10547f34a7",
+      "visuallyOpenedAtOriginalResolution": true
+    },
+    {
+      "path": "docs/evidence/ufo-fireworks-20261013/reduced-motion-portrait.png",
+      "bytes": 67287,
+      "sha256": "c4b868e7d569deff04937c344392c1243d05af71dc44e628f23c726de1b0ed7d",
+      "visuallyOpenedAtOriginalResolution": true
+    }
+  ],
+  "independentSourceReview": {
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "xhigh",
+    "newUnitPassed": 5,
+    "openSourceFindings": 0,
+    "moduleSha256": "71db64e7e24b111663bd17d83edbb7fe1eb037970c06619e615e8b2e8918c96e"
+  },
+  "limitations": [
+    "Local Chromium 153.0.8010.0 uses software WebGL, not physical iPhone Safari.",
+    "Pinned Playwright browser download failed in the local environment; repository default Chromium/WebKit checks are verified separately on GitHub CI.",
+    "Physical Safari performance, touch feel and flash measurements were not run."
+  ]
+}

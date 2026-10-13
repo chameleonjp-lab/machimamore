@@ -4,7 +4,8 @@ import { AircraftFactory, type AircraftVisual } from './aircraft';
 import { AircraftBatchFactory } from './aircraft-batch';
 import { FLIGHT_FOV, FLIGHT_FAR, EASY_AIM_RADIUS, getFlightCameraPose } from './flight-view';
 import { ACTIVE_LIMIT, MAX_BEAMS, MAX_BULLETS } from './rules';
-import type { Aircraft, CityDistrict, GameState } from './types';
+import { UfoFireworks } from './ufo-fireworks';
+import type { Aircraft, CityDistrict, GameEvent, GameState } from './types';
 
 type DistrictVisual = { root: Group; intact: Group; rubble: Group; smoke: Group; material: MeshStandardMaterial; danger: LineSegments };
 const UP = new Vector3(0, 1, 0);
@@ -38,6 +39,7 @@ export class MachiMamoreScene {
   private dpr = 1;
   private disposed = false;
   private current: GameState | null = null;
+  private fireworks = new UfoFireworks();
   private reducedMotion = false;
   private ready = false;
   private cameraMission = -1;
@@ -56,7 +58,7 @@ export class MachiMamoreScene {
     const sky=this.mesh(this.geometry(new SphereGeometry(6200,24,12)),this.material(new ShaderMaterial({side:BackSide,depthWrite:false,vertexShader:'varying vec3 vPosition; void main(){vPosition=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec3 vPosition;void main(){float h=clamp(normalize(vPosition).y,0.,1.);vec3 c=mix(vec3(.79,.80,.70),vec3(.20,.38,.48),pow(h,.55));gl_FragColor=vec4(c,1.);}'})));this.world.add(sky);
     this.sea=this.material(new ShaderMaterial({uniforms:{uTime:{value:0}},vertexShader:'varying vec3 vP;void main(){vP=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'uniform float uTime;varying vec3 vP;void main(){float a=sin(vP.x*.042+uTime*.23)*sin(vP.y*.027-uTime*.2);float b=pow(max(0.,sin(vP.x*.014+vP.y*.047+uTime*.14)),22.);vec3 c=vec3(.10,.25,.30)+a*.014+b*.045;gl_FragColor=vec4(c,1.);}'}));
     const ocean=this.mesh(this.geometry(new PlaneGeometry(22000,22000)),this.sea);ocean.rotation.x=-Math.PI/2;ocean.position.y=-.1;this.world.add(ocean);
-    this.createLandscape();this.createMothership();
+    this.createLandscape();this.createMothership();this.world.add(this.fireworks.root);
     const saucerPrototype=this.createSaucer();
     for(let i=0;i<ACTIVE_LIMIT;i++) {const detail=i===0?'hero':'enemy',plane=this.batches.optimize(this.factory.create(detail),detail);plane.root.visible=false;this.planes.push(plane);this.world.add(plane.root);const saucer=saucerPrototype.clone(true);saucer.visible=false;this.saucers.push(saucer);this.world.add(saucer);
       const geom=this.geometry(new BufferGeometry().setAttribute('position',new BufferAttribute(new Float32Array(6),3)).setAttribute('lineDistance',new BufferAttribute(new Float32Array(2),1)));
@@ -120,6 +122,7 @@ export class MachiMamoreScene {
     this.ready=false;this.syncWorld(state,1);this.updateCamera(state,false,1);
     const flags:{object:Object3D;visible:boolean;frustumCulled:boolean}[]=[];
     this.world.traverse(object=>{flags.push({object,visible:object.visible,frustumCulled:object.frustumCulled});object.visible=true;object.frustumCulled=false;});
+    const restoreFireworks=this.fireworks.prepareForUpload();
     const target=this.renderer.getRenderTarget(),face=this.renderer.getActiveCubeFace(),level=this.renderer.getActiveMipmapLevel();
     const viewport=this.renderer.getViewport(new Vector4()),scissor=this.renderer.getScissor(new Vector4()),scissorTest=this.renderer.getScissorTest();
     const cameraPosition=this.camera.position.clone(),cameraRotation=this.camera.quaternion.clone(),cameraUp=this.camera.up.clone();
@@ -137,6 +140,7 @@ export class MachiMamoreScene {
       this.renderer.render(this.world,this.camera);
       await this.waitForGpu();
     }finally{
+      restoreFireworks();
       for(const flag of flags){flag.object.visible=flag.visible;flag.object.frustumCulled=flag.frustumCulled;}
       this.tracerGeometry.setDrawRange(drawRange.start,drawRange.count);
       this.camera.position.copy(cameraPosition);this.camera.quaternion.copy(cameraRotation);this.camera.up.copy(cameraUp);
@@ -174,7 +178,7 @@ export class MachiMamoreScene {
     if(this.disposed)return;this.markerKeepOuts.invalidate();this.width=Math.max(1,window.innerWidth);this.height=Math.max(1,window.innerHeight);this.dpr=Math.min(window.devicePixelRatio||1,1.5);
     this.renderer.setPixelRatio(this.dpr);this.renderer.setSize(this.width,this.height,false);this.camera.aspect=this.width/this.height;this.camera.updateProjectionMatrix();this.overlay.width=Math.round(this.width*this.dpr);this.overlay.height=Math.round(this.height*this.dpr);this.ctx.setTransform(this.dpr,0,0,this.dpr,0,0);
   }
-  private syncWorld(state:GameState,alpha:number,resultAnimationTime=0):void{
+  private syncWorld(state:GameState,alpha:number,resultAnimationTime=0,presentationEvents:readonly GameEvent[]=[]):void{
     this.current=state;while(this.districts.length<state.city.length)this.districts.push(this.createDistrict(state.city[this.districts.length]!));
     for(let i=0;i<state.city.length;i++){const d=state.city[i]!,v=this.districts[i]!,ratio=d.health/d.maxHealth;v.intact.visible=!d.destroyed;v.rubble.visible=d.destroyed;v.smoke.visible=ratio<.55;v.danger.visible=d.attacked&&!d.destroyed;v.material.color.copy(DISTRICT_DAMAGED).lerp(DISTRICT_INTACT,ratio);}
     const player=state.fighters.find(f=>f.id===state.playerId)??null;const ordered=player?[player,...state.fighters.filter(f=>f.id!==player.id)]:state.fighters;
@@ -184,6 +188,7 @@ export class MachiMamoreScene {
     for(let i=0;i<this.beamMeshes.length;i++){const mesh=this.beamMeshes[i]!,beam=state.beams[i];mesh.visible=!!beam;if(!beam)continue;const direction=beam.end.clone().sub(beam.start),length=direction.length();if(length<.001){mesh.visible=false;continue;}mesh.position.copy(beam.start).addScaledVector(direction,.5);mesh.quaternion.setFromUnitVectors(UP,direction.multiplyScalar(1/length));mesh.scale.set(1.2,length,1.2);}
     let count=0;for(const bullet of state.bullets){if(count>=MAX_BULLETS)break;bullet.previous.toArray(this.tracerPositions,count*6);bullet.position.toArray(this.tracerPositions,count*6+3);count++;}this.tracerGeometry.setDrawRange(0,count*2);this.tracerGeometry.attributes.position!.needsUpdate=true;
     this.sea.uniforms.uTime!.value=this.reducedMotion?0:state.elapsed;
+    this.fireworks.update(state,alpha,resultAnimationTime,this.reducedMotion,presentationEvents);
     // Victory-only presentation time is supplied by main; the terminal game tick stays frozen.
     const retreat=state.result?.outcome==='victory'?Math.min(1,this.reducedMotion?1:Math.max(0,resultAnimationTime)/3):0;this.mother.position.set(160+retreat*1500,1050+retreat*2400,-2580-retreat*2000);
   }
@@ -197,9 +202,9 @@ export class MachiMamoreScene {
     const blend=this.cameraTransferTick<0?1:Math.min(1,(state.tick-this.cameraTransferTick+alpha)/18);
     this.camera.position.copy(this.transferPosition).lerp(position,blend);this.camera.quaternion.copy(this.transferQuaternion).slerp(rotation,blend);
   }
-  render(state:GameState,flight:boolean,alpha=1,resultAnimationTime=0):void{if(this.disposed||!this.ready)return;this.syncWorld(state,alpha,resultAnimationTime);this.updateCamera(state,flight,alpha);this.renderer.render(this.world,this.camera);this.drawMarkers(state,flight);}
+  render(state:GameState,flight:boolean,alpha=1,resultAnimationTime=0,presentationEvents:readonly GameEvent[]=[]):void{if(this.disposed||!this.ready)return;this.syncWorld(state,alpha,resultAnimationTime,presentationEvents);this.updateCamera(state,flight,alpha);this.renderer.render(this.world,this.camera);this.drawMarkers(state,flight);}
   private project(position:Vector3):{x:number;y:number;visible:boolean;behind:boolean}{const local=position.clone().sub(this.camera.position).applyQuaternion(this.camera.quaternion.clone().invert()),point=position.clone().project(this.camera);return{x:(point.x*.5+.5)*this.width,y:(.5-point.y*.5)*this.height,visible:local.z<-.5&&point.z<1&&Math.abs(point.x)<.97&&Math.abs(point.y)<.94,behind:local.z>=-.5};}
   private drawMarkers(state:GameState,flight:boolean):void{drawFlightMarkers(this.ctx,this.width,this.height,state,flight,position=>this.project(position),this.camera,this.markerKeepOuts.read());}
-  metrics(){const debrisMeshes=this.districts.filter(d=>d.rubble.visible).length,smokeMeshes=this.districts.filter(d=>d.smoke.visible).length*3;return{ready:this.ready,aircraft:(this.current?.fighters.length??0)+(this.current?.ufos.length??0),activeLasers:this.current?.beams.length??0,projectiles:this.current?.bullets.length??0,decorations:debrisMeshes,debrisMeshes,smokeMeshes,drawCalls:this.renderer.info.render.calls,geometries:this.renderer.info.memory.geometries,textures:this.renderer.info.memory.textures,programs:this.renderer.info.programs?.length??0};}
-  dispose():void{if(this.disposed)return;this.disposed=true;this.ready=false;this.markerKeepOuts.dispose();this.world.clear();this.batches.dispose();this.factory.dispose();for(const geometry of this.geometries)geometry.dispose();for(const material of this.materials)material.dispose();this.renderer.dispose();this.ctx.clearRect(0,0,this.width,this.height);}
+  metrics(){const debrisMeshes=this.districts.filter(d=>d.rubble.visible).length,smokeMeshes=this.districts.filter(d=>d.smoke.visible).length*3;return{ready:this.ready,aircraft:(this.current?.fighters.length??0)+(this.current?.ufos.length??0),activeLasers:this.current?.beams.length??0,projectiles:this.current?.bullets.length??0,activeUfoFireworks:this.fireworks.activeCount,decorations:debrisMeshes,debrisMeshes,smokeMeshes,drawCalls:this.renderer.info.render.calls,geometries:this.renderer.info.memory.geometries,textures:this.renderer.info.memory.textures,programs:this.renderer.info.programs?.length??0};}
+  dispose():void{if(this.disposed)return;this.disposed=true;this.ready=false;this.markerKeepOuts.dispose();this.fireworks.dispose();this.world.clear();this.batches.dispose();this.factory.dispose();for(const geometry of this.geometries)geometry.dispose();for(const material of this.materials)material.dispose();this.renderer.dispose();this.ctx.clearRect(0,0,this.width,this.height);}
 }

@@ -2,7 +2,7 @@ import './style.css';
 import './common-shell.css';
 import './control-settings.css';
 import { createGame, startGame, stepGame, pauseGame, resumeGame, abortGame, getPlayer, getHudSnapshot } from './simulation';
-import { FIXED_DT, RULES_VERSION } from './rules';
+import { ACTIVE_LIMIT, FIXED_DT, RULES_VERSION } from './rules';
 import { FlightControls } from './input';
 import { ControlSettings } from './control-settings';
 import { KeyboardSettings, ControlInputPresentation } from './keyboard-settings';
@@ -10,7 +10,7 @@ import { RulesGuide } from './rules-guide';
 import { MachiMamoreScene } from './scene';
 import { FlightAudio } from './audio';
 import { Hud, modeName } from './hud';
-import type { FlightInput, GameMode, GameState } from './types';
+import type { FlightInput, GameEvent, GameMode, GameState } from './types';
 
 type SceneView = Pick<MachiMamoreScene, 'render' | 'resize' | 'dispose' | 'setReducedMotion'> & { metrics(): unknown };
 
@@ -20,6 +20,7 @@ let selectedMode:GameMode='easy',state=createGame({mode:selectedMode}),screen:'h
 let graphicsReady=false,contextLost=false,preparing=false,disposed=false,preparationGeneration=0,frameId=0,lastFrame=0,accumulator=0;
 let cancelPreparation:(()=>void)|null=null,presentationPending=false;
 let pendingLoop=false,pendingFire=false,pendingAccelerate=false,pendingBrake=false,lastPlayerIdentity='',lastEventId=-1,lastEventMission=-1,announcementUntil=0,lastNoticeTick=-999,resultPresentationStart=0;
+const pendingUfoFireworkEvents:GameEvent[]=[];
 const buttons={fire:el<HTMLButtonElement>('fire'),loop:el<HTMLButtonElement>('loop'),throttle:el<HTMLElement>('throttle')};
 for(const button of Object.values(buttons))button.dataset.flightControl='true';
 const keyboard=new KeyboardSettings(),presentation=new ControlInputPresentation(),settings=new ControlSettings(buttons,keyboard,presentation);
@@ -39,8 +40,8 @@ function syncAudio(){audio.active=screen==='playing'&&state.phase==='playing'&&!
 async function toggleAudio(){audio.enabled=!audio.enabled;syncAudio();if(audio.enabled){await audio.unlock();syncAudio();if(audio.failed)announce('音を再生できません。飛行は続けられます。',4);}}
 for(const id of ['home-sound','game-sound'])el(id).addEventListener('click',()=>void toggleAudio());
 function announce(message:string,seconds=3){el('announcement').textContent=message;announcementUntil=state.tick+seconds*60;}
-function begin(){if(!scene||!graphicsReady||contextLost||document.hidden||preparing||screen==='playing'||settings.isOpen||rules?.isOpen)return;state=createGame({mode:selectedMode});startGame(state);accumulator=0;lastFrame=0;const p=getPlayer(state);lastPlayerIdentity=p?`${state.missionId}:${p.token}:${p.generation}`:'';lastEventId=-1;lastEventMission=state.missionId;lastNoticeTick=-999;announcementUntil=0;resultPresentationStart=0;audio.resetFlight();syncMode();setScreen('playing');syncAudio();if(audio.enabled)void audio.unlock();hud.update(state,getHudSnapshot(state));announce('街を守りUFO50機を撃破 · 味方残機は自機込み',4);renderScene(true);lastFrame=0;}
-function home(){if(state.phase==='playing'||state.phase==='paused')abortGame(state);state=createGame({mode:selectedMode});accumulator=0;lastFrame=0;audio.resetFlight();syncMode();setScreen('home');syncAudio();el('announcement').textContent='';renderScene(false);}
+function begin(){if(!scene||!graphicsReady||contextLost||document.hidden||preparing||screen==='playing'||settings.isOpen||rules?.isOpen)return;pendingUfoFireworkEvents.length=0;state=createGame({mode:selectedMode});startGame(state);accumulator=0;lastFrame=0;const p=getPlayer(state);lastPlayerIdentity=p?`${state.missionId}:${p.token}:${p.generation}`:'';lastEventId=-1;lastEventMission=state.missionId;lastNoticeTick=-999;announcementUntil=0;resultPresentationStart=0;audio.resetFlight();syncMode();setScreen('playing');syncAudio();if(audio.enabled)void audio.unlock();hud.update(state,getHudSnapshot(state));announce('街を守りUFO50機を撃破 · 味方残機は自機込み',4);renderScene(true);lastFrame=0;}
+function home(){if(state.phase==='playing'||state.phase==='paused')abortGame(state);pendingUfoFireworkEvents.length=0;state=createGame({mode:selectedMode});accumulator=0;lastFrame=0;audio.resetFlight();syncMode();setScreen('home');syncAudio();el('announcement').textContent='';renderScene(false);}
 const reasonLabels:Record<string,string>={manual:'作戦時計・装填・復帰・レーザーも止まっています。',blur:'フォーカスが外れたため停止しました。',hidden:'画面が非表示になったため停止しました。',frame:'画面更新に長い空白があったため停止しました。','webgl-lost':'描画コンテキストが失われたため停止しました。復旧を待っています。','render-failed':'描画を続けられないため停止しました。画面の準備を再試行してください。',fault:'出撃・戦闘処理の異常を検出したため停止しました。'};
 function pause(reason:string){if(state.phase!=='playing'&&state.phase!=='paused')return;pauseGame(state,reason);clearInput();accumulator=0;lastFrame=0;setScreen('paused');el('pause-reason').textContent=state.pauseReasons.map(r=>reasonLabels[r]??r).join(' ')+(state.fault?` ${state.fault}`:'');el<HTMLButtonElement>('resume').disabled=contextLost||!graphicsReady||!!state.fault;el('pause-reload').hidden=graphicsReady;el('pause-reload').textContent=contextLost?'ページを再読み込み':'画面の準備を再試行';syncAudio();}
 function resume(){if(state.phase!=='paused'||document.hidden||contextLost||!graphicsReady||preparing||state.fault||settings.isOpen||rules?.isOpen)return;resumeGame(state);if(phase()!=='playing')return;accumulator=0;lastFrame=0;clearInput();setScreen('playing');syncAudio();if(audio.enabled)void audio.unlock();}
@@ -53,7 +54,7 @@ function graphicsFailure(message:string){
   else if(screen==='result')announce(message,10);
   try{failedScene?.dispose();}catch{}
 }
-function renderScene(flight:boolean,alpha=1,resultAnimationTime=0){try{scene?.render(state,flight,alpha,resultAnimationTime);}catch{graphicsFailure('画面の描画を続けられません。画面の準備を再試行してください。');}}
+function renderScene(flight:boolean,alpha=1,resultAnimationTime=0){try{if(scene){const events=pendingUfoFireworkEvents.splice(0);scene.render(state,flight,alpha,resultAnimationTime,events);}}catch{graphicsFailure('画面の描画を続けられません。画面の準備を再試行してください。');}}
 for(const id of ['start','retry','pause-restart'])el(id).addEventListener('click',begin);for(const id of ['pause-home','result-home'])el(id).addEventListener('click',home);el('pause').addEventListener('click',()=>pause('manual'));el('resume').addEventListener('click',resume);
 for(const radio of document.querySelectorAll<HTMLInputElement>('input[name="game-mode"]'))radio.addEventListener('change',()=>{if(screen!=='home'||!radio.checked)return;selectedMode=radio.value==='normal'?'normal':'easy';state=createGame({mode:selectedMode});syncMode();renderScene(false);});
 window.addEventListener('keydown',event=>{if(settings.isOpen||rules?.isOpen)return;if((screen==='playing'||screen==='paused')&&keyboard.matchesPause(event)){event.preventDefault();if(screen==='playing')pause('manual');else resume();return;}if(screen==='paused'&&event.key==='Tab'){const buttons=Array.from(el('pause-screen').querySelectorAll<HTMLButtonElement>('button')).filter(b=>!b.hidden&&!b.disabled);const index=buttons.indexOf(document.activeElement as HTMLButtonElement),target=event.shiftKey?index<=0?buttons.at(-1):null:index<0||index===buttons.length-1?buttons[0]:null;if(target){event.preventDefault();target.focus();}}});
@@ -91,7 +92,7 @@ async function prepareGraphics(){
 }
 let retryGraphics = prepareGraphics;
 for(const id of ['reload','pause-reload'])el(id).addEventListener('click',()=>{if(contextLost)window.location.reload();else void retryGraphics();});
-function processEvents(){if(lastEventMission!==state.missionId){lastEventMission=state.missionId;lastEventId=-1;}for(const event of state.events){if(event.id<=lastEventId)continue;lastEventId=event.id;if((event.type==='respawn'||event.type==='takeover')&&event.owner===state.playerId)announce(event.type==='takeover'?'僚機の操縦を引き継ぎました':'自機が復帰しました',2);if((event.type==='kill'||event.type==='city-destroyed')&&state.tick-lastNoticeTick>=120){lastNoticeTick=state.tick;el('ally-announcements').textContent=event.type==='city-destroyed'?'街の区画が破壊されました。残る街を守ろう。':'交戦中 · 残機と街の耐久を確認';}}
+function processEvents(){if(lastEventMission!==state.missionId){lastEventMission=state.missionId;lastEventId=-1;pendingUfoFireworkEvents.length=0;}for(const event of state.events){if(event.id<=lastEventId)continue;lastEventId=event.id;if(event.type==='kill'&&event.targetKind==='ufo'){if(pendingUfoFireworkEvents.length>=ACTIVE_LIMIT)pendingUfoFireworkEvents.shift();pendingUfoFireworkEvents.push(event);}if((event.type==='respawn'||event.type==='takeover')&&event.owner===state.playerId)announce(event.type==='takeover'?'僚機の操縦を引き継ぎました':'自機が復帰しました',2);if((event.type==='kill'||event.type==='city-destroyed')&&state.tick-lastNoticeTick>=120){lastNoticeTick=state.tick;el('ally-announcements').textContent=event.type==='city-destroyed'?'街の区画が破壊されました。残る街を守ろう。':'交戦中 · 残機と街の耐久を確認';}}
   audio.updatePlayer(getPlayer(state));audio.consume(state.events);}
 const frameIntervals:number[]=[];let gapCount=0,maxFrameGap=0;
 function frame(now:number){if(disposed)return;frameId=requestAnimationFrame(frame);if(presentationPending)syncInstructions();if(!lastFrame){lastFrame=now;renderScene(screen!=='home',1);return;}const seconds=(now-lastFrame)/1000;lastFrame=now;
