@@ -52,3 +52,9 @@ Node 24.19.0 / npm 11.9.0。固定依存: Three.js 0.186.1、@types/three 0.183.
 このmain未到達の停止条件は初回提出時の状態であり、PR #4採用後は飛行runtimeがmainに存在する。レバー統合は別のfollow-upとしてpendingに残し、PR #5のworkflow・測定driver修正と最終証拠へ混ぜない。契約・adapter・初期要件/計画/移行調査は各作成時点の記録として保持する。
 
 後続の修正PR [#5](https://github.com/chameleonjp-lab/machimamore/pull/5) は2026-10-05T04:55:59Zに本人側で採用され、mainは `fa323bef322eb62f350011f3bd5f8af3935e17d9` になった。上記のDraft候補という記述はその提出時点の記録である。最終検証資料は別のDraft PR #6へ提出し、担当agentはマージ・公開を行わない。新しい検査PNGと長時間・作戦の大きなraw記録はローカル保持とし、公開資料には全入力行・全177観測のJSON投影と元記録のhashを保存する。
+
+## 2026-10-13 U14：UFO撃墜時の花火
+
+基点mainは `220d903fc57406c2003a94235be3fde308f9a21b`。Luna Maxが実装、6.1Sol Extra Highが別担当として確認した。UFOの撃墜確定通知を描画まで保持し、1機あたり56個の丸い火花と尾を固定8枠で表示する。1.8秒の消失、停止、作戦変更、結果画面、動作軽減と資源破棄に対応した。ゲーム論理・乱数・操作・カメラ・音は変更していない。
+
+単体170/170、型/build、配布物検査、ローカルChromiumのUI3条件、最大描画1件が成功した。実描画を原寸で開き、初撃墜前後と8同時爆発×20作戦後の描画資源数が同じことを確認した。詳細は [VERIFICATION.md](VERIFICATION.md) のU14追補と [画像・観測](evidence/ufo-fireworks-20261013/verification.json) を参照する。最新PR headのCIはPRのchecksで別に確認する。iPhone実機は未確認。本人の採用前にマージ・公開しない。

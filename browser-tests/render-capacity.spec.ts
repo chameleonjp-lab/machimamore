@@ -14,8 +14,12 @@ test('maximum capacity renderer fixture keeps 16 entities, 40 beams, 2048 rounds
       position: new Vector3((id % 64 - 32) * 12, 150 + Math.floor(id / 64) * 3, -850), previous: new Vector3((id % 64 - 32) * 12, 150 + Math.floor(id / 64) * 3, -840),
       velocity: new Vector3(0, 0, -820), birthTick: 0, expiresTick: 90, damage: 2.4, distanceTravelled: 10 }));
     for (const ufo of state.ufos) { ufo.attack.phase = 'warning'; ufo.attack.start.copy(ufo.position); ufo.attack.aimPoint.copy(state.city[ufo.slot].position); }
+    // Fixture-only confirmed kill notifications exercise the rendered 8-UFO firework cap.
+    state.tick = 7; state.elapsed = state.tick / 60;
+    const ufoKills = state.ufos.map((ufo: any, index: number) => ({ id: index + 1, missionId: state.missionId, tick: 0, type: 'kill' as const,
+      position: ufo.position.clone(), owner: 0, target: ufo.id, targetKind: 'ufo' as const }));
     const scene = new MachiMamoreScene(document.querySelector('#capacity'), document.querySelector('#overlay'));
-    await scene.prepare(state); scene.render(state, false);
+    await scene.prepare(state); scene.render(state, false, 1, 0, ufoKills);
     const cold = scene.metrics();
     // Exercise each visual variant once: Three uploads a hidden geometry only
     // when it first becomes visible. Subsequent toggles must not allocate again.
@@ -39,6 +43,8 @@ test('maximum capacity renderer fixture keeps 16 entities, 40 beams, 2048 rounds
   expect(observation.initial.aircraft).toBe(16);
   expect(observation.initial.activeLasers).toBe(40);
   expect(observation.initial.projectiles).toBe(2048);
+  expect(observation.initial.activeUfoFireworks).toBe(8);
+  expect(observation.final.activeUfoFireworks).toBe(8);
   expect(observation.final.geometries).toBe(observation.initial.geometries);
   expect(observation.final.textures).toBe(observation.initial.textures);
   expect(observation.final.programs).toBe(observation.initial.programs);

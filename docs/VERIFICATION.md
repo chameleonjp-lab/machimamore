@@ -111,3 +111,21 @@ WebKit 26.5、568×320、DPR1・renderer pixel ratio1・AA OFF（samples0）、N
 P19は、この条件・未確認範囲・影響を提出する工程として扱う。PR #4のmain採用は本人側で完了した。本番配備・公開URL照合は未実施であり、P22の公開ゲートは残る。
 
 後続の修正PR [#5](https://github.com/chameleonjp-lab/machimamore/pull/5) は2026-10-05T04:55:59Zに本人側で採用され、mainは `fa323bef322eb62f350011f3bd5f8af3935e17d9` になった。上記のDraft候補という記述はその提出時点の記録である。最終検証資料は別のDraft PR #6へ提出し、担当agentはマージ・公開を行わない。新しい検査PNGと長時間・作戦の大きなraw記録はローカル保持とし、公開資料には全入力行・全177観測のJSON投影と元記録のhashを保存する。
+
+## 2026-10-13 U14：UFO撃墜時の花火
+
+基点はmain `220d903fc57406c2003a94235be3fde308f9a21b`。検査対象のコード・テスト・設定を結ぶcontent digestは `2f5a494abda90e8b15ac405cb7d1931544122445e7c28733a50c121bdb4b5c7e`。変更5コードファイルのSHA256、検査集計、観測値、画像hashは [verification.json](evidence/ufo-fireworks-20261013/verification.json) に保存した。文書・画像はこのcode digestに含まれない。最新提出commitのCIとは区別する。
+
+| 検査 | 結果と条件 |
+| --- | --- |
+| 単体・型・配布物 | `npm test` 170/170 pass、fail/skip0。`npm run build` の製品/検査ツール型検査とbuildがpass。`npm run check:dist` は許可4ファイル、NOTICE一致、外部連携・開発用hook不在をpass |
+| 花火の軽い検査5件 | UFO撃墜だけ、重複防止、停止と1.8秒寿命、結果時刻、作戦変更と古い通知、固定8枠を確認。独立担当も5/5 pass |
+| 既存UI | 393×852、568×320、1280×720の3件がpass。製品のUI-only検査は変更せず、ローカル用configでChromium 153.0.8010.0を指定 |
+| 最大描画fixture | 16実体・40ビーム・2048弾・8花火を同時表示し、200回の既存表示切替後も資源数が同じ。1件pass |
+| 実描画と資源 | 開始前fixtureを通常の射撃入力で進めtick44に本物の撃墜通知が発生。描画前後のGameState JSONは同一。0.055/0.45/1.05秒で表示、1.85秒で消失。prepare直後・初撃墜後・8同時爆発×20作戦後ともgeometry74、texture5、program17。GL/page/console error0 |
+
+ローカル用コマンドは `npm run test:browser -- --config artifacts/playwright.local.config.ts` と `npm run test:browser -- --config artifacts/playwright.render.local.config.ts`。これらのconfigは作業用で、製品・既存workflow・標準ブラウザ指定へ変更を混ぜない。固定Playwrightのブラウザ取得はローカル環境でZIP取得に失敗したため、標準Chromium/WebKitの結果はGitHub CIで確認する。ローカルの描画はソフトウェアWebGLであり、iPhone Safariの実機性能ではない。
+
+画像は [横画面](evidence/ufo-fireworks-20261013/bloom-landscape.png)、[縦画面](evidence/ufo-fireworks-20261013/bloom-portrait.png)、[動きを減らす設定](evidence/ufo-fireworks-20261013/reduced-motion-portrait.png) を原寸で開いた。初版の四角い火花・白飛びを修正し、56個の丸い火花、色の見分け、尾と消失、動作軽減時の小さい広がりを確認した。撮影後の時刻サンプルと8件同時通知は演出fixtureであり、通常操作による作戦全勝の証拠ではない。
+
+実装中の指摘は、worldへの接続、動作軽減時の光量、丸いspriteの透明度、importとshaderの改行を修正した。終端の境界検査は浮動小数による1フレーム差を避け、既存爆発が消え最後の爆発だけ残る時点を結果1.41秒で確認した。1.8秒の設定値は変更していない。buildの500KB超チャンク警告は残る。物理Safari、タッチ感、実機の点滅測定は未実施で、今回の自動検査から合格を推論しない。

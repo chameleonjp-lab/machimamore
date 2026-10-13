@@ -293,3 +293,12 @@ CIはPR検査と公開を分ける。PRでは固定Node/lockfile、単体、型/
 ## 2026-10-11依頼：操作・標的・照準の共通追補
 
 今回の採用契約は [ZERO_SERIES_AIM_CONTRACT.md](ZERO_SERIES_AIM_CONTRACT.md)、実行結果と未確認項目は [ZERO_SERIES_AIM_VERIFICATION.md](ZERO_SERIES_AIM_VERIFICATION.md)。R1–R8の対象・意図的な作品差・基点を明示する。過去の「未実施」「文書のみ」は当時の工程の記録で、この追補の結果やSafari実機受入とは別。main宛てDraft PRまでとし、公開/mergeは今回実施しない。
+
+## 2026-10-13依頼：UFO撃墜時の花火
+
+対象はU14、R74・R82・R83・R91・R92。基点はmain `220d903fc57406c2003a94235be3fde308f9a21b`、作業ブランチは `work/ufo-fireworks-20261013`。既存workflowのpull_requestで検査し、pushとPRで同じ全件検査を重複起動させない。
+
+1. 既存の撃墜確定通知からUFOだけを拾い、描画までの複数論理更新でも通知を保つ。ゲームの状態更新は変更しない。
+2. 固定8枠の共有描画で、局所的な光、球状の火花、尾と消失を実装する。停止・作戦変更・結果・動作軽減に対応する。
+3. 通知の所有・寿命・上限を短い検査で確認し、実際の描画画像を開く。既存の単体・型/build・配布物・UI検査と別担当のレビューを行う。
+4. main宛てDraft PRを作成し、その最新headのCI成功まで対応する。実機未確認を明示し、マージと公開は本人の判断に残す。
