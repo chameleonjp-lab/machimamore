@@ -198,7 +198,7 @@ function updateFighters(state: GameState, input: FlightInput): void {
       const assist = getFlightAssist(fighter, aimTargets, input, state.mode, unobstructed, state.controller.targetLock);
       const speed = advanceThrottle(state.controller, input, state.mode, FIXED_DT);
       const adjusted = { ...input, ...smoothFlightAssistance(state.controller, input, assist, FIXED_DT) };
-      const completed = updatePlayerLoop(fighter, state.controller, adjusted, input, input.loop, FIXED_DT, speed, MAX_SPEED, state.controller.responseMultiplier);
+      const completed = updatePlayerLoop(fighter, state.controller, adjusted, input, input.loop, FIXED_DT, speed, MAX_SPEED, state.controller.responseMultiplier, state.mode);
       if (completed) { state.stats.loops++; emit(state, 'loop', fighter.position, fighter.id); }
       const automatic = autoFireTarget(fighter, aimTargets, state.mode, input.viewAspect, unobstructed, state.controller.targetLock);
       firing = input.fire || automatic !== null; firingTarget = automatic as Ufo | null;
