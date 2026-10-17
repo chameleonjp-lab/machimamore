@@ -8,18 +8,32 @@ export const FLIGHT_VISIBILITY_RANGE = 1500;
 export const FLIGHT_CAMERA_BANK_FACTOR = 0.45;
 /** Radius as a fraction of the shorter CSS viewport edge. */
 export const EASY_AIM_RADIUS = 0.135;
+export const NORMAL_CAMERA_LOOK_ANGLE = -0.19;
+export const EASY_CAMERA_LOOK_ANGLE = -Math.atan2(11, 479);
 const CAMERA_OFFSET = new Vector3(0, 11, 29);
-const NORMAL_LOOK = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -0.19);
-const EASY_LOOK = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -Math.atan2(11, 479));
+const CAMERA_BANK_AXIS = new Vector3(0, 0, 1);
+const CAMERA_LOOK_AXIS = new Vector3(1, 0, 0);
+const NORMAL_LOOK = new Quaternion().setFromAxisAngle(CAMERA_LOOK_AXIS, NORMAL_CAMERA_LOOK_ANGLE);
+const EASY_LOOK = new Quaternion().setFromAxisAngle(CAMERA_LOOK_AXIS, EASY_CAMERA_LOOK_ANGLE);
+const offsetRotation = new Quaternion();
+const bankAdjustment = new Quaternion();
+const opticalRoll = new Quaternion();
 const TAN_HALF_FOV = Math.tan(FLIGHT_FOV * Math.PI / 360);
 
 /** Shared by rendering and targeting so the displayed circle is the actual firing gate. */
 export function getFlightCameraPose(player: Aircraft, mode: GameMode, position: Vector3, rotation: Quaternion): void {
-  // Retain pitch/yaw and loops, but transmit only 45% of the bank to the view.
-  // Using the same rotation for the offset avoids a sideways camera swing.
-  rotation.copy(player.quaternion).multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), player.bank * (1 - FLIGHT_CAMERA_BANK_FACTOR)));
-  position.copy(CAMERA_OFFSET).applyQuaternion(rotation).add(player.position);
-  rotation.multiply(mode === 'easy' ? EASY_LOOK : NORMAL_LOOK);
+  // The position retains the existing 45% bank-following offset.
+  offsetRotation.copy(player.quaternion)
+    .multiply(bankAdjustment.setFromAxisAngle(CAMERA_BANK_AXIS, player.bank * (1 - FLIGHT_CAMERA_BANK_FACTOR)));
+  position.copy(CAMERA_OFFSET).applyQuaternion(offsetRotation).add(player.position);
+
+  // View forward follows the actual aircraft quaternion with its bank removed.
+  // Mode look is then applied, and 45% bank returns only as screen roll about
+  // the optical axis. The bank therefore cannot pull a target across the view.
+  rotation.copy(player.quaternion)
+    .multiply(bankAdjustment.setFromAxisAngle(CAMERA_BANK_AXIS, player.bank))
+    .multiply(mode === 'easy' ? EASY_LOOK : NORMAL_LOOK)
+    .multiply(opticalRoll.setFromAxisAngle(CAMERA_BANK_AXIS, -player.bank * FLIGHT_CAMERA_BANK_FACTOR));
 }
 
 export function projectFlightTarget(player: Aircraft, target: Vector3, aspect: number, mode: GameMode) {

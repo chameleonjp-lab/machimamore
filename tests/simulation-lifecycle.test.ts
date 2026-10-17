@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { Vector3 } from 'three';
+import { Quaternion, Vector3 } from 'three';
 import { abortGame, createGame, getHudSnapshot, getPlayer, NEUTRAL_INPUT, pauseGame, resumeGame, startGame, stepGame } from '../src/simulation';
 import { rosterCounts } from '../src/roster';
 import { beam, bullet, fixture, remapFighter } from './simulation-fixtures';
+import { getFlightCameraPose } from '../src/flight-view';
+import { updateQuaternion } from '../src/flight';
 test('A04 self respawns only at 180 ticks, neutralizes waiting input, restores HP and full magazines', () => {
   const state = fixture(), old = getPlayer(state)!; old.position.y = 1; old.mg = 20; old.cannon = 4;
   startGame(state); stepGame(state, { ...NEUTRAL_INPUT, fire: true });
@@ -29,6 +31,92 @@ test('A04/A05 no reserves transfers to smallest surviving token after 180 withou
   assert.equal(getPlayer(state), wingman); assert.equal(wingman.health, 63); assert.equal(wingman.mg, 78); assert.equal(wingman.cannon, 32); assert.equal(wingman.reloadTicksRemaining, reloadBefore - 1);
   assert.equal(wingman.role, 'player'); assert.equal(state.stats.playerLosses, 1); assert.equal(state.stats.allyLosses, 48); assert.equal(rosterCounts(state.rosters.friendly).D, 49);
   assert.equal(state.stats.shots, 0); assert.equal(state.events.filter(e => e.type === 'takeover').length, 1); assert.equal(state.fault, null);
+});
+
+test('pilot reassignment clears old assistance and delays Easy targeting and auto fire for 18 ticks', () => {
+  const state = fixture(2, 1, false);
+  state.mode = 'easy';
+  const departing = state.fighters[0], nextPilot = state.fighters[1], target = state.ufos[0];
+  departing.position.y = 1;
+  // Keep the sole enemy alive while the wingman spends the assignment delay
+  // pursuing it. The test resets its health when the new pilot takes over.
+  target.position.set(1700, 1000, 1900); target.previous.copy(target.position);
+  target.health = 1e8; target.velocity.set(0, 0, 0); target.speed = 0;
+  target.movement = 'stationary'; target.movementUntilTick = 100000;
+  target.attack.phase = 'cooldown'; target.attack.cooldownUntilTick = 100000;
+  startGame(state); stepGame(state);
+  assert.equal(getPlayer(state), null);
+  for (let i = 0; i < 179; i++) stepGame(state, { ...NEUTRAL_INPUT, turn: 0.9, climb: -0.8, fire: true, loop: true, steeringActive: true });
+  assert.equal(state.tick, 180);
+  state.controller.targetLock.key = 'ufo:0:1';
+  state.controller.targetLock.manual = true;
+  state.controller.assistTurn = 0.6; state.controller.assistClimb = -0.4; state.controller.responseMultiplier = 1.65;
+
+  // The last waiting input is deliberately hot; assignment must still neutralize it.
+  stepGame(state, { ...NEUTRAL_INPUT, turn: -0.9, climb: 0.8, fire: true, loop: true, steeringActive: true });
+  assert.equal(getPlayer(state), nextPilot);
+  assert.equal(state.tick, 181);
+  assert.equal(state.pilotAimReadyTick, 198);
+  assert.deepEqual(state.input, { ...NEUTRAL_INPUT });
+  assert.equal(state.controller.targetLock.key, null);
+  assert.equal(state.controller.targetLock.manual, false);
+  assert.equal(state.controller.assistTurn, 0); assert.equal(state.controller.assistClimb, 0);
+  assert.equal(state.controller.responseMultiplier, 1);
+  assert.equal(state.stats.shots, 0, 'old held fire and automatic fire must both wait during assignment');
+
+  // A new aircraft pose must be the one used for its camera and target tests.
+  nextPilot.position.set(300, 800, 1600); nextPilot.previous.copy(nextPilot.position);
+  nextPilot.pitch = 0.2; nextPilot.yaw = 0.15; nextPilot.bank = 0.45;
+  updateQuaternion(nextPilot);
+  target.health = 80;
+  const cameraPosition = new Vector3(), cameraRotation = new Quaternion();
+  getFlightCameraPose(nextPilot, state.mode, cameraPosition, cameraRotation);
+  target.position.copy(cameraPosition).addScaledVector(new Vector3(0, 0, -1).applyQuaternion(cameraRotation), 500);
+  target.previous.copy(target.position); target.velocity.set(0, 0, 0); target.speed = 0;
+  target.movement = 'stationary'; target.movementUntilTick = 100000;
+  target.attack.phase = 'cooldown'; target.attack.cooldownUntilTick = 100000;
+
+  for (let i = 0; i < 17; i++) {
+    stepGame(state);
+    assert.equal(state.stats.shots, 0, `Easy autofire should remain unavailable at takeover-relative tick ${i + 1}`);
+    assert.equal(state.controller.targetLock.key, null);
+  }
+  assert.equal(state.tick, 198);
+  // The incoming pilot has pitched back during the wait. Place a visible
+  // target on the current Easy camera axis for the first eligible tick.
+  getFlightCameraPose(nextPilot, state.mode, cameraPosition, cameraRotation);
+  target.position.copy(cameraPosition).addScaledVector(new Vector3(0, 0, -1).applyQuaternion(cameraRotation), 500);
+  target.previous.copy(target.position);
+  stepGame(state);
+  assert.ok(state.stats.shots > 0, 'Easy auto fire should resume at takeover-relative tick 18');
+  assert.equal(state.fault, null);
+});
+
+test('normal fire on or off leaves manual camera pose identical for the same 12 accepted ticks', () => {
+  const off = fixture(1, 1, false), on = fixture(1, 1, false);
+  for (const state of [off, on]) {
+    state.fighters[0].position.set(0, 500, 0); state.fighters[0].previous.copy(state.fighters[0].position);
+    state.ufos[0].position.set(1700, 900, 1900); state.ufos[0].previous.copy(state.ufos[0].position);
+    state.ufos[0].movement = 'stationary'; state.ufos[0].speed = 0; state.ufos[0].velocity.set(0, 0, 0);
+    state.ufos[0].attack.phase = 'cooldown'; state.ufos[0].attack.cooldownUntilTick = 100000;
+    startGame(state);
+  }
+  const pose = (state: ReturnType<typeof fixture>) => {
+    const player = getPlayer(state)!;
+    const position = new Vector3(), rotation = new Quaternion();
+    getFlightCameraPose(player, state.mode, position, rotation);
+    const forward = new Vector3(0, 0, -1).applyQuaternion(rotation).normalize();
+    return [...player.position.toArray(), ...player.quaternion.toArray(), ...forward.toArray()];
+  };
+  for (let tick = 0; tick < 12; tick++) {
+    const input = { ...NEUTRAL_INPUT, turn: 0.45, climb: 0.1, steeringActive: true };
+    stepGame(off, input);
+    stepGame(on, { ...input, fire: true });
+    assert.deepEqual(pose(on), pose(off), `fire changed the pose at tick ${tick + 1}`);
+  }
+  assert.equal(off.stats.shots, 0);
+  assert.ok(on.stats.shots > 0, 'the test must exercise actual Normal firing');
+  assert.equal(off.fault, null); assert.equal(on.fault, null);
 });
 test('A04 if only Q survives, pilot waits for its first legal spawn and does not lose', () => {
   const state = fixture(2, 1, false), player = state.fighters[0], wing = state.fighters[1], r = state.rosters.friendly;
