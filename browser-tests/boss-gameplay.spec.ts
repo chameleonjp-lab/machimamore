@@ -1,3 +1,4 @@
+import { writeFile } from 'node:fs/promises';
 import { test, expect } from './fixtures';
 
 // Real simulation driven only through accepted FlightInput, rendered with the
@@ -38,6 +39,8 @@ test('boss real simulation and 3D geometry acceptance', async ({ page }, info) =
         scene.camera.position.copy(target).add({x:440*scale,y:190*scale,z:440*scale});
         scene.camera.lookAt(target);scene.camera.updateMatrixWorld(true);
         scene.renderer.render(scene['world'],scene.camera);overlay.getContext('2d')!.clearRect(0,0,overlay.width,overlay.height);
+        // Read the actual rendered buffer synchronously, before WebKit swaps it.
+        (window as any).__bossAcceptance.frame=canvas.toDataURL('image/png');
       }
       return {phase:state.phase,battle:state.bossBattle.phase,tick:state.tick,record:{...record},outcome:state.result?.outcome,
         motherPosition:mother.position.toArray(),bossPosition:boss?.position.toArray(),scale:mother.scale.toArray(),bossHealth:boss?.health,
@@ -51,11 +54,16 @@ test('boss real simulation and 3D geometry acceptance', async ({ page }, info) =
     // WebKit can composite the previous canvas frame after evaluate returns.
     // Wait for this renderer's GPU fence and two presentation frames first.
     await page.evaluate(async()=>{await (window as any).__bossAcceptance.scene['waitForGpu']();await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));});
-    await page.screenshot({path:info.outputPath(`real-boss-${stage}.png`)});
+    const frame=await page.evaluate(()=>(window as any).__bossAcceptance.frame as string);
+    expect(frame).toMatch(/^data:image\/png;base64,/);
+    await writeFile(info.outputPath(`real-boss-${stage}.png`),Buffer.from(frame.split(',')[1],'base64'));
+    await writeFile(info.outputPath(`real-boss-${stage}.json`),JSON.stringify(observation,null,2));
+    await page.screenshot({path:info.outputPath(`composited-boss-${stage}.png`)});
     await info.attach(`real-boss-${stage}`,{body:JSON.stringify(observation,null,2),contentType:'application/json'});
   }
   const result=await page.evaluate(()=>(window as any).__bossAcceptance.advance('defeated'));
   expect(result.outcome).toBe('victory');expect(result.record.warning).toBe(1);expect(result.record.start).toBe(1);
   expect(result.record.minimum).toBeGreaterThanOrEqual(3);expect(result.record.maximum).toBeLessThanOrEqual(6);
+  await writeFile(info.outputPath('legal-simulation-result.json'),JSON.stringify(result,null,2));
   await info.attach('legal-simulation-result',{body:JSON.stringify(result,null,2),contentType:'application/json'});
 });
