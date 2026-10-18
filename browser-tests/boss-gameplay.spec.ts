@@ -48,6 +48,9 @@ test('boss real simulation and 3D geometry acceptance', async ({ page }, info) =
     const observation=await page.evaluate(stage=>(window as any).__bossAcceptance.advance(stage),stage);
     expect(observation.battle).toBe(stage);expect(observation.metrics.drawCalls).toBeGreaterThan(0);expect(observation.meshes).toBeGreaterThan(20);
     if(stage!=='alert'){expect(observation.scale).toEqual([.4,.4,.4]);expect(observation.motherPosition).toEqual(observation.bossPosition);expect(observation.bossHealth).toBeGreaterThan(0);}
+    // WebKit can composite the previous canvas frame after evaluate returns.
+    // Wait for this renderer's GPU fence and two presentation frames first.
+    await page.evaluate(async()=>{await (window as any).__bossAcceptance.scene['waitForGpu']();await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));});
     await page.screenshot({path:info.outputPath(`real-boss-${stage}.png`)});
     await info.attach(`real-boss-${stage}`,{body:JSON.stringify(observation,null,2),contentType:'application/json'});
   }
