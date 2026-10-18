@@ -78,3 +78,10 @@ test('the fixed eight-effect pool stays bounded and uploads its full pool only d
   assert.equal(internal.pointsGeometry.attributes.position.array, pointBuffer);
   fireworks.dispose();
 });
+
+test('boss kill replaces the oldest occupied effect without expanding the eight-slot pool',()=>{
+ const state=createGame(),fireworks=new UfoFireworks();fireworks.update(state,1,0,false,Array.from({length:8},(_,i)=>kill(state,i+1)));
+ const boss={...kill(state,9),detail:'boss'};fireworks.update(state,1,0,false,[boss]);
+ const effects=(fireworks as unknown as {effects:({eventId:number}|null)[]}).effects;
+ assert.equal(fireworks.activeCount,8);assert.ok(effects.some(e=>e?.eventId===9));assert.equal(effects.some(e=>e?.eventId===1),false);fireworks.dispose();
+});

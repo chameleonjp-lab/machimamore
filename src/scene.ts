@@ -1,3 +1,4 @@
+import { createBossMeshes, BOSS_SCALE } from './boss-shape';
 import { drawFlightMarkers, MarkerKeepOutCache } from './flight-markers';
 import { ACESFilmicToneMapping, BackSide, BoxGeometry, BufferAttribute, BufferGeometry, Color, ConeGeometry, CylinderGeometry, DirectionalLight, Fog, Group, HemisphereLight, InstancedMesh, Line, LineBasicMaterial, LineDashedMaterial, LineSegments, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Quaternion, Scene, ShaderMaterial, SphereGeometry, SRGBColorSpace, TorusGeometry, Vector3, Vector4, WebGLRenderer, type Material } from 'three';
 import { AircraftFactory, type AircraftVisual } from './aircraft';
@@ -95,11 +96,8 @@ export class MachiMamoreScene {
   }
   private createMothership():void {
     const hull=this.material(new MeshStandardMaterial({color:0x47525c,metalness:.7,roughness:.44}));const dark=this.material(new MeshStandardMaterial({color:0x263b49,metalness:.5,roughness:.6}));const glow=this.material(new MeshBasicMaterial({color:0xbad5ca}));
-    const body=this.mesh(this.geometry(new CylinderGeometry(300,390,85,48,1)),hull);this.mother.add(body);
-    const top=this.mesh(this.sphere,hull);top.scale.set(235,85,235);top.position.y=42;this.mother.add(top);
-    const ring=this.mesh(this.geometry(new TorusGeometry(341,14,8,56)),dark);ring.rotation.x=Math.PI/2;this.mother.add(ring);
-    for(let i=0;i<12;i++){const a=i*Math.PI/6,x=Math.cos(a)*285,z=Math.sin(a)*285;this.block(this.mother,x,48,z,34,70,36,dark);const lamp=this.mesh(this.sphere,glow);lamp.scale.set(9,4,9);lamp.position.set(x,-41,z);this.mother.add(lamp);}
-    const core=this.mesh(this.geometry(new CylinderGeometry(32,52,48,20)),dark);core.position.y=-61;this.mother.add(core);this.mother.position.set(160,1050,-2580);this.world.add(this.mother);
+    for (const part of createBossMeshes()) this.mother.add(this.mesh(this.geometry(part.geometry), { hull, dark, glow }[part.material]));
+    this.mother.position.set(160,1050,-2580);this.world.add(this.mother);
   }
   private createDistrict(d:CityDistrict):DistrictVisual {
     const root=new Group(),intact=new Group(),rubble=new Group(),smoke=new Group();root.position.copy(d.position);root.add(intact,rubble,smoke);
@@ -183,14 +181,18 @@ export class MachiMamoreScene {
     for(let i=0;i<state.city.length;i++){const d=state.city[i]!,v=this.districts[i]!,ratio=d.health/d.maxHealth;v.intact.visible=!d.destroyed;v.rubble.visible=d.destroyed;v.smoke.visible=ratio<.55;v.danger.visible=d.attacked&&!d.destroyed;v.material.color.copy(DISTRICT_DAMAGED).lerp(DISTRICT_INTACT,ratio);}
     const player=state.fighters.find(f=>f.id===state.playerId)??null;const ordered=player?[player,...state.fighters.filter(f=>f.id!==player.id)]:state.fighters;
     for(let i=0;i<this.planes.length;i++){const visual=this.planes[i]!,fighter=ordered[i];visual.root.visible=!!fighter;if(!fighter)continue;visual.root.position.lerpVectors(fighter.previous,fighter.position,alpha);visual.root.quaternion.copy(fighter.quaternion);visual.propeller.rotation.z=state.elapsed*110;visual.ailerons[0].rotation.x=fighter.bank*.18;visual.ailerons[1].rotation.x=-fighter.bank*.18;visual.elevator.rotation.x=fighter.pitch*.13;}
-    for(let i=0;i<this.saucers.length;i++){const visual=this.saucers[i]!,ufo=state.ufos[i];visual.visible=!!ufo;if(!ufo)continue;visual.position.lerpVectors(ufo.previous,ufo.position,alpha);visual.quaternion.copy(ufo.quaternion);const warning=this.warningLines[i]!;warning.visible=ufo.attack.phase==='warning';if(warning.visible){const pos=warning.geometry.attributes.position! as BufferAttribute;pos.setXYZ(0,ufo.attack.start.x,ufo.attack.start.y,ufo.attack.start.z);pos.setXYZ(1,ufo.attack.aimPoint.x,ufo.attack.aimPoint.y,ufo.attack.aimPoint.z);pos.needsUpdate=true;const distances=warning.geometry.attributes.lineDistance! as BufferAttribute;distances.setX(0,0);distances.setX(1,ufo.attack.start.distanceTo(ufo.attack.aimPoint));distances.needsUpdate=true;}}
-    for(let i=state.ufos.length;i<this.warningLines.length;i++)this.warningLines[i]!.visible=false;
+    for(let i=0;i<this.saucers.length;i++){const visual=this.saucers[i]!,ufo=state.ufos.filter(u=>u.variant!=='boss')[i];visual.visible=!!ufo;if(!ufo)continue;visual.position.lerpVectors(ufo.previous,ufo.position,alpha);visual.quaternion.copy(ufo.quaternion);const warning=this.warningLines[i]!;warning.visible=ufo.attack.phase==='warning';if(warning.visible){const pos=warning.geometry.attributes.position! as BufferAttribute;pos.setXYZ(0,ufo.attack.start.x,ufo.attack.start.y,ufo.attack.start.z);pos.setXYZ(1,ufo.attack.aimPoint.x,ufo.attack.aimPoint.y,ufo.attack.aimPoint.z);pos.needsUpdate=true;const distances=warning.geometry.attributes.lineDistance! as BufferAttribute;distances.setX(0,0);distances.setX(1,ufo.attack.start.distanceTo(ufo.attack.aimPoint));distances.needsUpdate=true;}}
+    for(let i=state.ufos.filter(u=>u.variant!=='boss').length;i<this.warningLines.length;i++)this.warningLines[i]!.visible=false;
     for(let i=0;i<this.beamMeshes.length;i++){const mesh=this.beamMeshes[i]!,beam=state.beams[i];mesh.visible=!!beam;if(!beam)continue;const direction=beam.end.clone().sub(beam.start),length=direction.length();if(length<.001){mesh.visible=false;continue;}mesh.position.copy(beam.start).addScaledVector(direction,.5);mesh.quaternion.setFromUnitVectors(UP,direction.multiplyScalar(1/length));mesh.scale.set(1.2,length,1.2);}
     let count=0;for(const bullet of state.bullets){if(count>=MAX_BULLETS)break;bullet.previous.toArray(this.tracerPositions,count*6);bullet.position.toArray(this.tracerPositions,count*6+3);count++;}this.tracerGeometry.setDrawRange(0,count*2);this.tracerGeometry.attributes.position!.needsUpdate=true;
     this.sea.uniforms.uTime!.value=this.reducedMotion?0:state.elapsed;
     this.fireworks.update(state,alpha,resultAnimationTime,this.reducedMotion,presentationEvents);
     // Victory-only presentation time is supplied by main; the terminal game tick stays frozen.
-    const retreat=state.result?.outcome==='victory'?Math.min(1,this.reducedMotion?1:Math.max(0,resultAnimationTime)/3):0;this.mother.position.set(160+retreat*1500,1050+retreat*2400,-2580-retreat*2000);
+    const boss=state.ufos.find(u=>u.variant==='boss');
+    this.mother.visible=state.bossBattle.phase!=='defeated';
+    if(boss){this.mother.position.lerpVectors(boss.previous,boss.position,alpha);this.mother.scale.setScalar(BOSS_SCALE);}
+    else if(state.bossBattle.phase==='alert'){const t=Math.min(1,(state.tick-state.bossBattle.sinceTick)/180);this.mother.position.set(160,1050-350*t,-2580+900*t);this.mother.scale.setScalar(1-.6*t);}
+    else{this.mother.position.set(160,1050,-2580);this.mother.scale.setScalar(1);}
   }
   private updateCamera(state:GameState,flight:boolean,alpha:number):void{
     const player=state.fighters.find(f=>f.id===state.playerId)??null;

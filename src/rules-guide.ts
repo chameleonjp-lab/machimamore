@@ -8,10 +8,10 @@ export interface RuleSection { heading: string; paragraphs: string[]; }
 export function ruleSections({ mode, input, keyboardDescription }: RulesContext): RuleSection[] {
   return [
     { heading: '街を守る作戦', paragraphs: [
-      `街を守り、敵UFO全${TOTAL_AIRCRAFT}機を撃破すれば勝利です。味方も自機を含めて総数${TOTAL_AIRCRAFT}機。同時出撃は両陣営${ACTIVE_LIMIT}機ずつで、初めの出撃機も総数に含みます。`,
+      `街を守り、敵UFO全${TOTAL_AIRCRAFT}機を撃破した後に現れる巨大UFOを破壊すれば勝利です。味方も自機を含めて総数${TOTAL_AIRCRAFT}機。同時出撃は両陣営${ACTIVE_LIMIT}機ずつで、初めの出撃機も総数に含みます。`,
       `街は${CITY_DISTRICTS}区画、総耐久${CITY_TOTAL_HEALTH.toLocaleString()}HPです。街の耐久が0、または味方残機が0になると敗北。最後の敵と街・味方の全滅が同時なら敗北です。時間制限はありません。`,
       '敵が画面からいなくなっても、予備や復帰待ちが残っていれば作戦は続きます。残機は「出撃中＋復帰待ち＋予備」。HUDは累計撃破と現在の出撃数を分けて示します。',
-      '巨大宇宙船はUFOの母艦です。今回の撃破対象ではなく、撃っても損傷や得点はありません。舞台は架空の港湾都市で、歴史事件や実在の被害を再現する作品ではありません。',
+      '全50機撃破後は3秒の警報とともに巨大UFOが街上空へ進入します。巨大UFOは640HP（通常の8倍）。ボス戦中は巨大UFOを除き妨害UFOが常時3〜6体存在し、撃破した分は即補充されます。巨大UFOの撃破でクリア。巨大UFOとの接触は自機が撃墜され、巨大UFOには80HPの損傷を与えます。舞台は架空の港湾都市で、歴史事件や実在の被害を再現する作品ではありません。',
     ] },
     { heading: '被撃墜と復帰', paragraphs: [
       `自機も僚機も、予備があれば破壊から${RESPAWN_TICKS / TICK_RATE}秒後に別の残機で復帰します。自機の復帰待ち中も街と編隊の戦闘は続きます。復帰待ちの入力は次の機体へ持ち越しません。`,
@@ -38,6 +38,7 @@ export function ruleSections({ mode, input, keyboardDescription }: RulesContext)
     ] },
     { heading: '得点と命中率', paragraphs: [
       `編隊全体のUFO撃破1機につき${SCORE_RULES.ufoKill.toLocaleString()}点、実際に与えたUFO損傷1HPにつき${SCORE_RULES.ufoDamage}点。勝利時だけ、${SCORE_RULES.timeBonus.toLocaleString()} ÷（1＋作戦秒数÷${SCORE_RULES.timeScale}）の時間ボーナスを加えます。`,
+      '巨大UFOは実損傷1HPにつき5点、撃破8,000点。妨害UFOは最初に出た6体だけ通常の撃破・損傷点を加算し、以後は追加点なし。すべての妨害UFOへの命中は命中率に含みます。時間ボーナスは巨大UFO撃破までの時間で計算。街の減点はボス戦中も続きます。',
       `自機損失1機につき${SCORE_RULES.playerLoss.toLocaleString()}点、僚機損失1機につき${SCORE_RULES.allyLoss.toLocaleString()}点を引きます。街損傷1HPにつき${SCORE_RULES.cityDamage}点、破壊区画1つにつき${SCORE_RULES.cityDestroyed.toLocaleString()}点を引きます。`,
       `自機の実発射弾を分母、UFOのHPを減らした弾を分子とする命中率で、${SCORE_RULES.accuracyPenalty.toLocaleString()}×（1−命中率）点を引きます。未射撃は「—（未射撃）」で減点0です。作戦中は暫定、終端tickで確定します。過剰損傷や同じ撃破は加点しません。`,
     ] },

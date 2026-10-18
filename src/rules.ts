@@ -1,6 +1,6 @@
 /** MachiMamore rules, independent of the source games' mission rules. */
-export const RULES_VERSION = 'machimamore-2';
-export const SCORE_RULES = Object.freeze({ ufoKill: 1000, ufoDamage: 5, timeBonus: 30000, timeScale: 180, playerLoss: 2000, allyLoss: 500, accuracyPenalty: 10000, cityDestroyed: 2000, cityDamage: 2 });
+export const RULES_VERSION = 'machimamore-3';
+export const SCORE_RULES = Object.freeze({ bossKill: 8000, ufoKill: 1000, ufoDamage: 5, timeBonus: 30000, timeScale: 180, playerLoss: 2000, allyLoss: 500, accuracyPenalty: 10000, cityDestroyed: 2000, cityDamage: 2 });
 export const TICK_RATE = 60;
 export const FIXED_DT = 1 / TICK_RATE;
 export const TOTAL_AIRCRAFT = 50;
@@ -9,6 +9,13 @@ export const RESPAWN_TICKS = 180;
 export const SPAWN_BLOCK_TIMEOUT_TICKS = 300;
 export const AIRCRAFT_HEALTH = 80;
 export const UFO_HEALTH = 80;
+export const BOSS_HEALTH = UFO_HEALTH * 8;
+export const BOSS_ALERT_TICKS = 180;
+export const BOSS_ENTRY_TICKS = 480;
+export const ESCORT_MIN = 3;
+export const ESCORT_MAX = 6;
+export const ESCORT_SCORE_LIMIT = 6;
+export const ESCORT_LAUNCH_TICKS = 180;
 export const MG_CAPACITY = 288;
 export const CANNON_CAPACITY = 96;
 export const RELOAD_TICKS = 360;

@@ -5,7 +5,7 @@ import { chooseRadarLayout, drawFlightMarkers, MarkerKeepOutCache, type MarkerLa
 import { EASY_AIM_RADIUS, FLIGHT_FAR, FLIGHT_FOV, getFlightCameraPose } from './flight-view';
 import type { GameResult, GameState } from './types';
 
-export const UI_FIXTURES = ['home','easy','normal','reload','wait','notices','easy-notices','paused','victory','defeat','interrupted','startup-error'] as const;
+export const UI_FIXTURES = ['home','easy','normal','boss-warning','boss','reload','wait','notices','easy-notices','paused','victory','defeat','interrupted','startup-error'] as const;
 export type UiFixtureName = typeof UI_FIXTURES[number];
 export type UiScreen = 'home' | 'playing' | 'paused' | 'result';
 export interface UiFixtureDriver {
@@ -34,14 +34,17 @@ export function uiFixtureState(name: UiFixtureName): {state: GameState; screen: 
   if (notices) {
     for (const district of state.city.slice(0,2)) {district.attacked=true;district.health=125;}
   }
+  if(name==='boss-warning'||name==='boss'){state.rosters.enemy.slots.fill(null);for(const token of state.rosters.enemy.tokens){token.status='destroyed';token.slot=null;} }
+  if(name==='boss-warning'){state.bossBattle.phase='alert';state.ufos=[];}
+  if(name==='boss'){state.bossBattle.phase='active';const boss=state.ufos[0]!;boss.variant='boss';boss.id=1000;boss.token=50;boss.maxHealth=640;boss.health=320;boss.radius=156;for(let i=1;i<=3;i++)state.ufos.push({...boss,id:1000+i,token:50+i,variant:'escort',escortOrdinal:i,health:80,maxHealth:80,radius:14,position:boss.position.clone().add(new Vector3(i*80,100,-100))});}
   if (name === 'wait') {state.playerId=null;state.pilotReadyTick=180;}
   if (name === 'paused') {state.phase='paused';state.pauseReasons=['manual'];return {state,screen:'paused'};}
   if (['victory','defeat','interrupted'].includes(name)) {
     const outcome=name as GameResult['outcome'];
     state.phase='ended';
-    state.result={outcome, reason:outcome==='victory'?'all-clear':outcome==='defeat'?'city-destroyed':'interrupted',
-      mode:state.mode,tick:0,time:123.45,score:12345,
-      breakdown:{ufoDestruction:10000,damage:2500,time:500,playerLoss:100,allyLoss:200,accuracy:300,cityLoss:55,total:12345},
+    state.result={bossHealth:outcome==='victory'?0:null,escortsRemaining:0,outcome, reason:outcome==='victory'?'all-clear':outcome==='defeat'?'city-destroyed':'interrupted',
+      mode:state.mode,tick:0,time:123.45,score:outcome==='victory'?31945:12345,
+      breakdown:{bossDestruction:outcome==='victory'?8000:0,bossDamage:outcome==='victory'?3200:0,escortDestruction:outcome==='victory'?6000:0,escortDamage:outcome==='victory'?2400:0,ufoDestruction:10000,damage:2500,time:500,playerLoss:100,allyLoss:200,accuracy:300,cityLoss:55,total:outcome==='victory'?31945:12345},
       stats:{...state.stats,playerKills:12,allyKills:38,playerLosses:1,allyLosses:2,shots:100,hits:75},
       accuracy:.75,cityHealth:outcome==='defeat'?0:4321,cityDestroyed:outcome==='defeat'?20:2,enemyDestroyed:outcome==='victory'?50:23,friendlyRemaining:47};
     return {state,screen:'result'};

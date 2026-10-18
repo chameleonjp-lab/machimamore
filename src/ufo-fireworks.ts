@@ -144,7 +144,8 @@ export class UfoFireworks {
       if (event.missionId !== state.missionId || event.id <= this.lastEventId) continue;
       this.lastEventId = event.id;
       if (event.type !== 'kill' || event.targetKind !== 'ufo') continue;
-      const slot = this.effects.findIndex(effect => effect === null);
+      let slot = this.effects.findIndex(effect => effect === null);
+      if (slot < 0 && event.detail === 'boss') slot = this.effects.reduce((oldest, effect, index, all) => effect!.bornAt < all[oldest]!.bornAt ? index : oldest, 0);
       if (slot < 0 || !Number.isFinite(event.position.x + event.position.y + event.position.z)) continue;
       const bornAt = event.tick / 60;
       this.effects[slot] = {

@@ -76,3 +76,8 @@ test('audio stays off by default, owns one context, caps sources, and releases t
     if (original) Object.defineProperty(globalThis, 'window', original); else Reflect.deleteProperty(globalThis, 'window');
   }
 });
+
+test('boss warning and start use bounded effects, honor mute and never replay events', async()=>{
+ const original=Object.getOwnPropertyDescriptor(globalThis,'window');Object.defineProperty(globalThis,'window',{configurable:true,value:{AudioContext:Context}});
+ try{const audio=new FlightAudio();audio.enabled=true;audio.active=true;await audio.unlock();const event:GameEvent={id:1,missionId:999,tick:0,type:'boss-warning',position:new Vector3(),owner:-1};audio.consume([event]);assert.equal(audio.activeEffectSourceCount,1);audio.consume([event]);assert.equal(audio.activeEffectSourceCount,1);audio.enabled=false;audio.sync();audio.consume([{...event,id:2,tick:180,type:'boss-start'}]);assert.equal(audio.activeEffectSourceCount,0);audio.dispose();}finally{if(original)Object.defineProperty(globalThis,'window',original);else Reflect.deleteProperty(globalThis,'window');}
+});

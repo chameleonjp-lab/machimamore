@@ -22,6 +22,9 @@ jobs:
       - run: npm run check:dist
       - run: npx playwright install --with-deps chromium webkit
       - run: npm run test:browser
+      - name: Real boss simulation and WebGL scene
+        if: ${{ !cancelled() }}
+        run: npx playwright test --config playwright.gameplay.config.ts browser-tests/boss-gameplay.spec.ts --reporter=line --output=test-results/boss-gameplay
       - run: npx playwright test --config playwright.gameplay.config.ts browser-tests/game-flow.spec.ts --grep camera-contract --project chromium --reporter=line --output=/tmp/machimamore-camera-contract-chromium
       - run: npx playwright test --config playwright.gameplay.config.ts browser-tests/game-flow.spec.ts --grep camera-contract --project webkit --reporter=line --output=/tmp/machimamore-camera-contract-webkit
       - uses: actions/upload-artifact@v4

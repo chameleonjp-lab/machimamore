@@ -1,3 +1,4 @@
+import { BOSS_HULL, BOSS_HORIZONTAL_RADIUS, hullSegmentFraction, hullSphereFraction } from './boss-shape';
 import { createFlightTargetLock, clearFlightAssistance, smoothFlightAssistance } from './flight-target';
 import { Euler, Quaternion, Vector3 } from 'three';
 import { advanceThrottle, CRUISE_SPEED, desiredFlightInput, forwardOf, MAX_SPEED, updateAircraftMotion, updatePlayerLoop } from './flight';
@@ -9,7 +10,7 @@ import { advanceLaserAttack, beginLaserWarning, createLaserAttack } from './lase
 import { activateReservations, assertRoster, createRoster, destroyToken, reserveEmptySlots, rosterCounts } from './roster';
 import { assertStats, calculateScore, createStats, freezeResult } from './score';
 import { moveUfo, seededRandom } from './ufo-ai';
-import { ACTIVE_LIMIT, AIRCRAFT_HEALTH, ALLY_CANNON_INTERVAL, ALLY_MG_INTERVAL, BASE_DAMAGE, BULLET_LIFETIME_TICKS, CANNON_CAPACITY, CITY_COLLISION_DAMAGE, CITY_TOTAL_HEALTH, FIXED_DT, HP_EPSILON, LASER_AIRCRAFT_DPS, LASER_CITY_DPS, LASER_RADIUS, LASER_RANGE, MAX_BEAMS, MAX_BULLETS, MG_CAPACITY, PLAYER_CANNON_INTERVAL, PLAYER_MG_INTERVAL, RESPAWN_TICKS, UFO_HEALTH, WORLD_BOUNDS, damageMultiplier } from './rules';
+import { BOSS_HEALTH, BOSS_ALERT_TICKS, BOSS_ENTRY_TICKS, ESCORT_MIN, ESCORT_MAX, ESCORT_SCORE_LIMIT, ESCORT_LAUNCH_TICKS, ACTIVE_LIMIT, AIRCRAFT_HEALTH, ALLY_CANNON_INTERVAL, ALLY_MG_INTERVAL, BASE_DAMAGE, BULLET_LIFETIME_TICKS, CANNON_CAPACITY, CITY_COLLISION_DAMAGE, CITY_TOTAL_HEALTH, FIXED_DT, HP_EPSILON, LASER_AIRCRAFT_DPS, LASER_CITY_DPS, LASER_RADIUS, LASER_RANGE, MAX_BEAMS, MAX_BULLETS, MG_CAPACITY, PLAYER_CANNON_INTERVAL, PLAYER_MG_INTERVAL, RESPAWN_TICKS, UFO_HEALTH, WORLD_BOUNDS, damageMultiplier } from './rules';
 import type { Aircraft, Bullet, CityDistrict, EntityRef, FlightInput, GameEvent, GameState, HudSnapshot, MissionConfig, RespawnReservation, Team, Ufo } from './types';
 
 let nextMissionId = 1;
@@ -30,7 +31,7 @@ function makeUfo(token: number, slot: number, generation: number, position: Vect
 }
 export function createGame(config: MissionConfig = { mode: 'easy' }): GameState {
   const seed = (config.seed ?? 0x4d414348) >>> 0;
-  const state: GameState = { missionId: nextMissionId++, phase: 'ready', mode: config.mode, seed, randomState: seed || 1, tick: 0, elapsed: 0,
+  const state: GameState = { bossBattle: { phase: 'wave', sinceTick: 0, nextLaunchTick: 0, launched: 0 }, missionId: nextMissionId++, phase: 'ready', mode: config.mode, seed, randomState: seed || 1, tick: 0, elapsed: 0,
     rosters: { friendly: createRoster('friendly'), enemy: createRoster('enemy') }, fighters: [], ufos: [], city: createCity(), bullets: [], beams: [], events: [],
     playerId: 0, playerSlot: 0, pilotReadyTick: 0, pilotAimReadyTick: 0, controller: { targetLock: createFlightTargetLock(), loopHeld: false, assistTurn: 0, assistClimb: 0, responseMultiplier: 1, playerTargetSpeed: CRUISE_SPEED, playerLoopActive: false, loopStartYaw: 0, loopStartPitch: 0, loopStartTurn: 0, loopStartClimb: 0, loopStartSteeringRevision: undefined },
     stats: createStats(), result: null, endReason: null, pauseReasons: [], fault: null, nextAttackId: 1, nextEventId: 1, input: { ...NEUTRAL_INPUT } };
@@ -64,7 +65,11 @@ function resolveRef(state: GameState, ref: EntityRef | null): Aircraft | Ufo | C
 }
 function collidersFor(state: Pick<GameState, 'fighters' | 'ufos' | 'city'>, excludedId?: number, beamRadius = 0): Collider[] {
   const colliders: Collider[] = [];
-  for (const e of [...state.fighters, ...state.ufos]) if (e.health > 0 && e.id !== excludedId) colliders.push({ shape: 'sphere', key: `${e.kind}:${String(e.token).padStart(2, '0')}:${e.generation}`, ref: refOf(e), previous: e.previous, position: e.position, radius: e.radius + beamRadius });
+  for (const e of [...state.fighters, ...state.ufos]) if (e.health > 0 && e.id !== excludedId) {
+    const key = `${e.kind}:${String(e.token).padStart(2, '0')}:${e.generation}`;
+    if (e.kind === 'ufo' && e.variant === 'boss') BOSS_HULL.forEach((part, index) => colliders.push({ shape: 'hull', key: `${key}:${index}`, ref: refOf(e), previous: e.previous, position: e.position, part, padding: beamRadius }));
+    else colliders.push({ shape: 'sphere', key, ref: refOf(e), previous: e.previous, position: e.position, radius: e.radius + beamRadius });
+  }
   for (const d of state.city) if (!d.destroyed) colliders.push({ shape: 'box', key: `city:${String(d.token).padStart(2, '0')}`, ref: refOf(d), min: d.position.clone().sub(d.halfExtent), max: d.position.clone().add(d.halfExtent), radius: beamRadius });
   colliders.push({ shape: 'box', key: 'terrain:sea', ref: null, min: new Vector3(-1e6, -1000, -1e6), max: new Vector3(1e6, 0, 1e6), radius: beamRadius });
   colliders.push({ shape: 'box', key: 'terrain:land', ref: null, min: new Vector3(-1300, 0, -1e6), max: new Vector3(1300, 6, -350), radius: beamRadius });
@@ -84,9 +89,13 @@ export function flightTargetLineOfSight(state: GameState, target: Aircraft | Ufo
 export function selectedFlightTargetKey(state: Pick<GameState, 'controller'>): string | null {
   return state.controller.targetLock.key;
 }
+function entityTouchesSphere(entity: Aircraft | Ufo, point: Vector3, radius: number): boolean {
+  if (entity.kind === 'ufo' && entity.variant === 'boss') { const relative = point.clone().sub(entity.position); return hullSphereFraction(relative, relative, radius) !== null; }
+  return point.distanceToSquared(entity.position) < (radius + entity.radius) ** 2;
+}
 function spawnSafe(state: GameState, point: Vector3, radius: number): boolean {
   if (point.y - radius <= groundHeight(point)) return false;
-  for (const e of [...state.fighters, ...state.ufos]) if (e.health > 0 && point.distanceToSquared(e.position) < (radius + e.radius + 20) ** 2) return false;
+  for (const e of [...state.fighters, ...state.ufos]) if (e.health > 0 && entityTouchesSphere(e, point, radius + 20)) return false;
   for (const d of state.city) if (!d.destroyed && sphereTouchesBox(point, radius, d.position.clone().sub(d.halfExtent), d.position.clone().add(d.halfExtent))) return false;
   for (const b of state.beams) if (state.tick >= b.birthTick && state.tick < b.expiresTick && segmentSphereFraction(b.start, b.end, point, radius + LASER_RADIUS) !== null) return false;
   return true;
@@ -133,6 +142,7 @@ function selectTargets(state: GameState): void {
     }
   }
   for (const u of [...state.ufos].sort((a, b) => a.slot - b.slot)) {
+    if (u.variant === 'boss') continue;
     const locked = resolveRef(state, u.attack.target);
     if ((u.attack.phase === 'warning' || u.attack.phase === 'burst') && locked) { u.target = u.attack.target; continue; }
     let target: Aircraft | CityDistrict | null = null;
@@ -145,6 +155,14 @@ function selectTargets(state: GameState): void {
 function updateUfos(state: GameState): void {
   selectTargets(state);
   for (const ufo of state.ufos) {
+    if (ufo.variant === 'boss') {
+      ufo.previous.copy(ufo.position);
+      const progress = Math.min(1, (state.tick - state.bossBattle.sinceTick) / BOSS_ENTRY_TICKS);
+      ufo.position.set(160, 700, -1680 + progress * 730);
+      ufo.velocity.copy(ufo.position).sub(ufo.previous).divideScalar(FIXED_DT);
+      if (progress === 1) state.bossBattle.phase = 'active';
+      continue;
+    }
     const target = resolveRef(state, ufo.target), attackTarget = resolveRef(state, ufo.attack.target);
     const valid = attackTarget !== null && ufo.attack.start.distanceTo(attackTarget.position) <= LASER_RANGE;
     advanceLaserAttack(ufo, state.tick, valid, beam => {
@@ -228,7 +246,7 @@ function projectileRequests(state: GameState): DamageRequest[] {
     for (const collider of colliders) {
       if (collider.ref?.kind === 'fighter' && collider.ref.token === bullet.ownerToken && collider.ref.generation === bullet.ownerGeneration) continue;
       if (collider.ref?.kind === 'fighter' && (!bullet.playerOwned || state.mode === 'easy')) continue;
-      const time = collider.shape === 'box' ? segmentBoxFraction(bullet.previous, bullet.position, collider.min, collider.max) : movingSphereFraction(bullet.previous, bullet.position, collider.previous, collider.position, collider.radius);
+      const time = collider.shape === 'box' ? segmentBoxFraction(bullet.previous, bullet.position, collider.min, collider.max) : collider.shape === 'hull' ? hullSegmentFraction(bullet.previous.clone().sub(collider.previous), bullet.position.clone().sub(collider.position), collider.part) : movingSphereFraction(bullet.previous, bullet.position, collider.previous, collider.position, collider.radius);
       if (time === null) continue;
       const ref = collider.ref;
       const damages = ref && (ref.kind !== 'city' || bullet.playerOwned && state.mode === 'normal');
@@ -273,11 +291,11 @@ function crashRequests(state: GameState): DamageRequest[] {
       requests.push({ time: t, attackId: state.nextAttackId++, target: refOf(f), amount: f.health, owner: -1, playerOwned: false, friendlySource: false, collisionParticipants: [refOf(f)] });
     }
     for (const u of state.ufos) {
-      const t = movingSphereFraction(f.previous, f.position, u.previous, u.position, f.radius + u.radius);
+      const t = u.variant === 'boss' ? hullSphereFraction(f.previous.clone().sub(u.previous), f.position.clone().sub(u.position), f.radius) : movingSphereFraction(f.previous, f.position, u.previous, u.position, f.radius + u.radius);
       if (t === null) continue;
       const id = state.nextAttackId++, collisionParticipants = [refOf(f), refOf(u)];
       requests.push({ time: t, attackId: id, target: refOf(f), amount: f.health, owner: u.id, playerOwned: false, friendlySource: false, collisionParticipants });
-      requests.push({ time: t, attackId: id, target: refOf(u), amount: u.health, owner: f.id, playerOwned: f.id === state.playerId, friendlySource: true, collisionParticipants });
+      requests.push({ time: t, attackId: id, target: refOf(u), amount: u.variant === 'boss' ? UFO_HEALTH : u.health, owner: f.id, playerOwned: f.id === state.playerId, friendlySource: true, collisionParticipants });
     }
   }
   return requests;
@@ -296,23 +314,29 @@ function applyDamage(state: GameState, request: DamageRequest): boolean {
   target.health = Math.max(0, before - request.amount); if (target.health < HP_EPSILON) target.health = 0;
   const actual = before - target.health;
   if (actual <= 0) return false;
-  state.rosters[target.team].tokens[target.token].damageTaken += actual;
+  if (target.kind === 'aircraft' || !target.variant) state.rosters[target.team].tokens[target.token].damageTaken += actual;
   emit(state, 'hit', target.position, request.owner, { target: target.id, targetKind: target.kind, amount: actual });
   if (target.kind === 'ufo' && request.friendlySource) {
-    state.stats.ufoDamage += actual; state.stats[request.playerOwned ? 'playerDamage' : 'allyDamage'] += actual;
+    if (target.variant === 'boss') state.stats.bossDamage += actual;
+    else if (target.variant === 'escort') { if (target.escortOrdinal! <= ESCORT_SCORE_LIMIT) state.stats.escortScoredDamage += actual; }
+    else state.stats.ufoDamage += actual;
+    state.stats[request.playerOwned ? 'playerDamage' : 'allyDamage'] += actual;
     if (request.bullet?.playerOwned) state.stats.hits++;
   }
   if (target.kind === 'aircraft' && target.id === state.playerId) state.stats.damageTaken += actual;
   const beam = state.beams.find(b => b.id === request.attackId); if (beam) beam.actualDamage += actual;
   if (target.health > 0) return false;
   const roster = state.rosters[target.team];
-  if (!destroyToken(roster, target.token, target.generation)) return false;
+  if (target.kind === 'ufo' && target.variant) {
+    if (target.variant === 'boss') { state.stats.bossKills++; state.bossBattle.phase = 'defeated'; }
+    else { state.stats.escortKills++; if (target.escortOrdinal! <= ESCORT_SCORE_LIMIT) state.stats.escortScoredKills++; }
+  } else if (!destroyToken(roster, target.token, target.generation)) return false;
   if (target.kind === 'aircraft') {
     const wasPlayer = target.id === state.playerId;
     state.stats[wasPlayer ? 'playerLosses' : 'allyLosses']++;
     if (wasPlayer) { state.playerId = null; state.playerSlot = target.slot; state.pilotReadyTick = state.tick + RESPAWN_TICKS; state.controller.playerLoopActive = false; state.input = { ...NEUTRAL_INPUT }; }
   } else if (request.owner >= 0 && request.owner < 50) state.stats[request.playerOwned ? 'playerKills' : 'allyKills']++;
-  emit(state, 'kill', target.position, request.owner, { target: target.id, targetKind: target.kind });
+  emit(state, 'kill', target.position, request.owner, { target: target.id, targetKind: target.kind, ...(target.kind === 'ufo' && target.variant === 'boss' ? { detail: 'boss' } : {}) });
   return true;
 }
 /** Integrate dose to the next collision, surface-order change or HP exhaustion. */
@@ -367,6 +391,41 @@ function applyCombat(state: GameState, instantaneous: DamageRequest[]): void {
     beam.end.copy(hit?.point ?? beam.aimPoint); beam.actualTarget = hit?.collider.ref ?? null; beam.lastIntegratedTick = state.tick;
   }
 }
+/** End-of-tick population maintenance: never leave a live boss with fewer than three escorts. */
+function advanceBossBattle(state: GameState): void {
+  const battle = state.bossBattle;
+  if (battle.phase === 'wave' && rosterCounts(state.rosters.enemy).remaining === 0) {
+    battle.phase = 'alert'; battle.sinceTick = state.tick;
+    emit(state, 'boss-warning', getPlayer(state)?.position ?? new Vector3(), -1);
+  } else if (battle.phase === 'alert' && state.tick - battle.sinceTick >= BOSS_ALERT_TICKS) {
+    battle.phase = 'entering'; battle.sinceTick = state.tick; battle.nextLaunchTick = state.tick + ESCORT_LAUNCH_TICKS;
+    const boss = makeUfo(50, 0, 1, new Vector3(160, 700, -1680), state.tick);
+    boss.id = 1000; boss.variant = 'boss'; boss.health = boss.maxHealth = BOSS_HEALTH;
+    boss.radius = BOSS_HORIZONTAL_RADIUS; boss.speed = 0; boss.velocity.set(0, 0, 0);
+    state.ufos.push(boss); emit(state, 'boss-start', getPlayer(state)?.position ?? boss.position, boss.id);
+  }
+  if (battle.phase !== 'entering' && battle.phase !== 'active') return;
+  const boss = state.ufos.find(u => u.variant === 'boss' && u.health > 0)!;
+  let count = state.ufos.filter(u => u.variant === 'escort' && u.health > 0).length;
+  const desired = Math.min(ESCORT_MAX, Math.max(ESCORT_MIN, count + Number(state.tick >= battle.nextLaunchTick)));
+  while (count < desired) {
+    // Many separated release ports inside the flight area. Eight fighters and
+    // at most five escorts cannot occupy all 64 distinct ports at this altitude.
+    let point: Vector3 | null = null;
+    for (let port = 0; port < 64; port++) {
+      const angle = ((port + battle.launched * 7) % 64) * Math.PI * 2 / 64;
+      const candidate = new Vector3(boss.position.x + Math.cos(angle) * 300, 500 + (port % 2) * 80, Math.max(-1850, boss.position.z + Math.sin(angle) * 300));
+      if (![...state.fighters, ...state.ufos].some(e => e.health > 0 && entityTouchesSphere(e, candidate, 14 + 12))) { point = candidate; break; }
+    }
+    if (!point) throw new Error('ボス射出口がすべて塞がっています。');
+    const ordinal = ++battle.launched;
+    const escort = makeUfo(50 + ordinal, count, 1, point, state.tick);
+    escort.id = 1000 + ordinal; escort.variant = 'escort'; escort.escortOrdinal = ordinal; escort.role = 'interceptor';
+    escort.velocity.set(0, 0, 0); escort.speed = 0;
+    state.ufos.push(escort); emit(state, 'escort-launch', point, boss.id, { target: escort.id }); count++;
+  }
+  if (state.tick >= battle.nextLaunchTick) battle.nextLaunchTick = state.tick + ESCORT_LAUNCH_TICKS;
+}
 function finishGame(state: GameState, outcome: 'victory' | 'defeat' | 'interrupted', reason: NonNullable<GameState['endReason']>): void {
   if (state.result) return;
   state.phase = 'ended'; state.endReason = reason; state.result = freezeResult(state, outcome, reason); state.input = { ...NEUTRAL_INPUT };
@@ -393,7 +452,8 @@ export function stepGame(state: GameState, input: FlightInput = NEUTRAL_INPUT): 
     assertRoster(state.rosters.friendly); assertRoster(state.rosters.enemy); assertStats(state);
     if (cityHealth(state.city) <= HP_EPSILON) finishGame(state, 'defeat', 'city-destroyed');
     else if (rosterCounts(state.rosters.friendly).remaining === 0) finishGame(state, 'defeat', 'friendly-exhausted');
-    else if (rosterCounts(state.rosters.enemy).remaining === 0) finishGame(state, 'victory', 'all-clear');
+    else if (state.bossBattle.phase === 'defeated') { state.ufos = []; finishGame(state, 'victory', 'all-clear'); }
+    else advanceBossBattle(state);
   } catch (error) {
     state.fault = error instanceof Error ? error.message : String(error); pauseGame(state, 'simulation-fault'); emit(state, 'fault', new Vector3(), -1, { detail: state.fault });
   }
