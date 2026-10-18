@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import type { UiFixtureDriver } from '../../src/ui-test-driver';
-test('boss warning, health, escorts and retry are readable without audio',async({page},info)=>{
+test('fixed boss warning, health, escorts and normal display switch are readable without audio',async({page},info)=>{
  await page.goto('/');await page.waitForFunction(()=>Boolean((window as any).__machimamoreUi));
  await page.evaluate(()=>((window as any).__machimamoreUi as UiFixtureDriver).show('boss-warning'));
  await expect(page.locator('#enemy-label')).toHaveText('⚠ WARNING');await expect(page.locator('#enemy-total')).toContainText('巨大UFO接近');await expect(page.locator('#enemy-total')).toBeVisible();

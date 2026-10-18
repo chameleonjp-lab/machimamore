@@ -1,3 +1,4 @@
+import { createBossMeshes, BOSS_SCALE } from './boss-shape';
 import { drawFlightMarkers, MarkerKeepOutCache } from './flight-markers';
 import { ACESFilmicToneMapping, BackSide, BoxGeometry, BufferAttribute, BufferGeometry, Color, ConeGeometry, CylinderGeometry, DirectionalLight, Fog, Group, HemisphereLight, InstancedMesh, Line, LineBasicMaterial, LineDashedMaterial, LineSegments, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Quaternion, Scene, ShaderMaterial, SphereGeometry, SRGBColorSpace, TorusGeometry, Vector3, Vector4, WebGLRenderer, type Material } from 'three';
 import { AircraftFactory, type AircraftVisual } from './aircraft';
@@ -95,11 +96,8 @@ export class MachiMamoreScene {
   }
   private createMothership():void {
     const hull=this.material(new MeshStandardMaterial({color:0x47525c,metalness:.7,roughness:.44}));const dark=this.material(new MeshStandardMaterial({color:0x263b49,metalness:.5,roughness:.6}));const glow=this.material(new MeshBasicMaterial({color:0xbad5ca}));
-    const body=this.mesh(this.geometry(new CylinderGeometry(300,390,85,48,1)),hull);this.mother.add(body);
-    const top=this.mesh(this.sphere,hull);top.scale.set(235,85,235);top.position.y=42;this.mother.add(top);
-    const ring=this.mesh(this.geometry(new TorusGeometry(341,14,8,56)),dark);ring.rotation.x=Math.PI/2;this.mother.add(ring);
-    for(let i=0;i<12;i++){const a=i*Math.PI/6,x=Math.cos(a)*285,z=Math.sin(a)*285;this.block(this.mother,x,48,z,34,70,36,dark);const lamp=this.mesh(this.sphere,glow);lamp.scale.set(9,4,9);lamp.position.set(x,-41,z);this.mother.add(lamp);}
-    const core=this.mesh(this.geometry(new CylinderGeometry(32,52,48,20)),dark);core.position.y=-61;this.mother.add(core);this.mother.position.set(160,1050,-2580);this.world.add(this.mother);
+    for (const part of createBossMeshes()) this.mother.add(this.mesh(this.geometry(part.geometry), { hull, dark, glow }[part.material]));
+    this.mother.position.set(160,1050,-2580);this.world.add(this.mother);
   }
   private createDistrict(d:CityDistrict):DistrictVisual {
     const root=new Group(),intact=new Group(),rubble=new Group(),smoke=new Group();root.position.copy(d.position);root.add(intact,rubble,smoke);
@@ -192,7 +190,7 @@ export class MachiMamoreScene {
     // Victory-only presentation time is supplied by main; the terminal game tick stays frozen.
     const boss=state.ufos.find(u=>u.variant==='boss');
     this.mother.visible=state.bossBattle.phase!=='defeated';
-    if(boss){this.mother.position.lerpVectors(boss.previous,boss.position,alpha);this.mother.scale.setScalar(.4);}
+    if(boss){this.mother.position.lerpVectors(boss.previous,boss.position,alpha);this.mother.scale.setScalar(BOSS_SCALE);}
     else if(state.bossBattle.phase==='alert'){const t=Math.min(1,(state.tick-state.bossBattle.sinceTick)/180);this.mother.position.set(160,1050-350*t,-2580+900*t);this.mother.scale.setScalar(1-.6*t);}
     else{this.mother.position.set(160,1050,-2580);this.mother.scale.setScalar(1);}
   }

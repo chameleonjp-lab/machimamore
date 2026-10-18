@@ -1,9 +1,11 @@
+import { hullSegmentFraction, type HullPart } from './boss-shape';
 import { Vector3 } from 'three';
 import type { EntityRef } from './types';
 const EPS = 1e-10;
 export interface SphereCollider { shape: 'sphere'; key: string; ref: EntityRef; previous: Vector3; position: Vector3; radius: number; }
 export interface BoxCollider { shape: 'box'; key: string; ref: EntityRef | null; min: Vector3; max: Vector3; radius?: number; }
-export type Collider = SphereCollider | BoxCollider;
+export interface HullCollider { shape: 'hull'; key: string; ref: EntityRef; previous: Vector3; position: Vector3; part: HullPart; padding: number; }
+export type Collider = SphereCollider | BoxCollider | HullCollider;
 export interface Contact { collider: Collider; fraction: number; point: Vector3; }
 export interface ContactInterval { collider: Collider; from: number; to: number; }
 
@@ -82,7 +84,9 @@ export function nearestBeamContact(start: Vector3, end: Vector3, colliders: read
   for (const collider of colliders) {
     const fraction = collider.shape === 'box'
       ? segmentRoundedBoxFraction(start, end, collider.min, collider.max, collider.radius ?? 0)
-      : segmentSphereFraction(start, end, collider.previous.clone().lerp(collider.position, time), collider.radius);
+      : collider.shape === 'hull'
+        ? hullSegmentFraction(start.clone().sub(collider.previous.clone().lerp(collider.position, time)), end.clone().sub(collider.previous.clone().lerp(collider.position, time)), collider.part, collider.padding)
+        : segmentSphereFraction(start, end, collider.previous.clone().lerp(collider.position, time), collider.radius);
     if (fraction === null) continue;
     if (!best || fraction < best.fraction - EPS || (Math.abs(fraction - best.fraction) <= EPS && collider.key < best.collider.key)) best = { collider, fraction, point: start.clone().lerp(end, fraction) };
   }
@@ -114,7 +118,7 @@ function polyMultiply(a: number[], b: number[]): number[] {
   const result = Array(a.length + b.length - 1).fill(0) as number[];
   a.forEach((x, i) => b.forEach((y, j) => { result[i + j] += x * y; })); return result;
 }
-interface SpherePath { collider: SphereCollider; p: number[]; q: number[]; boundaries: number[]; }
+interface SpherePath { collider: SphereCollider | HullCollider; p: number[]; q: number[]; boundaries: number[]; }
 function spherePath(start: Vector3, end: Vector3, collider: SphereCollider, from: number, to: number): SpherePath {
   const line = end.clone().sub(start), length = line.length();
   const direction = length > EPS ? line.clone().divideScalar(length) : new Vector3();
@@ -125,6 +129,37 @@ function spherePath(start: Vector3, end: Vector3, collider: SphereCollider, from
   const q = [collider.radius ** 2 - perpendicular.lengthSq(), -2 * perpendicular.dot(vPerpendicular), -vPerpendicular.lengthSq()];
   const boundaries = [from, to, ...roots(q, from, to), ...roots(polyAdd(q, polyMultiply(p, p), -1), from, to), ...roots(polyAdd(q, polyMultiply([p[0] - length, p[1]], [p[0] - length, p[1]]), -1), from, to)];
   return { collider, p, q, boundaries };
+}
+/** Clip in (time, ray fraction) space. Each convex plane is a half-plane,
+ * so every visibility boundary and active entry-face switch is linear. */
+function hullPaths(start: Vector3, end: Vector3, collider: HullCollider, from: number, to: number): SpherePath[] {
+  const ray = end.clone().sub(start), length = ray.length(), offset = start.clone().sub(collider.previous), motion = collider.position.clone().sub(collider.previous);
+  // AABB broad-phase over the entire translation, never only endpoint hits.
+  const pad = collider.padding;
+  const min = collider.part.min.clone().add(collider.previous).min(collider.part.min.clone().add(collider.position)).addScalar(-pad);
+  const max = collider.part.max.clone().add(collider.previous).max(collider.part.max.clone().add(collider.position)).addScalar(pad);
+  if (segmentBoxFraction(start, end, min, max) === null) return [];
+  let polygon = [[from, 0], [to, 0], [to, 1], [from, 1]];
+  const entries: number[][] = [[0, 0]];
+  for (const plane of collider.padding > 0 ? collider.part.paddingPlanes : collider.part.planes) {
+    const a = -plane.normal.dot(motion), b = plane.normal.dot(ray), c = plane.constant + collider.padding - plane.normal.dot(offset);
+    if (b < -EPS) entries.push([c / b * length, -a / b * length]);
+    const clipped: number[][] = [];
+    for (let i = 0; i < polygon.length; i++) {
+      const p = polygon[i], q = polygon[(i + 1) % polygon.length], dp = a*p[0]+b*p[1]-c, dq = a*q[0]+b*q[1]-c;
+      if (dp <= EPS) clipped.push(p);
+      if ((dp <= EPS) !== (dq <= EPS)) { const t = dp / (dp-dq); clipped.push([p[0]+t*(q[0]-p[0]), p[1]+t*(q[1]-p[1])]); }
+    }
+    polygon = clipped;
+    if (!polygon.length) return [];
+  }
+  const edges = [...new Set(polygon.map(p => p[0]))].sort((a,b) => a-b), paths: SpherePath[] = [];
+  for (let i = 1; i < edges.length; i++) {
+    const lo = edges[i-1], hi = edges[i]; if (hi-lo <= EPS) continue;
+    const middle = (lo+hi)/2, p = entries.reduce((best, entry) => entry[0]+entry[1]*middle > best[0]+best[1]*middle ? entry : best);
+    paths.push({collider, p, q:[0], boundaries:[lo,hi]});
+  }
+  return paths;
 }
 /**
  * Integrates a fixed beam against linearly moving spheres. Capsule entry/exit
@@ -137,21 +172,32 @@ export function integrateBeamContacts(start: Vector3, end: Vector3, colliders: r
     const edges = [...path.boundaries].sort((a, b) => a - b);
     return edges.some((v, i) => i > 0 && nearestBeamContact(start, end, [path.collider], (edges[i - 1] + v) / 2) !== null);
   });
+  paths.push(...colliders.filter((c): c is HullCollider => c.shape === 'hull').flatMap(c => hullPaths(start, end, c, from, to)));
   const boundaries = [from, to, ...paths.flatMap(p => p.boundaries)];
   const staticContact = nearestBeamContact(start, end, colliders.filter(c => c.shape === 'box'), 0);
   if (!paths.length) return staticContact ? [{ collider: staticContact.collider, from, to }] : [];
-  const relevant = [...paths.map(path => path.collider), ...(staticContact ? [staticContact.collider] : [])];
+  const relevant = [...new Map(paths.map(path => [path.collider.key, path.collider])).values(), ...(staticContact ? [staticContact.collider] : [])];
   const lineLength = start.distanceTo(end);
   for (let i = 0; i < paths.length; i++) {
     const a = paths[i];
     if (staticContact) {
       const relative = [a.p[0] - staticContact.fraction * lineLength, a.p[1]];
-      boundaries.push(...roots(polyAdd(a.q, polyMultiply(relative, relative), -1), from, to));
+      boundaries.push(...roots(a.collider.shape === 'hull' ? relative : polyAdd(a.q, polyMultiply(relative, relative), -1), a.collider.shape === 'hull' ? Math.max(from,a.boundaries[0]) : from, a.collider.shape === 'hull' ? Math.min(to,a.boundaries[a.boundaries.length-1]) : to));
     }
     for (let j = i + 1; j < paths.length; j++) {
       const b = paths[j], dp = polyAdd(a.p, b.p, -1);
-      const sum = polyAdd(polyAdd(a.q, b.q), polyMultiply(dp, dp), -1);
-      boundaries.push(...roots(polyAdd(polyMultiply(sum, sum), polyMultiply(a.q, b.q).map(x => 4 * x), -1), from, to));
+      // A convex entry is affine (q=0). Do not square it into a quartic:
+      // tiny relative motion would disappear under polynomial tolerances.
+      const aHull = a.collider.shape === 'hull', bHull = b.collider.shape === 'hull';
+      const lo = Math.max(from, aHull ? a.boundaries[0] : from, bHull ? b.boundaries[0] : from);
+      const hi = Math.min(to, aHull ? a.boundaries[a.boundaries.length-1] : to, bHull ? b.boundaries[b.boundaries.length-1] : to);
+      if (hi <= lo) continue;
+      if (aHull && bHull) boundaries.push(...roots(dp,lo,hi));
+      else if (aHull || bHull) boundaries.push(...roots(polyAdd(aHull ? b.q : a.q, polyMultiply(dp,dp),-1),lo,hi));
+      else {
+        const sum = polyAdd(polyAdd(a.q, b.q), polyMultiply(dp, dp), -1);
+        boundaries.push(...roots(polyAdd(polyMultiply(sum, sum), polyMultiply(a.q, b.q).map(x => 4 * x), -1), from, to));
+      }
     }
   }
   boundaries.sort((a, b) => a - b);

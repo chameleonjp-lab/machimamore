@@ -292,22 +292,6 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await page.locator('#announcement').evaluate(element=>{element.textContent='';});
   await expect(page.locator('#flight-tip')).toBeHidden();await expectKaisenHudLayout(page);await expectMarkerLabelsClear(page,['506m','city']);
 
-  for(const [name,title] of [['victory','防衛成功'],['defeat','防衛失敗'],['interrupted','作戦中断']] as const){
-    await show(page,name);await expect(page.locator('#result')).toBeVisible();
-    await expectFixedUi(page,'result','ended');
-    await expect(page.locator('#result-title')).toHaveText(title);
-    await expect(page.locator('#result-time')).toHaveText('02:03.45');
-    await expect(page.locator('#result-score')).toHaveText('12,345');
-    await expect(page.locator('#score-breakdown > div')).toHaveCount(7);
-    await noHorizontalOverflow(page);
-    await captureScrollSegments(page,info,`score-result-${name}`,'#result',['#retry','#result-home','#result-controls']);
-  }
-  await page.locator('#result-controls').tap();await page.locator('#control-cancel').tap();
-  await expect(page.locator('#app')).toHaveAttribute('data-screen','result');
-  await expectFixedUi(page,'result','ended');
-  await page.locator('#retry').tap();await expect(page.locator('#result')).toBeHidden();
-  await expect(page.locator('#hud')).toBeVisible();await expectFixedUi(page,'playing','playing');
-
   await show(page,'startup-error');await expect(page.locator('#startup-error')).toBeVisible();await expect(page.locator('#announcement')).toBeEmpty();
   await expect(page.locator('#start')).toBeDisabled();await expect(page.locator('#reload')).toBeVisible();
   await captureScrollSegments(page,info,'startup-error','#home',['#reload']);
@@ -325,3 +309,25 @@ test('real Home, HUD, dialogs, results and error UI from fixed display states', 
   await info.attach('ui-duration',{body:JSON.stringify({uiBodyMs:Date.now()-started,targetSuiteMs:60000,scope:'UI only; install/build/server setup and human screenshot review excluded; no gameplay or GPU performance claim'}),contentType:'application/json'});
   }
 });
+
+// Separate outcomes so one score assertion cannot hide the other outcomes or retry.
+for(const [name,title] of [['victory','防衛成功'],['defeat','防衛失敗'],['interrupted','作戦中断']] as const) {
+  test(`fixed ${name} score breakdown, result scrolling and retry`,async({page},info)=>{
+    await page.goto('/');await page.waitForFunction(()=>Boolean(window.__machimamoreUi));
+    await show(page,name);await expect(page.locator('#result')).toBeVisible();
+    await expectFixedUi(page,'result','ended');await expect(page.locator('#result-title')).toHaveText(title);
+    await expect(page.locator('#result-time')).toHaveText('02:03.45');
+    await expect(page.locator('#result-score')).toHaveText(name==='victory'?'31,945':'12,345');
+    const labels=['UFO破壊点','与ダメージ点','BOSS撃破','BOSS損傷','妨害UFO撃破（初回6体）','妨害UFO損傷（初回6体）','時間点（勝利時）','自機損失','僚機損失','命中率減点','街損失'];
+    const values=name==='victory'?[10000,2500,8000,3200,6000,2400,500,-100,-200,-300,-55]:[10000,2500,0,0,0,0,500,-100,-200,-300,-55];
+    await expect(page.locator('#score-breakdown dt')).toHaveText(labels);
+    const displayed=await page.locator('#score-breakdown dd').allTextContents();
+    expect(displayed.map(value=>Number(value.replaceAll(',','').replace('＋','').replace('−','-')))).toEqual(values);
+    expect(values.reduce((sum,value)=>sum+value,0)).toBe(name==='victory'?31945:12345);
+    await noHorizontalOverflow(page);
+    await captureScrollSegments(page,info,`score-result-${name}`,'#result',['#retry','#result-home','#result-controls']);
+    await page.locator('#result-controls').tap();await page.locator('#control-cancel').tap();
+    await expectFixedUi(page,'result','ended');await page.locator('#retry').tap();
+    await expect(page.locator('#result')).toBeHidden();await expect(page.locator('#hud')).toBeVisible();await expectFixedUi(page,'playing','playing');
+  });
+}

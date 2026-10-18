@@ -1,3 +1,4 @@
+import { BOSS_HULL, BOSS_HORIZONTAL_RADIUS, hullSegmentFraction, hullSphereFraction } from './boss-shape';
 import { createFlightTargetLock, clearFlightAssistance, smoothFlightAssistance } from './flight-target';
 import { Euler, Quaternion, Vector3 } from 'three';
 import { advanceThrottle, CRUISE_SPEED, desiredFlightInput, forwardOf, MAX_SPEED, updateAircraftMotion, updatePlayerLoop } from './flight';
@@ -64,7 +65,11 @@ function resolveRef(state: GameState, ref: EntityRef | null): Aircraft | Ufo | C
 }
 function collidersFor(state: Pick<GameState, 'fighters' | 'ufos' | 'city'>, excludedId?: number, beamRadius = 0): Collider[] {
   const colliders: Collider[] = [];
-  for (const e of [...state.fighters, ...state.ufos]) if (e.health > 0 && e.id !== excludedId) colliders.push({ shape: 'sphere', key: `${e.kind}:${String(e.token).padStart(2, '0')}:${e.generation}`, ref: refOf(e), previous: e.previous, position: e.position, radius: e.radius + beamRadius });
+  for (const e of [...state.fighters, ...state.ufos]) if (e.health > 0 && e.id !== excludedId) {
+    const key = `${e.kind}:${String(e.token).padStart(2, '0')}:${e.generation}`;
+    if (e.kind === 'ufo' && e.variant === 'boss') BOSS_HULL.forEach((part, index) => colliders.push({ shape: 'hull', key: `${key}:${index}`, ref: refOf(e), previous: e.previous, position: e.position, part, padding: beamRadius }));
+    else colliders.push({ shape: 'sphere', key, ref: refOf(e), previous: e.previous, position: e.position, radius: e.radius + beamRadius });
+  }
   for (const d of state.city) if (!d.destroyed) colliders.push({ shape: 'box', key: `city:${String(d.token).padStart(2, '0')}`, ref: refOf(d), min: d.position.clone().sub(d.halfExtent), max: d.position.clone().add(d.halfExtent), radius: beamRadius });
   colliders.push({ shape: 'box', key: 'terrain:sea', ref: null, min: new Vector3(-1e6, -1000, -1e6), max: new Vector3(1e6, 0, 1e6), radius: beamRadius });
   colliders.push({ shape: 'box', key: 'terrain:land', ref: null, min: new Vector3(-1300, 0, -1e6), max: new Vector3(1300, 6, -350), radius: beamRadius });
@@ -84,9 +89,13 @@ export function flightTargetLineOfSight(state: GameState, target: Aircraft | Ufo
 export function selectedFlightTargetKey(state: Pick<GameState, 'controller'>): string | null {
   return state.controller.targetLock.key;
 }
+function entityTouchesSphere(entity: Aircraft | Ufo, point: Vector3, radius: number): boolean {
+  if (entity.kind === 'ufo' && entity.variant === 'boss') { const relative = point.clone().sub(entity.position); return hullSphereFraction(relative, relative, radius) !== null; }
+  return point.distanceToSquared(entity.position) < (radius + entity.radius) ** 2;
+}
 function spawnSafe(state: GameState, point: Vector3, radius: number): boolean {
   if (point.y - radius <= groundHeight(point)) return false;
-  for (const e of [...state.fighters, ...state.ufos]) if (e.health > 0 && point.distanceToSquared(e.position) < (radius + e.radius + 20) ** 2) return false;
+  for (const e of [...state.fighters, ...state.ufos]) if (e.health > 0 && entityTouchesSphere(e, point, radius + 20)) return false;
   for (const d of state.city) if (!d.destroyed && sphereTouchesBox(point, radius, d.position.clone().sub(d.halfExtent), d.position.clone().add(d.halfExtent))) return false;
   for (const b of state.beams) if (state.tick >= b.birthTick && state.tick < b.expiresTick && segmentSphereFraction(b.start, b.end, point, radius + LASER_RADIUS) !== null) return false;
   return true;
@@ -237,7 +246,7 @@ function projectileRequests(state: GameState): DamageRequest[] {
     for (const collider of colliders) {
       if (collider.ref?.kind === 'fighter' && collider.ref.token === bullet.ownerToken && collider.ref.generation === bullet.ownerGeneration) continue;
       if (collider.ref?.kind === 'fighter' && (!bullet.playerOwned || state.mode === 'easy')) continue;
-      const time = collider.shape === 'box' ? segmentBoxFraction(bullet.previous, bullet.position, collider.min, collider.max) : movingSphereFraction(bullet.previous, bullet.position, collider.previous, collider.position, collider.radius);
+      const time = collider.shape === 'box' ? segmentBoxFraction(bullet.previous, bullet.position, collider.min, collider.max) : collider.shape === 'hull' ? hullSegmentFraction(bullet.previous.clone().sub(collider.previous), bullet.position.clone().sub(collider.position), collider.part) : movingSphereFraction(bullet.previous, bullet.position, collider.previous, collider.position, collider.radius);
       if (time === null) continue;
       const ref = collider.ref;
       const damages = ref && (ref.kind !== 'city' || bullet.playerOwned && state.mode === 'normal');
@@ -282,7 +291,7 @@ function crashRequests(state: GameState): DamageRequest[] {
       requests.push({ time: t, attackId: state.nextAttackId++, target: refOf(f), amount: f.health, owner: -1, playerOwned: false, friendlySource: false, collisionParticipants: [refOf(f)] });
     }
     for (const u of state.ufos) {
-      const t = movingSphereFraction(f.previous, f.position, u.previous, u.position, f.radius + u.radius);
+      const t = u.variant === 'boss' ? hullSphereFraction(f.previous.clone().sub(u.previous), f.position.clone().sub(u.position), f.radius) : movingSphereFraction(f.previous, f.position, u.previous, u.position, f.radius + u.radius);
       if (t === null) continue;
       const id = state.nextAttackId++, collisionParticipants = [refOf(f), refOf(u)];
       requests.push({ time: t, attackId: id, target: refOf(f), amount: f.health, owner: u.id, playerOwned: false, friendlySource: false, collisionParticipants });
@@ -392,7 +401,7 @@ function advanceBossBattle(state: GameState): void {
     battle.phase = 'entering'; battle.sinceTick = state.tick; battle.nextLaunchTick = state.tick + ESCORT_LAUNCH_TICKS;
     const boss = makeUfo(50, 0, 1, new Vector3(160, 700, -1680), state.tick);
     boss.id = 1000; boss.variant = 'boss'; boss.health = boss.maxHealth = BOSS_HEALTH;
-    boss.radius = 156; boss.speed = 0; boss.velocity.set(0, 0, 0);
+    boss.radius = BOSS_HORIZONTAL_RADIUS; boss.speed = 0; boss.velocity.set(0, 0, 0);
     state.ufos.push(boss); emit(state, 'boss-start', getPlayer(state)?.position ?? boss.position, boss.id);
   }
   if (battle.phase !== 'entering' && battle.phase !== 'active') return;
@@ -406,7 +415,7 @@ function advanceBossBattle(state: GameState): void {
     for (let port = 0; port < 64; port++) {
       const angle = ((port + battle.launched * 7) % 64) * Math.PI * 2 / 64;
       const candidate = new Vector3(boss.position.x + Math.cos(angle) * 300, 500 + (port % 2) * 80, Math.max(-1850, boss.position.z + Math.sin(angle) * 300));
-      if (![...state.fighters, ...state.ufos].some(e => e.health > 0 && candidate.distanceToSquared(e.position) < (e.radius + 14 + 12) ** 2)) { point = candidate; break; }
+      if (![...state.fighters, ...state.ufos].some(e => e.health > 0 && entityTouchesSphere(e, candidate, 14 + 12))) { point = candidate; break; }
     }
     if (!point) throw new Error('ボス射出口がすべて塞がっています。');
     const ordinal = ++battle.launched;
