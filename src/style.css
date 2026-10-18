@@ -171,3 +171,15 @@
 #hud [data-flight-control] { pointer-events: auto; }
 
 #app[data-screen="paused"] #hud .throttle-lever { pointer-events: none; }
+
+/* Boss warning is readable without sound or motion; paused state never pulses. */
+#app #hud[data-boss="alert"] .enemy-tally{border:2px solid #ffca78;background:#632a20ed;box-shadow:0 0 18px #ef874b66}
+#app #hud[data-boss="entering"] .enemy-tally,#app #hud[data-boss="active"] .enemy-tally{border-color:#ffca78;background:#462a31ed}
+#app[data-screen="playing"] #hud[data-boss="alert"] .enemy-tally{animation:boss-alert 1.2s ease-in-out infinite}
+@keyframes boss-alert{50%{box-shadow:0 0 28px #ef874baa}}
+@media(prefers-reduced-motion:reduce){#app[data-screen="playing"] #hud[data-boss="alert"] .enemy-tally{animation:none}}
+
+/* Compact HUD normally hides wave detail. Boss state/count must stay visible. */
+#app #hud:is([data-boss="alert"],[data-boss="entering"],[data-boss="active"]) .mission-hud .enemy-tally{display:block}
+#app #hud:is([data-boss="alert"],[data-boss="entering"],[data-boss="active"]) .mission-hud .enemy-tally small{display:block;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:600px){#app #hud:is([data-boss="alert"],[data-boss="entering"],[data-boss="active"]) .enemy-tally strong{font-size:12px}#app #hud:is([data-boss="alert"],[data-boss="entering"],[data-boss="active"]) .enemy-tally span{white-space:normal;font-size:10px}}

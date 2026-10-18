@@ -86,6 +86,8 @@ export class FlightAudio {
       switch(category){
         case 'mg': preset=[155,58,.065,'square',.12];break;
         case 'cannon': preset=[95,30,.14,'sawtooth',.23];break;
+        case 'boss-warning': preset=[420,880,.9,'sawtooth',.28];break;
+        case 'boss-start': preset=[330,990,.65,'square',.23];break;
         case 'warning': preset=[610,740,.18,'sine',.19];break;
         case 'laser': preset=[1550,360,.22,'sawtooth',.11];break;
         case 'damage': preset=[160,38,.25,'triangle',.30];break;

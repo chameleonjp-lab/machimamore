@@ -12,10 +12,15 @@ export class Hud {
   update(state:GameState,h:HudSnapshot):void{
     if(this.mission!==state.missionId){this.mission=state.missionId;this.lastCityNotice=-999;text('city-warning','');text('ally-announcements','');}
     text('timer',formatTime(h.time));text('hud-mode',modeName(h.mode));
-    text('enemy-count',`${h.enemy.D} / ${TOTAL_AIRCRAFT}`);text('enemy-total',`残機${h.enemy.remaining} · 出撃${h.enemy.A} · 予備＋待機${h.enemy.R+h.enemy.Q}`);
+    const boss=state.ufos.find(u=>u.variant==='boss'),battle=state.bossBattle.phase;
+    const escorts=state.ufos.filter(u=>u.variant==='escort'&&u.health>0).length;
+    el('hud').dataset.boss=battle;
+    text('enemy-label',boss?'BOSS · 巨大UFO':battle==='alert'?'⚠ WARNING':'UFO撃破');
+    text('enemy-count',boss?`${Math.ceil(boss.health)} / ${boss.maxHealth} HP`:`${h.enemy.D} / ${TOTAL_AIRCRAFT}`);
+    text('enemy-total',boss?`妨害UFO ${escorts}体 · 巨大UFOを破壊せよ`:battle==='alert'?'巨大UFO接近 · BOSS戦開始間近':`残機${h.enemy.remaining} · 出撃${h.enemy.A} · 予備＋待機${h.enemy.R+h.enemy.Q}`);
     text('allies-count',`残機${h.friendly.remaining}`);text('allies-total',`出撃${h.friendly.A} · 予備＋待機${h.friendly.R+h.friendly.Q}`);
     const rosterDetail=(counts:HudSnapshot['friendly'])=>`残機${counts.remaining} · 出撃${counts.A} · 予備${counts.R} · 待機${counts.Q}`;
-    text('pause-time',formatTime(h.time));text('pause-enemy-status',rosterDetail(h.enemy));text('pause-friendly-status',rosterDetail(h.friendly));
+    text('pause-time',formatTime(h.time));text('pause-enemy-status',rosterDetail(h.enemy));if(boss)text('pause-enemy-status',`BOSS ${Math.ceil(boss.health)} / ${boss.maxHealth}HP · 妨害${escorts}体`);else if(battle==='alert')text('pause-enemy-status','巨大UFO接近 · 警報中');text('pause-friendly-status',rosterDetail(h.friendly));
     text('pause-city-status',`${Math.ceil(h.cityHealth).toLocaleString('ja-JP')} / ${CITY_TOTAL_HEALTH.toLocaleString('ja-JP')}HP · ${h.cityDestroyed} / ${CITY_DISTRICTS}区画`);
     text('city-health',`${Math.ceil(h.cityPercent)}%`);text('city-destroyed',`破壊 ${h.cityDestroyed} / ${CITY_DISTRICTS}区画`);el('city-bar').style.width=`${h.cityPercent}%`;
     const p=h.player;text('health',p?String(Math.ceil(p.health/p.maxHealth*100)):'—');el('health-bar').style.width=`${p?p.health/p.maxHealth*100:0}%`;
@@ -38,11 +43,12 @@ export class Hud {
   result(r:GameResult):void{
     text('result-title',r.outcome==='victory'?'防衛成功':r.outcome==='interrupted'?'作戦中断':'防衛失敗');
     text('result-kicker',r.outcome==='victory'?'CITY DEFENDED':'MISSION REPORT');text('result-mode',modeName(r.mode));
-    const reasons:Record<GameResult['reason'],string>={'all-clear':`UFO全${TOTAL_AIRCRAFT}機を撃破。母艦は撤退します。`,'city-destroyed':'街の耐久が0になりました。','friendly-exhausted':'味方の全50機を失いました。','interrupted':'ホームへ戻ったため中断しました。確定した勝利記録ではありません。'};
+    const reasons:Record<GameResult['reason'],string>={'all-clear':`UFO全${TOTAL_AIRCRAFT}機と巨大UFOを撃破。街を守り抜きました。`,'city-destroyed':'街の耐久が0になりました。','friendly-exhausted':'味方の全50機を失いました。','interrupted':'ホームへ戻ったため中断しました。確定した勝利記録ではありません。'};
     text('result-reason',reasons[r.reason]);text('result-time',formatTime(r.time));text('result-score',r.score.toLocaleString('ja-JP'));
     text('player-kills',`${r.stats.playerKills}機`);text('ally-kills',`${r.stats.allyKills}機`);text('losses',`${r.stats.playerLosses} / ${r.stats.allyLosses}機`);
     text('city-result',`${r.cityHealth.toFixed(1)} / ${CITY_TOTAL_HEALTH}HP · ${r.cityDestroyed}区画`);text('accuracy-result',`${r.stats.hits} / ${r.stats.shots}発 · ${formatAccuracy(r.accuracy)}`);text('survivors',`${r.friendlyRemaining} / ${TOTAL_AIRCRAFT-r.enemyDestroyed}機`);
-    const entries:[string,number,boolean][]=[['UFO破壊点',r.breakdown.ufoDestruction,false],['与ダメージ点',r.breakdown.damage,false],['時間点（勝利時）',r.breakdown.time,false],['自機損失',r.breakdown.playerLoss,true],['僚機損失',r.breakdown.allyLoss,true],['命中率減点',r.breakdown.accuracy,true],['街損失',r.breakdown.cityLoss,true]];
+    text('boss-result',r.bossHealth===null?'未交戦':`${r.bossHealth>0?Math.ceil(r.bossHealth)+'HP':'撃破'} / 残り${r.escortsRemaining}体`);
+    const entries:[string,number,boolean][]=[['UFO破壊点',r.breakdown.ufoDestruction,false],['与ダメージ点',r.breakdown.damage,false],['BOSS撃破',r.breakdown.bossDestruction,false],['BOSS損傷',r.breakdown.bossDamage,false],['妨害UFO撃破（初回6体）',r.breakdown.escortDestruction,false],['妨害UFO損傷（初回6体）',r.breakdown.escortDamage,false],['時間点（勝利時）',r.breakdown.time,false],['自機損失',r.breakdown.playerLoss,true],['僚機損失',r.breakdown.allyLoss,true],['命中率減点',r.breakdown.accuracy,true],['街損失',r.breakdown.cityLoss,true]];
     const list=el('score-breakdown');list.replaceChildren();for(const [label,value,negative]of entries){const row=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=`${negative?'−':'＋'}${value.toLocaleString('ja-JP',{maximumFractionDigits:1})}`;row.append(dt,dd);list.append(row);}
   }
 }

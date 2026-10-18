@@ -172,3 +172,10 @@ test('UI driver uses the product entry/styles, guarded boot and a separate legac
   assert.match(source('src/hud.ts'),/text\('pause-enemy-status',rosterDetail\(h\.enemy\)\)/);
   assert.match(source('src/main.ts'),/querySelectorAll<HTMLElement>\('button:not\(\[hidden\]\):not\(:disabled\),summary/);
 });
+
+test('boss UI fixtures expose alert and actual boss health, separately from finite wave',()=>{
+ const alert=uiFixtureState('boss-warning' as any).state;assert.equal(alert.bossBattle.phase,'alert');
+ const boss=uiFixtureState('boss' as any).state;assert.equal(boss.bossBattle.phase,'active');assert.equal(boss.ufos.find(u=>u.variant==='boss')?.health,320);
+ assert.match(source('src/rules-guide.ts'),/最初.*6|ESCORT_SCORE_LIMIT/);
+ assert.doesNotMatch(source('src/rules-guide.ts'),/今回の撃破対象ではなく/);
+});

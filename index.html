@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <meta name="theme-color" content="#071e2b" />
-    <meta name="description" content="街を守り、UFO50機を迎撃するゼロシリーズの都市防衛フライトゲーム。" />
+    <meta name="description" content="街を守り、UFO50機と巨大UFOを迎撃するゼロシリーズの都市防衛フライトゲーム。" />
     <title>マチマモレ</title>
   </head>
   <body>
@@ -17,12 +17,12 @@
         <div class="home-copy">
           <p class="eyebrow">その街を、守りきれ。</p>
           <h1 id="title">マチマモレ</h1>
-          <p class="intro">呉港沖に現れた巨大宇宙船。<br />味方編隊とともに、街を守りUFO50機を撃破。</p>
+          <p class="intro">呉港沖に現れた巨大宇宙船。<br />味方編隊とともに、街を守りUFO50機を撃破し、巨大UFOを倒せ。</p>
         </div>
         <div class="briefing">
           <div class="mission-data">
             <div><span>味方戦闘機</span><strong>50<small>機</small></strong><em>自機を含む総戦力</em></div>
-            <div><span>敵UFO</span><strong>50<small>機</small></strong><em>全機撃破で防衛成功</em></div>
+            <div><span>敵UFO</span><strong>50<small>機</small></strong><em>全機撃破後、巨大UFO戦</em></div>
             <div><span>同時出撃</span><strong>8<small>対</small>8</strong><em>有限の予備から3秒で復帰</em></div>
           </div>
           <p class="brief-note">被撃墜後も、残機がある限り戦いは続く。街の耐久と味方残機を守ろう。</p>
@@ -43,7 +43,7 @@
           <div class="hud-actions"><button id="game-sound" class="icon-button" aria-label="音をオンにする" aria-pressed="false">音 OFF</button><button id="pause" class="icon-button" aria-label="一時停止">Ⅱ</button></div>
         </div>
         <div class="mission-hud">
-          <div class="tally enemy-tally"><span>UFO撃破</span><strong id="enemy-count">0 / 50</strong><small id="enemy-total">残機50 · 出撃8 · 予備＋待機42</small></div>
+          <div class="tally enemy-tally"><span id="enemy-label">UFO撃破</span><strong id="enemy-count">0 / 50</strong><small id="enemy-total">残機50 · 出撃8 · 予備＋待機42</small></div>
           <div class="tally city-tally"><span>街の耐久</span><strong id="city-health">100%</strong><small id="city-destroyed">破壊 0 / 20区画</small><div class="health-track"><i id="city-bar"></i></div></div>
         </div>
         <div class="flight-data">
@@ -74,7 +74,7 @@
         <div class="panel"><p class="eyebrow">PAUSED</p><h2 id="pause-title">一時停止</h2><p id="pause-reason">作戦の時計も止まっています。</p><button id="pause-reload" class="primary" hidden>画面の準備を再試行</button><button id="resume" class="primary">飛行を再開</button><button id="pause-restart" class="secondary">はじめから出撃</button><button id="pause-home" class="text-button">ホームへ戻る</button><details id="pause-status-details" class="pause-status-details"><summary>戦況詳細</summary><dl class="pause-status-list"><div><dt>作戦時間</dt><dd id="pause-time">00:00.00</dd></div><div><dt>敵UFO</dt><dd id="pause-enemy-status">残機50 · 出撃8 · 予備42 · 待機0</dd></div><div><dt>味方（自機込み）</dt><dd id="pause-friendly-status">残機50 · 出撃8 · 予備42 · 待機0</dd></div><div><dt>街の耐久 / 破壊</dt><dd id="pause-city-status">5000 / 5000HP · 0 / 20区画</dd></div><div><dt>自機HP / 高度</dt><dd id="pause-player-status">100% · 220m</dd></div><div><dt>速度 / 残弾</dt><dd id="pause-flight-status">396km/h · 機銃288 / 機関砲96</dd></div><div><dt>暫定得点 / 命中率</dt><dd id="pause-score-status">0 · 0%</dd></div><div><dt>時間点</dt><dd id="pause-time-bonus">勝利時に加算</dd></div></dl></details><div class="panel-actions"><button id="pause-rules" class="secondary">ルールと操作方法</button><button id="pause-controls" class="secondary">操作設定</button></div></div>
       </section>
       <section id="result" class="screen modal-screen" aria-labelledby="result-title" hidden>
-        <div class="panel result-panel"><p id="result-kicker" class="eyebrow">MISSION REPORT</p><h2 id="result-title" tabindex="-1">作戦終了</h2><p id="result-mode" class="mode-label">イージー</p><p id="result-reason"></p><div class="result-time"><span>能動作戦時間</span><strong id="result-time">00:00.00</strong></div><p class="result-score">最終得点 <b id="result-score">0</b></p><dl id="score-breakdown" class="result-stats"></dl><dl class="result-stats"><div><dt>自機のUFO撃破</dt><dd id="player-kills">0機</dd></div><div><dt>僚機のUFO撃破</dt><dd id="ally-kills">0機</dd></div><div><dt>自機 / 僚機損失</dt><dd id="losses">0 / 0機</dd></div><div><dt>街の残耐久 / 破壊</dt><dd id="city-result">5000 / 5000HP · 0区画</dd></div><div><dt>自機 命中 / 発射</dt><dd id="accuracy-result">0 / 0発 · —（未射撃）</dd></div><div><dt>味方 / 敵の残機</dt><dd id="survivors">50 / 50機</dd></div></dl><button id="retry" class="primary">もう一度出撃</button><button id="result-home" class="secondary">ホームへ戻る</button><button id="result-controls" class="text-button">操作設定</button></div>
+        <div class="panel result-panel"><p id="result-kicker" class="eyebrow">MISSION REPORT</p><h2 id="result-title" tabindex="-1">作戦終了</h2><p id="result-mode" class="mode-label">イージー</p><p id="result-reason"></p><div class="result-time"><span>能動作戦時間</span><strong id="result-time">00:00.00</strong></div><p class="result-score">最終得点 <b id="result-score">0</b></p><dl id="score-breakdown" class="result-stats"></dl><dl class="result-stats"><div><dt>自機のUFO撃破</dt><dd id="player-kills">0機</dd></div><div><dt>僚機のUFO撃破</dt><dd id="ally-kills">0機</dd></div><div><dt>自機 / 僚機損失</dt><dd id="losses">0 / 0機</dd></div><div><dt>街の残耐久 / 破壊</dt><dd id="city-result">5000 / 5000HP · 0区画</dd></div><div><dt>自機 命中 / 発射</dt><dd id="accuracy-result">0 / 0発 · —（未射撃）</dd></div><div><dt>味方 / 初期UFOの残機</dt><dd id="survivors">50 / 50機</dd></div><div><dt>巨大UFO / 妨害UFO</dt><dd id="boss-result">未交戦</dd></div></dl><button id="retry" class="primary">もう一度出撃</button><button id="result-home" class="secondary">ホームへ戻る</button><button id="result-controls" class="text-button">操作設定</button></div>
       </section>
       <div id="announcement" class="announcement" role="status" aria-live="polite" aria-atomic="true"></div>
     </main>

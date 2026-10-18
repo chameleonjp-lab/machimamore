@@ -138,14 +138,12 @@ test('A03 pending player reservation checks all deterministic safe candidates an
   const pending = state.rosters.friendly.reservations.find(q => q.slot === 0)!;
   assert.equal(pending.token, reservedToken); assert.equal(pending.blockedSince, 180); assert.equal(state.rosters.friendly.tokens[reservedToken].status, 'queued'); assert.equal(state.fault, null);
 });
-test('A06 last enemy token gives victory exactly once, and A0 with Q/R is not victory', () => {
+test('A06 last wave enemy starts boss warning instead of prematurely ending the mission', () => {
   const state = fixture(1, 1, false);
   state.bullets = [bullet(state, new Vector3(1000, 400, -1460), new Vector3(0, 0, -2000), 1000)]; state.stats.shots = 1;
   startGame(state); stepGame(state); stepGame(state);
-  assert.equal(state.result?.outcome, 'victory'); assert.equal(state.result?.enemyDestroyed, 50); assert.equal(state.endReason, 'all-clear'); assert.equal(state.events.filter(e => e.type === 'end').length, 1);
-  const result = state.result, frozen = JSON.stringify(state);
-  for (let i = 0; i < 60; i++) stepGame(state, { ...NEUTRAL_INPUT, fire: true });
-  assert.equal(state.result, result); assert.equal(JSON.stringify(state), frozen); assert.equal(Object.isFrozen(result), true); assert.equal(Object.isFrozen(result?.stats), true); assert.equal(Object.isFrozen(result?.breakdown), true);
+  assert.equal(state.result, null); assert.equal(state.bossBattle.phase, 'alert');
+  assert.equal(rosterCounts(state.rosters.enemy).D, 50); assert.equal(state.endReason, null);
 });
 test('A07 same-tick last friendly and last enemy losses prioritize defeat and freeze all in-flight attacks', () => {
   const state = fixture(1, 1, false); state.fighters[0].position.y = 1;

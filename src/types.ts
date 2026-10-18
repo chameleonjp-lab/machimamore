@@ -21,6 +21,8 @@ export interface LaserAttack {
   lastExpireTick: number; holdUntilTick: number; cooldownUntilTick: number;
 }
 export interface Ufo {
+  /** Omitted means an original finite-roster UFO. */
+  variant?: 'boss' | 'escort'; escortOrdinal?: number;
   kind: 'ufo'; id: number; token: number; generation: number; slot: number; team: 'enemy';
   position: Vector3; previous: Vector3; quaternion: Quaternion; velocity: Vector3; speed: number;
   health: number; maxHealth: number; radius: number; role: 'city-attacker' | 'interceptor';
@@ -41,28 +43,33 @@ export interface LaserBeam {
   lastIntegratedTick: number; actualTarget: EntityRef | null; actualDamage: number;
 }
 export interface MissionStats {
+  bossDamage: number; bossKills: number; escortScoredDamage: number; escortScoredKills: number; escortKills: number;
   playerKills: number; allyKills: number; playerLosses: number; allyLosses: number;
   playerDamage: number; allyDamage: number; ufoDamage: number; cityDamage: number; cityDestroyed: number;
   shots: number; hits: number; loops: number; damageTaken: number;
 }
 export interface ScoreBreakdown {
+  bossDestruction: number; bossDamage: number; escortDestruction: number; escortDamage: number;
   ufoDestruction: number; damage: number; time: number; playerLoss: number; allyLoss: number;
   accuracy: number; cityLoss: number; total: number;
 }
 export type EndReason = 'all-clear' | 'city-destroyed' | 'friendly-exhausted' | 'interrupted';
 export interface GameResult {
+  bossHealth: number | null; escortsRemaining: number;
   outcome: 'victory' | 'defeat' | 'interrupted'; reason: EndReason; tick: number; time: number; mode: GameMode;
   score: number; breakdown: Readonly<ScoreBreakdown>; stats: Readonly<MissionStats>;
   accuracy: number | null; cityHealth: number; cityDestroyed: number; enemyDestroyed: number; friendlyRemaining: number;
 }
-export type EventType = 'shot' | 'hit' | 'kill' | 'damage' | 'loop' | 'end' | 'splash' | 'reload-start' | 'reload-complete' | 'respawn' | 'takeover' | 'warning' | 'laser' | 'city-destroyed' | 'fault';
+export type EventType = 'boss-warning' | 'boss-start' | 'escort-launch' | 'shot' | 'hit' | 'kill' | 'damage' | 'loop' | 'end' | 'splash' | 'reload-start' | 'reload-complete' | 'respawn' | 'takeover' | 'warning' | 'laser' | 'city-destroyed' | 'fault';
 export interface GameEvent {
   id: number; missionId: number; tick: number; type: EventType; position: Vector3;
   owner: number; target?: number; targetKind?: 'aircraft' | 'ufo' | 'city'; amount?: number; weapon?: 'mg' | 'cannon'; detail?: string;
 }
 export interface MissionConfig { mode: GameMode; seed?: number; }
 export interface PlayerController extends FlightController {}
+export interface BossBattle { phase: 'wave' | 'alert' | 'entering' | 'active' | 'defeated'; sinceTick: number; nextLaunchTick: number; launched: number; }
 export interface GameState {
+  bossBattle: BossBattle;
   missionId: number; phase: 'ready' | 'playing' | 'paused' | 'ended'; mode: GameMode; seed: number; randomState: number;
   tick: number; elapsed: number; rosters: { friendly: Roster; enemy: Roster };
   fighters: Aircraft[]; ufos: Ufo[]; city: CityDistrict[]; bullets: Bullet[]; beams: LaserBeam[]; events: GameEvent[];
