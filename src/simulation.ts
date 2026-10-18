@@ -1,7 +1,7 @@
 import { createFlightTargetLock, clearFlightAssistance, smoothFlightAssistance } from './flight-target';
 import { Euler, Quaternion, Vector3 } from 'three';
 import { advanceThrottle, CRUISE_SPEED, desiredFlightInput, forwardOf, MAX_SPEED, updateAircraftMotion, updatePlayerLoop } from './flight';
-import { applyEasyShotCorrection, autoFireTarget, getFlightAssist, predictedShotDirection } from './flight-assist';
+import { applyEasyShotCorrection, autoFireTarget, getFlightAssist, PLAYER_MAX_PITCH, predictedShotDirection } from './flight-assist';
 import { beginAircraftReload, tickAircraftReload } from './ammunition';
 import { createCity, cityHealth, damageDistrict, groundHeight } from './city';
 import { integrateBeamContacts, movingSphereFraction, nearestBeamContact, segmentBoxFraction, segmentRoundedBoxFraction, segmentSphereFraction, sphereTouchesBox, type Collider } from './collision';
@@ -197,7 +197,7 @@ function updateFighters(state: GameState, input: FlightInput): void {
       const aimTargets = state.tick >= state.pilotAimReadyTick ? state.ufos : [];
       const assist = getFlightAssist(fighter, aimTargets, input, state.mode, unobstructed, state.controller.targetLock);
       const speed = advanceThrottle(state.controller, input, state.mode, FIXED_DT);
-      const adjusted = { ...input, ...smoothFlightAssistance(state.controller, input, assist, FIXED_DT) };
+      const adjusted = { ...input, ...smoothFlightAssistance(state.controller, input, assist, FIXED_DT, state.mode === 'easy' && !input.steeringActive && Math.max(Math.abs(input.turn), Math.abs(input.climb)) <= 1e-8 ? Math.max(-1, Math.min(1, fighter.pitch / PLAYER_MAX_PITCH)) : undefined) };
       const completed = updatePlayerLoop(fighter, state.controller, adjusted, input, input.loop, FIXED_DT, speed, MAX_SPEED, state.controller.responseMultiplier, state.mode);
       if (completed) { state.stats.loops++; emit(state, 'loop', fighter.position, fighter.id); }
       const automatic = autoFireTarget(fighter, aimTargets, state.mode, input.viewAspect, unobstructed, state.controller.targetLock);
