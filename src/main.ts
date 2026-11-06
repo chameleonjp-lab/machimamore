@@ -23,7 +23,7 @@ let cancelPreparation:(()=>void)|null=null,presentationPending=false;
 let pendingLoop=false,pendingFire=false,pendingAccelerate=false,pendingBrake=false,lastPlayerIdentity='',lastEventId=-1,lastEventMission=-1,announcementUntil=0,lastNoticeTick=-999,resultPresentationStart=0;
 const pendingUfoFireworkEvents:GameEvent[]=[];
 const flightPresentation=new FlightPresentation();
-let viewportWidth=window.innerWidth,viewportHeight=window.innerHeight;
+let viewportWidth=window.innerWidth;
 const buttons={fire:el<HTMLButtonElement>('fire'),loop:el<HTMLButtonElement>('loop'),throttle:el<HTMLElement>('throttle')};
 for(const button of Object.values(buttons))button.dataset.flightControl='true';
 const keyboard=new KeyboardSettings(),presentation=new ControlInputPresentation(),settings=new ControlSettings(buttons,keyboard,presentation);
@@ -63,7 +63,7 @@ for(const radio of document.querySelectorAll<HTMLInputElement>('input[name="game
 window.addEventListener('keydown',event=>{if(settings.isOpen||rules?.isOpen)return;if((screen==='playing'||screen==='paused')&&keyboard.matchesPause(event)){event.preventDefault();if(screen==='playing')pause('manual');else resume();return;}if(screen==='paused'&&event.key==='Tab'){const focusables=Array.from(el('pause-screen').querySelectorAll<HTMLElement>('button:not([hidden]):not(:disabled),summary,a[href],input:not(:disabled),[tabindex]:not([tabindex="-1"])')).filter(item=>!item.hidden&&!item.closest('[hidden]')&&getComputedStyle(item).display!=='none'&&getComputedStyle(item).visibility!=='hidden');const index=focusables.indexOf(document.activeElement as HTMLElement),target=event.shiftKey?index<=0?focusables.at(-1):null:index<0||index===focusables.length-1?focusables[0]:null;if(target){event.preventDefault();target.focus();}}});
 window.addEventListener('blur',()=>pause('blur'));window.addEventListener('pagehide',()=>pause('hidden'));document.addEventListener('visibilitychange',()=>{if(document.hidden)pause('hidden');lastFrame=0;});
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');reducedMotion.addEventListener('change',()=>scene?.setReducedMotion(reducedMotion.matches));
-function resizeScene(){const width=window.innerWidth,height=window.innerHeight;if(width!==viewportWidth||(width>height)!==(viewportWidth>viewportHeight))clearInput();viewportWidth=width;viewportHeight=height;try{scene?.resize();}catch{graphicsFailure('画面サイズの更新を続けられません。画面の準備を再試行してください。');}}
+function resizeScene(){const width=window.innerWidth;if(width!==viewportWidth)clearInput();viewportWidth=width;try{scene?.resize();}catch{graphicsFailure('画面サイズの更新を続けられません。画面の準備を再試行してください。');}}
 window.addEventListener('resize',resizeScene);window.visualViewport?.addEventListener('resize',resizeScene);window.addEventListener('orientationchange',clearInput);
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();contextLost=true;graphicsReady=false;preparationGeneration++;cancelPreparation?.();cancelPreparation=null;preparing=false;scene?.dispose();scene=null;pause('webgl-lost');el<HTMLButtonElement>('start').disabled=true;el('startup-error').hidden=false;el('startup-error').textContent='描画コンテキストが失われました。復旧を待つか、ページを再読み込みしてください。復旧後も明示的な再開が必要です。';el('reload').hidden=false;el('reload').textContent='ページを再読み込み';});
 canvas.addEventListener('webglcontextrestored',()=>{contextLost=false;void prepareGraphics();});

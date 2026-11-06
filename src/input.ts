@@ -47,7 +47,6 @@ export class FlightControls {
   private lastSteeringPoint = { x: 0, y: 0 };
   private rebaseSteering = false;
   private viewportWidth = window.innerWidth;
-  private viewportHeight = window.innerHeight;
   private mode: FlightMode = 'normal';
   private readonly abort = new AbortController();
   private readonly joystick: HTMLElement;
@@ -222,10 +221,10 @@ export class FlightControls {
   }
 
   private resizeViewport(): void {
-    const width = window.innerWidth, height = window.innerHeight;
-    const rotated = width !== this.viewportWidth || (width > height) !== (this.viewportWidth > this.viewportHeight);
-    this.viewportWidth = width; this.viewportHeight = height;
-    if (rotated) this.clear();
+    const width = window.innerWidth;
+    const widthChanged = width !== this.viewportWidth;
+    this.viewportWidth = width;
+    if (widthChanged) this.clear();
     else if (this.steerPointer !== null) this.rebaseSteering = true;
   }
 

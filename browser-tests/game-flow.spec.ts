@@ -71,51 +71,72 @@ for (const mode of ['easy', 'normal'] as const) cameraContractTest(`[camera-cont
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   let probeInstalled = false;
+  let failed = false;
+  let currentStage = 'open Home';
+  const stage = async <T>(name: string, run: () => Promise<T>): Promise<T> => {
+    currentStage = name;
+    return cameraContractTest.step(`${mode}: ${name}`, async () => {
+      console.info(`[camera-contract] ${mode}: ${name}`);
+      return run();
+    });
+  };
   try {
-    await openHome(page);
-    await page.getByRole('radio', { name: mode === 'easy' ? 'イージー' : 'ノーマル' }).check();
-    await installPassiveCameraProbe(page);
+    await stage('open Home', () => openHome(page));
+    await stage('select mode', () => page.getByRole('radio', { name: mode === 'easy' ? 'イージー' : 'ノーマル' }).check());
+    await stage('install passive camera probe', () => installPassiveCameraProbe(page));
     probeInstalled = true;
     // Omitting testInfo intentionally suppresses setup recovery JSON attachments
     // for this focused contract run; the regular gameplay suite keeps them.
-    await startMission(page);
-    await page.waitForFunction(() => (window as any).__machimamoreCameraContract?.samples.some((sample: any) => sample.tick >= 30));
+    await stage('normal Home departure and stable setup', () => startMission(page));
+    await stage('wait for tick 30 camera sample', () => page.waitForFunction(() => (window as any).__machimamoreCameraContract?.samples.some((sample: any) => sample.tick >= 30)));
 
-    const initial = await latestCameraSample(page);
+    const initial = await stage('read initial rendered pose', () => latestCameraSample(page));
     expect(initial.mode).toBe(mode);
     expectCameraMatchesRenderedPose(initial);
 
-    await page.keyboard.down('ArrowUp');
-    await page.keyboard.down('ArrowRight');
-    await page.waitForFunction((pitch: number) => {
-      const sample = (window as any).__machimamoreCameraContract?.samples.at(-1);
-      return sample && sample.player.pitch > pitch + 0.02;
-    }, initial.player.pitch);
-    const climbed = await latestCameraSample(page);
+    await stage('hold climb and right until pitch advances', async () => {
+      await page.keyboard.down('ArrowUp');
+      await page.keyboard.down('ArrowRight');
+      await page.waitForFunction((pitch: number) => {
+        const sample = (window as any).__machimamoreCameraContract?.samples.at(-1);
+        return sample && sample.player.pitch > pitch + 0.02;
+      }, initial.player.pitch);
+    });
+    const climbed = await stage('read climbed rendered pose', () => latestCameraSample(page));
     expect(climbed.player.pitch).toBeGreaterThan(initial.player.pitch + 0.02);
     expectCameraMatchesRenderedPose(climbed);
 
-    await page.keyboard.up('ArrowUp');
+    await stage('release vertical key', () => page.keyboard.up('ArrowUp'));
     // Capture the barrier only after keyup dispatch completes, so a render that
     // raced between a pre-keyup read and the key event cannot satisfy it.
-    const afterReleaseDispatch = await latestCameraSample(page);
-    await page.waitForFunction(({ calls, tick }: { calls: number; tick: number }) => {
-      const sample = (window as any).__machimamoreCameraContract?.samples.at(-1);
-      return sample && sample.calls > calls && sample.tick > tick;
-    }, { calls: afterReleaseDispatch.calls, tick: afterReleaseDispatch.tick });
-    const releasedVertical = await latestCameraSample(page);
-    await page.waitForFunction((tick: number) => {
-      const sample = (window as any).__machimamoreCameraContract?.samples.at(-1);
-      return sample && sample.tick >= tick + 6;
-    }, releasedVertical.tick);
-    const horizontalOnly = await latestCameraSample(page);
+    const afterReleaseDispatch = await stage('read post-keyup render barrier', () => latestCameraSample(page));
+    await stage('wait for rendered tick after vertical release', () => page.waitForFunction(({ calls, tick }: { calls: number; tick: number }) => {
+        const sample = (window as any).__machimamoreCameraContract?.samples.at(-1);
+        return sample && sample.calls > calls && sample.tick > tick;
+      }, { calls: afterReleaseDispatch.calls, tick: afterReleaseDispatch.tick }));
+    const releasedVertical = await stage('read released-vertical rendered pose', () => latestCameraSample(page));
+    await stage('hold horizontal input for six ticks', () => page.waitForFunction((tick: number) => {
+        const sample = (window as any).__machimamoreCameraContract?.samples.at(-1);
+        return sample && sample.tick >= tick + 6;
+      }, releasedVertical.tick));
+    const horizontalOnly = await stage('read horizontal-only rendered pose', () => latestCameraSample(page));
     expect(Math.abs(horizontalOnly.player.pitch - releasedVertical.player.pitch)).toBeLessThan(1e-9);
     expectCameraMatchesRenderedPose(horizontalOnly);
     expect(errors).toEqual([]);
+  } catch (error) {
+    failed = true;
+    console.error(`[camera-contract] ${mode}: failed during ${currentStage}`);
+    throw error;
   } finally {
     await page.keyboard.up('ArrowUp').catch(() => {});
     await page.keyboard.up('ArrowRight').catch(() => {});
-    if (probeInstalled) await restorePassiveCameraProbe(page);
+    if (probeInstalled && !page.isClosed()) {
+      try { await restorePassiveCameraProbe(page); }
+      catch (error) {
+        if (!failed) throw error;
+        console.warn(`[camera-contract] ${mode}: probe cleanup failed after the original test failure`, error);
+      }
+    }
   }
 });
 

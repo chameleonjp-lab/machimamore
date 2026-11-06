@@ -40,7 +40,7 @@
 | 型/ビルド | `npm run build` | 成功。JS `assets/index-DLA2tIsu.js`、758.94kB。既存の大きいchunk警告のみ |
 | 配布物 | `npm run check:dist`、`npm run evidence:source`、`BUILD_COMMIT=<local SHA> node scripts/prepare-pages.mjs` | 成功。cleanな候補からmanifestを生成し、5公開ファイルのbyte数/SHA-256一致を再確認 |
 | 修正前ブラウザ | 通常HomeからNormal出撃、既存camera-contract、Chromium/SwiftShader | 1成功13.2秒。変更前の検査で、候補の合格ではない |
-| 候補ブラウザ | UI全件、通常出撃の両モードcamera-contractをChromium/WebKitで検査 | 取りまとめ担当の共有ブラウザ枠待ち。未実行 |
+| 候補ブラウザ | UI全件、通常出撃の両モードcamera-contractをChromium/WebKitで検査 | 旧候補のDraft #23 CIではUI20件とChromium Normal cameraが成功、Easy cameraは既定60秒で失敗との取りまとめ担当通知。下記resize修正後は未実行 |
 | iPhone17Pro Safari | 両モード402×874、874×402、402×700相当、保持/別指/バー/回転/停止再開 | 実機なし、未確認 |
 | 独立レビュー | 実装者以外による差分確認 | 取りまとめ担当へ依頼、未確認 |
 
@@ -49,6 +49,20 @@
 全件初回の失敗も残す。元の全resize解除を正解とした4検査は、幅・向きが変わる割り込みを実際に与える検査へ更新し、解除の判定を残した。mainのVM検査には新しい実 `FlightPresentation` 依存を渡した。合法入力pilotは旧絶対pitch入力/予測を使っていたため、整列済みの上向き標的にclimb0.42077を要求するREDを追加し、手動pitch-rateと実運動に一致する予測へ直した。作戦勝利の検査は削除・弱体化していない。
 
 初回の既定sandbox全件では `pages-deployment.test.ts` の子git起動がEPERMとなった。検査/製品コードを迂回せず、必要な実行環境権限で同じコマンドを実行した。追尾・旋回倍率・発射補正・中央保持・表示色の新規検査は変更前のREDを確認した。新表示moduleは初回未実装でimport不可、P0の実camera更新関数は24/48繰返しを再現しており、候補の表示検査では0/48となる。
+
+## 高さだけのresizeが正方形の画面比をまたぐ場合の追補
+
+共通の独立レビュー指摘を本作でも再現した。幅が402のまま高さ430→390、390→430に変わると、`width > height` の反転を画面回転と推定して実controlsとmainの両方で入力を解除していた。高さだけの変更ではこの推定を使わず、幅の変更と明示的な`orientationchange`の解除を維持した。表示補間、0.3秒の機体交代、停止再開の履歴解除には変更していない。
+
+新しい`viewport-resize.test.ts`はEasy/Normal、両方向、実controls単体/実main関数と実controlsの組合せの8件を追加する。修正前は8件すべて同じ操縦pointerの消失でRED。修正後は同じ指・旋回/上昇量・保持ボタン・操縦revisionとmainの保留入力を保持し、最初の変更後client座標を再基準化して次の移動に応答する。幅変更と明示回転での解除も同じ検査で確認した。近傍のcontrols-recovery、throttle-runtimeを合わせて23/23成功。
+
+追補の全単体`npm test`は232/232成功、fail/skipとも0、終了0（54.6秒）。`npm run build`と`npm run check:dist`も成功した。resize修正commit`4a7da37`のソース入力digestは`e6a28db162fe2976cf72c43ddf2bf1408a9b126b7d3e4acb645cdc5f9ebab0cc`、JSは`assets/index-x6Z77ACk.js`（758.76kB）、SHA-256は`a1831890d5c74daa6c49ca1c56111cd59eb9dee73d60dae854a90def50eb470f`。同commitのcleanなソースmanifest、Pages準備、5配布ファイルの実byte数/SHA-256一致も成功した。実iPhoneと公開後の照合は未確認。
+
+## CIのcamera検査の診断追補
+
+旧候補Draft #23のrun`42276980094`ではChromium Easy cameraが既定60秒で失敗し、finallyのprobe解除が閉じたpageへevaluateして元の待機段階を隠していた。artifact`13533452428`を取得し、ZIPのSHA-256`48fcc197724d63b8945e64b173bbbefe0653656bb4ccbd9729980d385f466d31`とcleanなソースdigest`882004ac…ecea6e`を照合した。227ファイルにcameraのtrace/error-context/resultsは含まれない。camera検査はcaptureを無効にし、既存workflowは対象の`/tmp`出力を収集しないため、元の停止段階や製品原因はこのartifactから確定できない。
+
+検査に通常出撃、tick30、上昇、keyup後の表示、水平6tickの段階名とログを加え、失敗後のprobe解除が元の例外を上書きしないようにした。待機条件・60秒の既定timeout・全assertion・workflowは変更していない。型検査と4件の検査列挙は成功したが、共有ブラウザ枠待ちで実行結果は未確認。これは原因解決やcamera合格の宣言ではない。
 
 ## 公開版と残件
 
