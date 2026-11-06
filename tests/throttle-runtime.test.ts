@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createContext, runInContext } from 'node:vm';
 import ts from 'typescript';
-import { createGame, startGame, getPlayer, stepGame, getHudSnapshot } from '../src/simulation';
+import { createGame, startGame, getPlayer, stepGame, getHudSnapshot, pauseGame, resumeGame } from '../src/simulation';
 import { FIXED_DT } from '../src/rules';
 import { advanceThrottle } from '../src/flight';
+import { FlightPresentation } from '../src/flight-presentation';
 import type { FlightInput } from '../src/flight-types';
 const neutral = {turn:0,climb:0,fire:false,loop:false};
 const main = readFileSync(new URL('../src/main.ts', import.meta.url),'utf8');
@@ -22,7 +23,7 @@ function frameFixture(mode:'normal'|'easy'='normal') {
     sampleThrottle(up=false,down=false){const value=Math.max(-1,Math.min(1,axis+pulse+Number(up)-Number(down)));pulse=0;return mode==='normal'?value:0;},
     clear(){axis=0;pulse=0;accel=false;brake=false;clearCount++;}};
   const player=getPlayer(game)!;
-  const ctx=createContext({state:game,controls,getPlayer,getHudSnapshot,FIXED_DT,window:{innerWidth:393,innerHeight:852},
+  const ctx=createContext({state:game,controls,getPlayer,getHudSnapshot,FIXED_DT,flightPresentation:new FlightPresentation(),window:{innerWidth:393,innerHeight:852},
     screen:'playing',disposed:false,frameId:0,lastFrame:1,accumulator:0,presentationPending:false,
     frameIntervals:[],gapCount:0,maxFrameGap:0,pendingLoop:false,pendingFire:false,pendingAccelerate:false,pendingBrake:false,
     lastPlayerIdentity:`${game.missionId}:${player.token}:${player.generation}`,announcementUntil:0,resultPresentationStart:0,
@@ -59,6 +60,18 @@ test('M simulation explicitly neutral throttle wins over legacy and Easy retains
     for(let i=0;i<600;i++)advanceThrottle(game.controller,{...neutral,throttle:-1},mode,FIXED_DT);
     assert.equal(game.controller.playerTargetSpeed,mode==='normal'?65:110);
   }
+});
+
+test('pause and resume between displays cannot bring back the preceding flight pose',()=>{
+  const state=createGame({mode:'normal'}),flightPresentation=new FlightPresentation();startGame(state);
+  flightPresentation.capture(state);stepGame(state,{...neutral,climb:.45,steeringActive:true});
+  const node={textContent:'',hidden:false,disabled:false};
+  const ctx=createContext({state,flightPresentation,pauseGame,resumeGame,getHudSnapshot,clearInput(){},accumulator:0,lastFrame:0,
+    hud:{update(){}},setScreen(){},el:()=>node,reasonLabels:{manual:'paused'},contextLost:false,graphicsReady:true,preparing:false,
+    document:{hidden:false},settings:{isOpen:false},rules:null,syncAudio(){},audio:{enabled:false}});
+  runInContext(['phase','pause','resume'].map(productFunction).join('\n'),ctx);
+  runInContext("pause('manual');resume();",ctx);
+  assert.equal(state.phase,'playing');assert.equal(flightPresentation.sample(state,0),state);
 });
 
 test('common shell preserves the city briefing, own HUD and nine-key product boundary',()=>{

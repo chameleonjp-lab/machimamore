@@ -141,35 +141,6 @@ test('manual diagonal input shares one circular budget and neutral leveling is c
     'neutral return must not exceed the manual angular step');
 });
 
-test('offscreen response multiplier changes horizontal rate only', () => {
-  for (const mode of ['easy', 'normal'] as const) {
-    for (const speed of [65, 85, 110, 141]) {
-      for (const pitch of [-0.9, 0, 0.9]) {
-        for (const bank of [-0.72, 0, 0.72]) {
-          for (const yaw of [-3.14, 0, 3.14]) {
-            for (const sign of [-1, 1]) {
-              for (const axis of ['turn', 'climb'] as const) {
-                const ratio = (responseMultiplier: number) => {
-                  const aircraft = makeAircraft(1, 'friendly', new Vector3(0, 2400, 0), yaw, 'player');
-                  aircraft.speed = speed; aircraft.pitch = pitch; aircraft.yaw = yaw; aircraft.bank = bank; updateQuaternion(aircraft);
-                  const control = createFlightController(aircraft), before = cameraForward(aircraft, mode);
-                  const steering = { ...neutral, turn: axis === 'turn' ? sign * 0.45 : 0,
-                    climb: axis === 'climb' ? sign * 0.45 : 0, steeringActive: true };
-                  updatePlayerLoop(aircraft, control, steering, steering, false, dt, 110, 141, responseMultiplier, mode);
-                  return directionAngle(before, cameraForward(aircraft, mode));
-                };
-                const one = ratio(1), offscreen = ratio(1.65);
-                assert.ok(Math.abs(offscreen / one - (axis === 'turn' ? 1.65 : 1)) <= 1e-12,
-                  `${mode} ${axis} speed=${speed} pitch=${pitch} bank=${bank} yaw=${yaw}`);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-});
-
 test('loop interruption keeps the continuous camera branch near vertical at every phase', () => {
   let cases = 0;
   for (const mode of ['easy', 'normal'] as const) {

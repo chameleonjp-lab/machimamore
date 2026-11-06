@@ -1,6 +1,5 @@
 import { Vector3 } from 'three';
-import { flightTargetKey } from './flight-target';
-import { flightTargetLineOfSight, selectedFlightTargetKey } from './simulation';
+import { flightTargetLineOfSight } from './simulation';
 import { EASY_AIM_RADIUS } from './flight-view';
 import { RELOAD_TICKS } from './rules';
 import type { GameState } from './types';
@@ -170,12 +169,11 @@ function sightPoint(state:GameState,width:number,height:number,project:(position
 function aimColor(state:GameState,sight:MarkerProjection,radius:number,project:(position:Vector3)=>MarkerProjection):string{
   const player=state.fighters.find(fighter=>fighter.id===state.playerId&&fighter.health>0);
   if(!player)return AIM_COLORS.clear;
-  const selected=selectedFlightTargetKey(state);let color:keyof typeof AIM_COLORS='clear';
+  let color:keyof typeof AIM_COLORS='clear';
   for(const target of [...state.fighters,...state.ufos]){
     if(target.id===player.id||target.health<=0)continue;
     const enemy=target.kind==='ufo',distance=player.position.distanceTo(target.position),range=state.mode==='easy'?1200:1500;
     if(distance>range)continue;
-    if(enemy&&state.mode==='easy'&&flightTargetKey(target)!==selected)continue;
     const projection=project(target.position);
     if(!projection.visible||Math.hypot(projection.x-sight.x,projection.y-sight.y)>radius||!flightTargetLineOfSight(state,target))continue;
     if(!enemy)return AIM_COLORS.friendly;

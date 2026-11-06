@@ -77,7 +77,7 @@ test('the shared Canvas2D draws Kaisen-style targets, range/HP marks, radar and 
   assert.ok(denseLabel.x+denseLabel.width<=denseKeepOut.x||denseKeepOut.x+denseKeepOut.width<=denseLabel.x||denseLabel.y+denseLabel.height<=denseKeepOut.y||denseKeepOut.y+denseKeepOut.height<=denseLabel.y,'dense-label fallback finds an open marker cell');
   assert.equal(fallbackMeasurements,1,'fallback reuses one text measurement instead of measuring every cell');
 });
-test('aim color follows the visible target and existing lock without mutating the mission',()=>{
+test('aim color follows visible display contacts independently from the live trigger lock',()=>{
   const draw=(kind:'enemy'|'friendly',mode:'easy'|'normal',selected:boolean)=>{
     const state=uiFixtureState('normal').state;state.mode=mode;
     const player=getPlayer(state)!;
@@ -97,8 +97,8 @@ test('aim color follows the visible target and existing lock without mutating th
     return writes;
   };
   assert.ok(draw('enemy','normal',false).includes('#ff645b'),'an enemy in the sight ring turns the sight red');
-  assert.ok(draw('enemy','easy',false).includes('#ffffff'),'Easy does not color an unselected enemy as locked');
-  assert.ok(draw('enemy','easy',true).includes('#ff645b'),'Easy uses the existing selected target lock');
+  assert.ok(draw('enemy','easy',false).includes('#ff645b'),'Easy colors a displayed enemy contact without a live trigger identity');
+  assert.ok(draw('enemy','easy',true).includes('#ff645b'),'a live trigger lock cannot change the display contact color');
   assert.ok(draw('friendly','normal',false).includes('#6cb8ff'),'a friendly aircraft in the sight ring turns the sight blue');
 });
 test('distance labels stop at the shared 1500m marker range',()=>{
