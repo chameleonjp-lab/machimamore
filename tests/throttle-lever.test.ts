@@ -33,7 +33,7 @@ function pointer(type:string,id:number,y=122,extra={}) {return Object.assign(new
 function key(type:string,code:string,extra={}) {return Object.assign(new Event(type,{cancelable:true}),{code,repeat:false,isComposing:false,ctrlKey:false,metaKey:false,altKey:false,...extra});}
 function controlsFixture() {
   const originals=['window','document','HTMLElement'].map(k=>[k,Object.getOwnPropertyDescriptor(globalThis,k)] as const);
-  const win=Object.assign(new EventTarget(),{visualViewport:new EventTarget()}); const doc=Object.assign(new EventTarget(),{hidden:false,getElementById:()=>new NodeStub()});
+  const win=Object.assign(new EventTarget(),{innerWidth:402,innerHeight:874,visualViewport:new EventTarget()}); const doc=Object.assign(new EventTarget(),{hidden:false,getElementById:()=>new NodeStub()});
   for(const [k,v] of [['window',win],['document',doc],['HTMLElement',NodeStub]] as const)Object.defineProperty(globalThis,k,{configurable:true,value:v});
   const surface=new NodeStub(), throttle=new NodeStub(), fire=new NodeStub(), loop=new NodeStub();let active=true;
   const controls=new FlightControls(surface as any,{throttle,fire,loop} as any,()=>active);
@@ -69,7 +69,7 @@ test('focused short commands survive zero-tick frames, consume once, cancel safe
     f.throttle.dispatchEvent(key('keydown','ArrowUp',{isComposing:true}));assert.equal(f.controls.sampleThrottle(),0);
     f.win.dispatchEvent(key('keydown','ArrowUp'));assert.equal(f.controls.sample().climb,1);f.throttle.dispatchEvent(new Event('focusin'));assert.equal(f.controls.sample().climb,0);
     f.win.dispatchEvent(key('keydown','KeyS'));f.throttle.dispatchEvent(pointer('pointerdown',5,145));close(f.controls.sample().throttle!,-.5);
-    for(const event of ['resize','blur','pagehide']){f.win.dispatchEvent(new Event(event));assert.equal(f.controls.sample().throttle,0);f.throttle.dispatchEvent(pointer('pointerdown',6));}
+    for(const event of ['resize','blur','pagehide']){if(event==='resize')f.win.innerWidth+=1;f.win.dispatchEvent(new Event(event));assert.equal(f.controls.sample().throttle,0);f.throttle.dispatchEvent(pointer('pointerdown',6));}
     f.controls.setMode('easy');assert.equal(f.controls.sample().throttle,0);f.throttle.dispatchEvent(pointer('pointerdown',7));assert.equal(f.controls.peek().throttlePointer,null);
   }finally{f.cleanup();}
 });
@@ -203,7 +203,7 @@ test('configured-key pulses cancel with opposing input, focus loss, remap, inact
   const f=controlsFixture();try{
     const pulse=(code:string)=>{f.win.dispatchEvent(key('keydown',code));f.win.dispatchEvent(key('keyup',code));};
     pulse('KeyW');pulse('KeyS');assert.equal(f.controls.sampleThrottle(),0);
-    for(const terminal of ['blur','resize','pagehide','orientationchange']){pulse('KeyW');f.win.dispatchEvent(new Event(terminal));assert.equal(f.controls.sampleThrottle(),0);}
+    for(const terminal of ['blur','resize','pagehide','orientationchange']){pulse('KeyW');if(terminal==='resize')f.win.innerWidth+=1;f.win.dispatchEvent(new Event(terminal));assert.equal(f.controls.sampleThrottle(),0);}
     pulse('KeyW');f.controls.clear();assert.equal(f.controls.sampleThrottle(),0);
     pulse('KeyW');f.controls.setMode('easy');assert.equal(f.controls.sampleThrottle(),0);f.controls.setMode('normal');
     f.throttle.setAttribute('role','slider');
@@ -238,7 +238,7 @@ test('short touch adjustment reaches one M tick, centres on release, and interru
     f.throttle.dispatchEvent(pointer('pointerdown',3));assert.equal(f.controls.sampleThrottle(),1);f.win.dispatchEvent(pointer('pointerup',3));assert.equal(f.controls.sampleThrottle(),0);
     for(const terminal of ['clear','blur','pagehide','resize','orientationchange']){
       f.throttle.dispatchEvent(pointer('pointerdown',4));f.win.dispatchEvent(pointer('pointerup',4));assert.equal(f.controls.sample(false).throttle,1);
-      if(terminal==='clear')f.controls.clear();else f.win.dispatchEvent(new Event(terminal));assert.equal(f.controls.sampleThrottle(),0);
+      if(terminal==='clear')f.controls.clear();else {if(terminal==='resize')f.win.innerWidth+=1;f.win.dispatchEvent(new Event(terminal));}assert.equal(f.controls.sampleThrottle(),0);
     }
   }finally{f.cleanup();}
 });

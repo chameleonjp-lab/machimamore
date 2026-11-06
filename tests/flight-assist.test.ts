@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { Euler, PerspectiveCamera, Quaternion, Vector3 } from 'three';
 import type { Aircraft, CombatTarget } from '../src/flight-types';
-import { applyEasyShotCorrection, autoFireTarget, getFlightAssist, predictedShotDirection, targetAimPoint } from '../src/flight-assist';
+import { autoFireTarget, getFlightAssist, predictedShotDirection, targetAimPoint } from '../src/flight-assist';
 import { EASY_CAMERA_LOOK_ANGLE, FLIGHT_FAR, FLIGHT_FOV, FLIGHT_CAMERA_BANK_FACTOR, NORMAL_CAMERA_LOOK_ANGLE, getFlightCameraPose, projectFlightTarget } from '../src/flight-view';
 
 const neutral = { turn: 0, climb: 0, fire: false, loop: false, viewAspect: 393 / 852 };
@@ -120,19 +120,13 @@ test('normal retains manual stick and fire; Easy ignores dead or occluded target
   assert.equal(getFlightAssist(aircraft, [ufo], neutral, 'easy').responseMultiplier, 1);
 });
 
-test('UFO aiming uses free 3D velocity, immutable aim points and the pinned gentle correction', () => {
+test('AI UFO aiming uses free 3D velocity and immutable aim points', () => {
   const ufo = target(new Vector3(0, 800, -450), new Vector3(40, 12, 0));
   const originalPosition = ufo.position.clone(), originalVelocity = ufo.velocity.clone();
   const origin = new Vector3(0, 800, 0), forward = new Vector3(0, 0, -1);
   const predicted = predictedShotDirection(origin, forward, ufo, 720, 1.5);
   assert.ok(predicted.x > 0); assert.ok(predicted.y > 0);
-  const corrected = applyEasyShotCorrection(forward, predicted);
-  const angle = forward.angleTo(predicted), expectedAngle = Math.min(angle * 0.35, 0.028);
-  assert.ok(Math.abs(forward.angleTo(corrected) - expectedAngle) < 1e-10);
-  assert.ok(Math.abs(corrected.length() - 1) < 1e-12);
   const point = targetAimPoint(ufo); point.y += 100;
   assert.deepEqual(ufo.position, originalPosition); assert.deepEqual(ufo.velocity, originalVelocity);
-  const outside = new Vector3(1, 0, -1).normalize();
-  assert.deepEqual(applyEasyShotCorrection(forward, outside), forward);
   assert.deepEqual(predictedShotDirection(origin, forward, target(new Vector3(700, 800, -100)), 720, 1.5), forward);
 });

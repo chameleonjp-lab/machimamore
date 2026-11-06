@@ -1,8 +1,8 @@
 import { BOSS_HULL, BOSS_HORIZONTAL_RADIUS, hullSegmentFraction, hullSphereFraction } from './boss-shape';
-import { createFlightTargetLock, clearFlightAssistance, smoothFlightAssistance } from './flight-target';
+import { createFlightTargetLock, clearFlightAssistance } from './flight-target';
 import { Euler, Quaternion, Vector3 } from 'three';
 import { advanceThrottle, CRUISE_SPEED, desiredFlightInput, forwardOf, MAX_SPEED, updateAircraftMotion, updatePlayerLoop } from './flight';
-import { applyEasyShotCorrection, autoFireTarget, getFlightAssist, PLAYER_MAX_PITCH, predictedShotDirection } from './flight-assist';
+import { autoFireTarget, predictedShotDirection } from './flight-assist';
 import { beginAircraftReload, tickAircraftReload } from './ammunition';
 import { createCity, cityHealth, damageDistrict, groundHeight } from './city';
 import { integrateBeamContacts, movingSphereFraction, nearestBeamContact, segmentBoxFraction, segmentRoundedBoxFraction, segmentSphereFraction, sphereTouchesBox, type Collider } from './collision';
@@ -190,8 +190,7 @@ function fireAircraft(state: GameState, fighter: Aircraft, firing: boolean, targ
       const forward = forwardOf(fighter), offset = kind === 'mg' ? new Vector3(side * 0.3, 0.52, -4.25) : new Vector3(side * 2.5, 0, -2.4);
       const position = fighter.position.clone().add(offset.applyQuaternion(fighter.quaternion));
       const speed = fighter.speed + (kind === 'mg' ? 820 : 700);
-      const prediction = target ? predictedShotDirection(position, forward, target, speed, BULLET_LIFETIME_TICKS * FIXED_DT) : forward;
-      const direction = playerOwned && state.mode === 'easy' ? applyEasyShotCorrection(forward, prediction) : !playerOwned ? prediction : forward;
+      const direction = !playerOwned && target ? predictedShotDirection(position, forward, target, speed, BULLET_LIFETIME_TICKS * FIXED_DT) : forward;
       if (!playerOwned) { direction.x += Math.sin(state.tick * 1.7 + fighter.id * 3 + side) * 0.012; direction.y += Math.cos(state.tick * 1.3 + fighter.id * 2 + side) * 0.012; direction.normalize(); }
       const bullet: Bullet = { id: state.nextAttackId++, missionId: state.missionId, owner: fighter.id, ownerToken: fighter.token, ownerGeneration: fighter.generation, playerOwned, team: 'friendly', kind,
         position, previous: position.clone(), velocity: direction.multiplyScalar(speed), birthTick: state.tick, expiresTick: state.tick + BULLET_LIFETIME_TICKS, damage: BASE_DAMAGE[playerOwned ? 'player' : 'ally'][kind], distanceTravelled: 0 };
@@ -213,13 +212,12 @@ function updateFighters(state: GameState, input: FlightInput): void {
     if (fighter.id === state.playerId) {
       const unobstructed = (u: { position: Vector3 }) => clearLine(state, fighter.position, u.position, fighter.id, state.ufos.find(e => e === u)?.id);
       const aimTargets = state.tick >= state.pilotAimReadyTick ? state.ufos : [];
-      const assist = getFlightAssist(fighter, aimTargets, input, state.mode, unobstructed, state.controller.targetLock);
+      clearFlightAssistance(state.controller);
       const speed = advanceThrottle(state.controller, input, state.mode, FIXED_DT);
-      const adjusted = { ...input, ...smoothFlightAssistance(state.controller, input, assist, FIXED_DT, state.mode === 'easy' && !input.steeringActive && Math.max(Math.abs(input.turn), Math.abs(input.climb)) <= 1e-8 ? Math.max(-1, Math.min(1, fighter.pitch / PLAYER_MAX_PITCH)) : undefined) };
-      const completed = updatePlayerLoop(fighter, state.controller, adjusted, input, input.loop, FIXED_DT, speed, MAX_SPEED, state.controller.responseMultiplier, state.mode);
+      const completed = updatePlayerLoop(fighter, state.controller, input, input, input.loop, FIXED_DT, speed, MAX_SPEED, 1, state.mode);
       if (completed) { state.stats.loops++; emit(state, 'loop', fighter.position, fighter.id); }
       const automatic = autoFireTarget(fighter, aimTargets, state.mode, input.viewAspect, unobstructed, state.controller.targetLock);
-      firing = input.fire || automatic !== null; firingTarget = automatic as Ufo | null;
+      firing = state.mode === 'easy' ? automatic !== null : input.fire; firingTarget = null;
     } else {
       const objective = target ? target.position.clone().addScaledVector(target.velocity, 0.4) : new Vector3(0, 280, -700);
       if (fighter.position.y < 90) objective.y = Math.max(objective.y, 240);

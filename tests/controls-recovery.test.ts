@@ -78,7 +78,7 @@ test('capture failure plus release on window cannot strand steering; other held 
     // New steering works without a retry/home reset.
     surface.dispatchEvent(pointer('pointerdown',4));win.dispatchEvent(pointer('pointermove',4,70,200));
     assert.ok(controls.sample().turn<-.7);
-    for(const event of ['resize','blur','pagehide']) {
+    for(const event of ['orientationchange','blur','pagehide']) {
       win.dispatchEvent(new Event(event));assert.equal(controls.peek().steerPointer,null);
       assert.equal(controls.sample().accelerate,false);surface.dispatchEvent(pointer('pointerdown',5));
     }
@@ -88,4 +88,23 @@ test('capture failure plus release on window cannot strand steering; other held 
   } finally {
     controls.dispose();for(const [key,value] of originals)if(value)Object.defineProperty(globalThis,key,value);else Reflect.deleteProperty(globalThis,key);
   }
+});
+
+test('height-only resize preserves held fingers and rebases the next steering event', () => {
+  const originals=['window','document','HTMLElement'].map(k=>[k,Object.getOwnPropertyDescriptor(globalThis,k)] as const);
+  const win=Object.assign(new EventTarget(),{innerWidth:402,innerHeight:874,visualViewport:new EventTarget()});
+  const doc=Object.assign(new EventTarget(),{hidden:false,getElementById:()=>new ElementStub()});
+  Object.defineProperties(globalThis,{window:{configurable:true,value:win},document:{configurable:true,value:doc},HTMLElement:{configurable:true,value:ElementStub}});
+  const surface=new ElementStub(),buttons={fire:new ElementStub(),loop:new ElementStub()};
+  const controls=new FlightControls(surface as any,buttons as any,()=>true);
+  try {
+    surface.dispatchEvent(pointer('pointerdown',1,100,200,true));win.dispatchEvent(pointer('pointermove',1,115,200));
+    buttons.fire.dispatchEvent(pointer('pointerdown',2));const before=controls.sample().turn;
+    win.innerHeight=820;win.dispatchEvent(new Event('resize'));win.visualViewport.dispatchEvent(new Event('resize'));
+    assert.equal(controls.peek().steerPointer,1);assert.equal(controls.sample().fire,true);
+    win.dispatchEvent(pointer('pointermove',1,115,146));assert.equal(controls.sample().turn,before);assert.equal(controls.sample().climb,0);
+    win.dispatchEvent(pointer('pointermove',1,120,146));assert.ok(controls.sample().turn>before);
+    win.dispatchEvent(pointer('pointercancel',2));assert.equal(controls.sample().fire,false);assert.equal(controls.peek().steerPointer,1);
+    win.innerWidth=874;win.innerHeight=402;win.dispatchEvent(new Event('resize'));assert.equal(controls.peek().steerPointer,null);
+  } finally {controls.dispose();for(const [key,value]of originals)if(value)Object.defineProperty(globalThis,key,value);else Reflect.deleteProperty(globalThis,key);}
 });

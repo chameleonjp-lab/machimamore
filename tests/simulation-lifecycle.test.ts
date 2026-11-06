@@ -195,15 +195,15 @@ test('R91 accepted tick inputs produce identical state at 30, 60 and 120Hz rende
 });
 
 
-test('Easy actual simulation acquisition never pitches away from a higher or lower target', () => {
+test('Easy UFO acquisition cannot change a centered held pilot attitude', () => {
   for(const sign of [-1,1]) {
     const state = fixture(1,1); state.mode='easy'; const p=getPlayer(state)!, enemy=state.ufos[0];
     startGame(state); p.position.set(0,600,0); p.previous.copy(p.position); p.pitch=sign*.6; p.yaw=0;p.bank=0;updateQuaternion(p);
     const cp=new Vector3(), cq=new Quaternion();getFlightCameraPose(p,'easy',cp,cq);
     enemy.position.copy(new Vector3(0,sign*150,-500).applyQuaternion(cq).add(cp));enemy.previous.copy(enemy.position);enemy.health=1e8;
     const before=p.pitch;
-    stepGame(state, {...NEUTRAL_INPUT,viewAspect:393/852});
-    assert.equal(state.fault, null); assert.ok(sign*(p.pitch-before)>0, `expected pitch toward target, before=${before}, after=${p.pitch}`);
+    stepGame(state, {...NEUTRAL_INPUT,steeringActive:true,viewAspect:393/852});
+    assert.equal(state.fault, null); assert.equal(p.pitch,before);
   }
 });
 

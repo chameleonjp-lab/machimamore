@@ -67,13 +67,13 @@ async function latestCameraSample(page: import('@playwright/test').Page): Promis
   return sample!;
 }
 
-cameraContractTest('[camera-contract] real render camera matches the live pose and horizontal input retains pitch', async ({ page }) => {
+for (const mode of ['easy', 'normal'] as const) cameraContractTest(`[camera-contract] ${mode} render camera and aircraft share the display pose and horizontal input retains pitch`, async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   let probeInstalled = false;
   try {
     await openHome(page);
-    await page.getByRole('radio', { name: 'ノーマル' }).check();
+    await page.getByRole('radio', { name: mode === 'easy' ? 'イージー' : 'ノーマル' }).check();
     await installPassiveCameraProbe(page);
     probeInstalled = true;
     // Omitting testInfo intentionally suppresses setup recovery JSON attachments
@@ -82,7 +82,7 @@ cameraContractTest('[camera-contract] real render camera matches the live pose a
     await page.waitForFunction(() => (window as any).__machimamoreCameraContract?.samples.some((sample: any) => sample.tick >= 30));
 
     const initial = await latestCameraSample(page);
-    expect(initial.mode).toBe('normal');
+    expect(initial.mode).toBe(mode);
     expectCameraMatchesRenderedPose(initial);
 
     await page.keyboard.down('ArrowUp');
@@ -122,7 +122,7 @@ cameraContractTest('[camera-contract] real render camera matches the live pose a
 function expectCameraMatchesRenderedPose(sample: CameraSample): void {
   const player: any = {
     previous: new Vector3().fromArray(sample.player.previous),
-    position: new Vector3().lerpVectors(new Vector3().fromArray(sample.player.previous), new Vector3().fromArray(sample.player.position), sample.alpha),
+    position: new Vector3().fromArray(sample.player.position),
     quaternion: new Quaternion().fromArray(sample.player.quaternion),
     bank: sample.player.bank,
   };

@@ -70,6 +70,7 @@ export function updateAircraftMotion(
   responseMultiplier = 1,
   manualSteering = false,
   cameraLookAngle = NORMAL_CAMERA_LOOK_ANGLE,
+  holdNeutralPitch = false,
 ): void {
   let turn = clamp(turnInput, -1, 1);
   let climb = clamp(climbInput, -1, 1);
@@ -99,8 +100,8 @@ export function updateAircraftMotion(
         aircraft.pitch += clamp(clamp(aircraft.pitch, -maxPitch, maxPitch) - aircraft.pitch, -angularStep, angularStep);
       } else if (Math.abs(climb) > EPSILON) {
         aircraft.pitch = clamp(aircraft.pitch + climb * angularStep, -maxPitch, maxPitch);
-      } else if (Math.abs(turn) <= EPSILON) {
-        // Only fully neutral manual input may level. Horizontal input retains pitch.
+      } else if (Math.abs(turn) <= EPSILON && !holdNeutralPitch) {
+        // A centered held gesture keeps pitch; released neutral input levels smoothly.
         aircraft.pitch += clamp(-aircraft.pitch * pitchBlend, -angularStep, angularStep);
       }
       if (Math.abs(turn) > EPSILON
@@ -185,6 +186,8 @@ export function updatePlayerLoop(
   const manualSteering = !!userInput.steeringActive
     || Math.max(Math.abs(userInput.turn), Math.abs(userInput.climb)) > EPSILON
     || Math.max(Math.abs(input.turn), Math.abs(input.climb)) <= EPSILON;
+  const holdNeutralPitch = !!userInput.steeringActive
+    || Math.max(Math.abs(userInput.turn), Math.abs(userInput.climb)) > EPSILON;
 
   const revisionChanged = meta.loopStartSteeringRevision !== undefined
     && userInput.steeringRevision !== undefined
@@ -219,6 +222,7 @@ export function updatePlayerLoop(
       responseMultiplier,
       true,
       cameraLookAngle,
+      holdNeutralPitch,
     );
     return false;
   }
@@ -246,6 +250,7 @@ export function updatePlayerLoop(
       responseMultiplier,
       manualSteering,
       cameraLookAngle,
+      holdNeutralPitch,
     );
     return false;
   }
@@ -269,7 +274,7 @@ export function updatePlayerLoop(
     meta.playerLoopActive = false;
   }
   updateAircraftMotion(player, 0, 0, dt, preferredSpeed, true, speedCeiling, PLAYER_MAX_PITCH, responseMultiplier,
-    manualSteering, cameraLookAngle);
+    manualSteering, cameraLookAngle, holdNeutralPitch);
   return completed;
 }
 

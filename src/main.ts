@@ -4,6 +4,7 @@ import './control-settings.css';
 import { createGame, startGame, stepGame, pauseGame, resumeGame, abortGame, getPlayer, getHudSnapshot } from './simulation';
 import { ACTIVE_LIMIT, FIXED_DT, RULES_VERSION } from './rules';
 import { FlightControls } from './input';
+import { FlightPresentation } from './flight-presentation';
 import { ControlSettings } from './control-settings';
 import { KeyboardSettings, ControlInputPresentation } from './keyboard-settings';
 import { RulesGuide } from './rules-guide';
@@ -21,6 +22,8 @@ let graphicsReady=false,contextLost=false,preparing=false,disposed=false,prepara
 let cancelPreparation:(()=>void)|null=null,presentationPending=false;
 let pendingLoop=false,pendingFire=false,pendingAccelerate=false,pendingBrake=false,lastPlayerIdentity='',lastEventId=-1,lastEventMission=-1,announcementUntil=0,lastNoticeTick=-999,resultPresentationStart=0;
 const pendingUfoFireworkEvents:GameEvent[]=[];
+const flightPresentation=new FlightPresentation();
+let viewportWidth=window.innerWidth,viewportHeight=window.innerHeight;
 const buttons={fire:el<HTMLButtonElement>('fire'),loop:el<HTMLButtonElement>('loop'),throttle:el<HTMLElement>('throttle')};
 for(const button of Object.values(buttons))button.dataset.flightControl='true';
 const keyboard=new KeyboardSettings(),presentation=new ControlInputPresentation(),settings=new ControlSettings(buttons,keyboard,presentation);
@@ -43,8 +46,8 @@ function announce(message:string,seconds=3){el('announcement').textContent=messa
 function begin(){if(!scene||!graphicsReady||contextLost||document.hidden||preparing||screen==='playing'||settings.isOpen||rules?.isOpen)return;pendingUfoFireworkEvents.length=0;state=createGame({mode:selectedMode});startGame(state);accumulator=0;lastFrame=0;const p=getPlayer(state);lastPlayerIdentity=p?`${state.missionId}:${p.token}:${p.generation}`:'';lastEventId=-1;lastEventMission=state.missionId;lastNoticeTick=-999;announcementUntil=0;resultPresentationStart=0;audio.resetFlight();audio.updatePlayer(p);syncMode();setScreen('playing');syncAudio();if(audio.enabled)void audio.unlock();hud.update(state,getHudSnapshot(state));announce('街を守りUFO50機を撃破、その先の巨大UFOを倒せ！',4);renderScene(true);lastFrame=0;}
 function home(){if(state.phase==='playing'||state.phase==='paused')abortGame(state);pendingUfoFireworkEvents.length=0;state=createGame({mode:selectedMode});accumulator=0;lastFrame=0;audio.resetFlight();syncMode();setScreen('home');syncAudio();el('announcement').textContent='';renderScene(false);}
 const reasonLabels:Record<string,string>={manual:'作戦時計・装填・復帰・レーザーも止まっています。',blur:'フォーカスが外れたため停止しました。',hidden:'画面が非表示になったため停止しました。',frame:'画面更新に長い空白があったため停止しました。','webgl-lost':'描画コンテキストが失われたため停止しました。復旧を待っています。','render-failed':'描画を続けられないため停止しました。画面の準備を再試行してください。',fault:'出撃・戦闘処理の異常を検出したため停止しました。'};
-function pause(reason:string){if(state.phase!=='playing'&&state.phase!=='paused')return;pauseGame(state,reason);clearInput();accumulator=0;lastFrame=0;hud.update(state,getHudSnapshot(state));setScreen('paused');el('pause-reason').textContent=state.pauseReasons.map(r=>reasonLabels[r]??r).join(' ')+(state.fault?` ${state.fault}`:'');el<HTMLButtonElement>('resume').disabled=contextLost||!graphicsReady||!!state.fault;el('pause-reload').hidden=graphicsReady;el('pause-reload').textContent=contextLost?'ページを再読み込み':'画面の準備を再試行';syncAudio();}
-function resume(){if(state.phase!=='paused'||document.hidden||contextLost||!graphicsReady||preparing||state.fault||settings.isOpen||rules?.isOpen)return;resumeGame(state);if(phase()!=='playing')return;accumulator=0;lastFrame=0;clearInput();setScreen('playing');syncAudio();if(audio.enabled)void audio.unlock();}
+function pause(reason:string){if(state.phase!=='playing'&&state.phase!=='paused')return;pauseGame(state,reason);flightPresentation.reset();clearInput();accumulator=0;lastFrame=0;hud.update(state,getHudSnapshot(state));setScreen('paused');el('pause-reason').textContent=state.pauseReasons.map(r=>reasonLabels[r]??r).join(' ')+(state.fault?` ${state.fault}`:'');el<HTMLButtonElement>('resume').disabled=contextLost||!graphicsReady||!!state.fault;el('pause-reload').hidden=graphicsReady;el('pause-reload').textContent=contextLost?'ページを再読み込み':'画面の準備を再試行';syncAudio();}
+function resume(){if(state.phase!=='paused'||document.hidden||contextLost||!graphicsReady||preparing||state.fault||settings.isOpen||rules?.isOpen)return;resumeGame(state);if(phase()!=='playing')return;flightPresentation.reset();accumulator=0;lastFrame=0;clearInput();setScreen('playing');syncAudio();if(audio.enabled)void audio.unlock();}
 function finish(){if(!state.result)return;accumulator=0;lastFrame=0;resultPresentationStart=performance.now();clearInput();audio.active=false;audio.resetFlight();syncAudio();hud.result(state.result);setScreen('result');el('announcement').textContent='';}
 function graphicsFailure(message:string){
   graphicsReady=false;clearInput();const failedScene=scene;scene=null;
@@ -54,14 +57,14 @@ function graphicsFailure(message:string){
   else if(screen==='result')announce(message,10);
   try{failedScene?.dispose();}catch{}
 }
-function renderScene(flight:boolean,alpha=1,resultAnimationTime=0){try{if(scene){const events=pendingUfoFireworkEvents.splice(0);scene.render(state,flight,alpha,resultAnimationTime,events);}}catch{graphicsFailure('画面の描画を続けられません。画面の準備を再試行してください。');}}
+function renderScene(flight:boolean,alpha=1,resultAnimationTime=0){try{if(scene){const events=pendingUfoFireworkEvents.splice(0);scene.render(flightPresentation.sample(state,alpha),flight,alpha,resultAnimationTime,events);}}catch{graphicsFailure('画面の描画を続けられません。画面の準備を再試行してください。');}}
 for(const id of ['start','retry','pause-restart'])el(id).addEventListener('click',begin);for(const id of ['pause-home','result-home'])el(id).addEventListener('click',home);el('pause').addEventListener('click',()=>pause('manual'));el('resume').addEventListener('click',resume);
 for(const radio of document.querySelectorAll<HTMLInputElement>('input[name="game-mode"]'))radio.addEventListener('change',()=>{if(screen!=='home'||!radio.checked)return;selectedMode=radio.value==='normal'?'normal':'easy';state=createGame({mode:selectedMode});syncMode();renderScene(false);});
 window.addEventListener('keydown',event=>{if(settings.isOpen||rules?.isOpen)return;if((screen==='playing'||screen==='paused')&&keyboard.matchesPause(event)){event.preventDefault();if(screen==='playing')pause('manual');else resume();return;}if(screen==='paused'&&event.key==='Tab'){const focusables=Array.from(el('pause-screen').querySelectorAll<HTMLElement>('button:not([hidden]):not(:disabled),summary,a[href],input:not(:disabled),[tabindex]:not([tabindex="-1"])')).filter(item=>!item.hidden&&!item.closest('[hidden]')&&getComputedStyle(item).display!=='none'&&getComputedStyle(item).visibility!=='hidden');const index=focusables.indexOf(document.activeElement as HTMLElement),target=event.shiftKey?index<=0?focusables.at(-1):null:index<0||index===focusables.length-1?focusables[0]:null;if(target){event.preventDefault();target.focus();}}});
 window.addEventListener('blur',()=>pause('blur'));window.addEventListener('pagehide',()=>pause('hidden'));document.addEventListener('visibilitychange',()=>{if(document.hidden)pause('hidden');lastFrame=0;});
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');reducedMotion.addEventListener('change',()=>scene?.setReducedMotion(reducedMotion.matches));
-function resizeScene(){clearInput();try{scene?.resize();}catch{graphicsFailure('画面サイズの更新を続けられません。画面の準備を再試行してください。');}}
-window.addEventListener('resize',resizeScene);window.visualViewport?.addEventListener('resize',resizeScene);
+function resizeScene(){const width=window.innerWidth,height=window.innerHeight;if(width!==viewportWidth||(width>height)!==(viewportWidth>viewportHeight))clearInput();viewportWidth=width;viewportHeight=height;try{scene?.resize();}catch{graphicsFailure('画面サイズの更新を続けられません。画面の準備を再試行してください。');}}
+window.addEventListener('resize',resizeScene);window.visualViewport?.addEventListener('resize',resizeScene);window.addEventListener('orientationchange',clearInput);
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();contextLost=true;graphicsReady=false;preparationGeneration++;cancelPreparation?.();cancelPreparation=null;preparing=false;scene?.dispose();scene=null;pause('webgl-lost');el<HTMLButtonElement>('start').disabled=true;el('startup-error').hidden=false;el('startup-error').textContent='描画コンテキストが失われました。復旧を待つか、ページを再読み込みしてください。復旧後も明示的な再開が必要です。';el('reload').hidden=false;el('reload').textContent='ページを再読み込み';});
 canvas.addEventListener('webglcontextrestored',()=>{contextLost=false;void prepareGraphics();});
 async function prepareGraphics(){
@@ -100,7 +103,7 @@ function frame(now:number){if(disposed)return;frameId=requestAnimationFrame(fram
     if(seconds>.25){gapCount++;maxFrameGap=Math.max(maxFrameGap,seconds);pause('frame');}
     else{frameIntervals.push(seconds*1000);if(frameIntervals.length>4096)frameIntervals.shift();const raw=controls.sample(false);pendingLoop||=raw.loop;pendingFire||=raw.fire;pendingAccelerate||=!!raw.accelerate;pendingBrake||=!!raw.brake;accumulator+=Math.max(0,seconds);let count=0;
       while(accumulator+1e-12>=FIXED_DT&&state.phase==='playing'&&count<15){syncPilotOwnership(raw);
-        const input:FlightInput={...raw,throttle:controls.sampleThrottle(raw.accelerate||pendingAccelerate,raw.brake||pendingBrake),fire:raw.fire||pendingFire,accelerate:raw.accelerate||pendingAccelerate,brake:raw.brake||pendingBrake,loop:pendingLoop,viewAspect:window.innerWidth/Math.max(1,window.innerHeight)};pendingLoop=false;pendingFire=false;pendingAccelerate=false;pendingBrake=false;stepGame(state,input);syncPilotOwnership(raw);accumulator-=FIXED_DT;count++;processEvents();if(phase()==='paused'){pause(state.fault?'fault':'frame');break;}if(phase()==='ended'){finish();break;}}
+        const input:FlightInput={...raw,throttle:controls.sampleThrottle(raw.accelerate||pendingAccelerate,raw.brake||pendingBrake),fire:raw.fire||pendingFire,accelerate:raw.accelerate||pendingAccelerate,brake:raw.brake||pendingBrake,loop:pendingLoop,viewAspect:window.innerWidth/Math.max(1,window.innerHeight)};pendingLoop=false;pendingFire=false;pendingAccelerate=false;pendingBrake=false;flightPresentation.capture(state);stepGame(state,input);syncPilotOwnership(raw);accumulator-=FIXED_DT;count++;processEvents();if(phase()==='paused'){pause(state.fault?'fault':'frame');break;}if(phase()==='ended'){finish();break;}}
       if(accumulator+1e-12>=FIXED_DT&&state.phase==='playing')pause('frame');hud.update(state,getHudSnapshot(state));if(announcementUntil&&state.tick>=announcementUntil){el('announcement').textContent='';announcementUntil=0;}
     }
   }

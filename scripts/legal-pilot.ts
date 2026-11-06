@@ -1,7 +1,8 @@
 import { Vector3 } from 'three';
 import { getPlayer, NEUTRAL_INPUT } from '../src/simulation';
 import { clamp, CRUISE_SPEED, forwardOf, MAX_SPEED, normalizeAngle, STALL_SPEED, updateAircraftMotion } from '../src/flight';
-import { getFlightAssist, PLAYER_MAX_PITCH } from '../src/flight-assist';
+import { PLAYER_MAX_PITCH } from '../src/flight-assist';
+import { EASY_CAMERA_LOOK_ANGLE, NORMAL_CAMERA_LOOK_ANGLE } from '../src/flight-view';
 import { rosterCounts } from '../src/roster';
 import { BASE_DAMAGE, BULLET_LIFETIME_TICKS, damageMultiplier, FIXED_DT } from '../src/rules';
 import type { Aircraft, FlightInput, GameState, Ufo } from '../src/types';
@@ -65,7 +66,7 @@ export function pilotInput(state: GameState, policy: Policy): FlightInput {
     }
     input = steerTo(player, objective, new Vector3(), state, preferredSpeed);
     // Gain altitude promptly without pointing steeply down at a low UFO.
-    if (player.position.y < 430) input.climb = clamp(Math.atan2(SAFE_ALTITUDE - player.position.y, 330) / PLAYER_MAX_PITCH, 0, 1);
+    if (player.position.y < 430) input.climb = clamp(3.8 * (Math.atan2(SAFE_ALTITUDE - player.position.y, 330) - player.pitch) / yawRate(player, 1), 0, 1);
     input = pointerCompatible(input);
   }
   input = { ...input, accelerate, brake, viewAspect: ASPECT, fire: false, loop: false };
@@ -183,10 +184,10 @@ function steerTo(player: Aircraft, objective: Vector3, objectiveVelocity: Vector
   const desiredPitch = Math.atan2(direction.y, Math.hypot(direction.x, direction.z));
   const relativeVelocity = objectiveVelocity.clone().sub(forwardOf(player).multiplyScalar(player.speed));
   const rate = angularRate(direction, relativeVelocity);
-  const response = getFlightAssist(player, state.ufos, { ...NEUTRAL_INPUT, viewAspect: ASPECT }, state.mode).responseMultiplier;
-  const turn = clamp(-(3.8 * normalizeAngle(desiredYaw - player.yaw) + rate.yaw) / yawRate(player, response), -1, 1);
-  const climb = clamp((desiredPitch + rate.pitch / 4.2 + .75 * (desiredPitch - player.pitch)) / PLAYER_MAX_PITCH, -1, 1);
-  return pointerCompatible({ ...NEUTRAL_INPUT, turn, climb });
+  const look = state.mode === 'easy' ? EASY_CAMERA_LOOK_ANGLE : NORMAL_CAMERA_LOOK_ANGLE;
+  const turn = clamp(-(3.8 * normalizeAngle(desiredYaw - player.yaw) + rate.yaw) * Math.cos(player.pitch + look) / yawRate(player, 1), -1, 1);
+  const climb = clamp((3.8 * (desiredPitch - player.pitch) + rate.pitch) / yawRate(player, 1), -1, 1);
+  return pointerCompatible({ ...NEUTRAL_INPUT, turn, climb, steeringActive: true });
 }
 
 function aimInput(player: Aircraft, target: Ufo, state: GameState, preferredSpeed: number): FlightInput {
@@ -209,8 +210,8 @@ function cloneAircraft(player: Aircraft): Aircraft {
 
 function nextPose(player: Aircraft, state: GameState, input: FlightInput, preferredSpeed: number): Aircraft {
   const pose = cloneAircraft(player);
-  const assist = getFlightAssist(player, state.ufos, input, state.mode);
-  updateAircraftMotion(pose, assist.turn, assist.climb, FIXED_DT, preferredSpeed, false, MAX_SPEED, PLAYER_MAX_PITCH, assist.responseMultiplier);
+  updateAircraftMotion(pose, input.turn, input.climb, FIXED_DT, preferredSpeed, false, MAX_SPEED, PLAYER_MAX_PITCH, 1, true,
+    state.mode === 'easy' ? EASY_CAMERA_LOOK_ANGLE : NORMAL_CAMERA_LOOK_ANGLE, true);
   return pose;
 }
 
@@ -225,11 +226,12 @@ function closestApproach(player: Aircraft, target: Ufo): { time: number; distanc
 }
 
 function safetyScore(player: Aircraft, state: GameState, input: FlightInput, preferredSpeed: number): number {
-  const pose = cloneAircraft(player), response = getFlightAssist(player, state.ufos, input, state.mode).responseMultiplier;
+  const pose = cloneAircraft(player);
   let minimum = Infinity, time = 0;
   for (let step = 0; step < 10; step++) {
     const previous = pose.position.clone();
-    updateAircraftMotion(pose, input.turn, input.climb, .2, preferredSpeed, false, MAX_SPEED, PLAYER_MAX_PITCH, response);
+    updateAircraftMotion(pose, input.turn, input.climb, .2, preferredSpeed, false, MAX_SPEED, PLAYER_MAX_PITCH, 1, true,
+      state.mode === 'easy' ? EASY_CAMERA_LOOK_ANGLE : NORMAL_CAMERA_LOOK_ANGLE, true);
     const nextTime = time + .2;
     minimum = Math.min(minimum, (pose.position.y - 150) * 2);
     for (const u of state.ufos) {
